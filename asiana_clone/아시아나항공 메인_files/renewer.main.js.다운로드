@@ -1,0 +1,194 @@
+//mega start
+//(function(){
+
+$(document).ready(function(){
+	
+
+    var header_ht, footer_ht, cont_ht, slide_ht;
+//        per = 0;
+//    $(window).on('load', function(){
+//    	main_slideSize();
+//    });
+    
+    
+    
+  
+    /*var main_Swiper, notice_Swiper;*/
+    
+    var main_Swiper;
+    
+    $(window).on({
+    	'load': function(){
+    		main_slideSize();
+    		
+    		setTimeout(function(){
+    			main_Swiper = new Swiper('.main_slider_wrap', {
+        	    	effect: 'fade',
+        	    	speed:1000,
+        	        spaceBetween: 0,
+        	        loop:true,
+        	        pagination: '.main_slider_wrap .swiper-pagination',
+        	        paginationClickable: true,
+        	        prevButton:'.main_slider_wrap .swiper-button-prev',
+        	        nextButton:'.main_slider_wrap .swiper-button-next',
+        	        initialSlide:0,
+        	        autoplayDisableOnInteraction: true,
+        	        autoplay:3000,
+        	        onInit:function(swiperm){
+        	        	if($('.main_slider_wrap .swiper-slide').length == 3){
+        	        		swiperm.stopAutoplay();
+        	        		swiperm.lockSwipes();
+        	        	} else {
+        	        		$('.main_slider_wrap .ps').on('click', function(){
+            		            if($(this).hasClass('stop')){
+            		                $(this).removeClass('stop');
+            		                swiperm.startAutoplay();
+            		            } else {
+            		                $(this).addClass('stop');
+            		                swiperm.stopAutoplay();
+            		            }
+            		        });
+        	        	}
+        	        	
+        	        	$(window).resize(function(){
+        	        		header_ht = $('.main_header_wrap').height(),
+        	                footer_ht = $('.anchor_wrap').height(),
+        	                cont_ht = $(window).height() - (header_ht+footer_ht);
+        	        		
+        	        		setTimeout(function(){
+        	        			main_slideSize();
+        	        			swiperm.update();
+        	        		}, 200);
+        	        	});
+        	        },
+        	        onAutoplayStart : function(swiper){
+        	        	//console.log(swiper);        	        	
+        	        	$('.main_slider_wrap .ps').removeClass('stop');
+        	        },
+    				onAutoplayStop : function(swiper){
+    					
+    					$('.main_slider_wrap .ps').addClass('stop');
+    				}
+        	    });
+    		}, 500)
+    		
+    		mainSlide_pt();
+    		
+    	}
+//    ,
+//    	'resize' : function(){
+//    		header_ht = $('.main_header_wrap').height(),
+//            footer_ht = $('.anchor_wrap').height(),
+//            cont_ht = $(window).height() - (header_ht+footer_ht);
+//    		
+//    		setTimeout(function(){
+//    			main_slideSize();
+//    		}, 200)
+//           }
+    });
+    
+    
+    $('.main_header_wrap, .layer_bgBlack, .anchor_wrap').on('click', function(){
+    	if($('.main_header_wrap').hasClass('blur')){
+    		layerAllClose();
+            quickAreaFold();    		
+    	}
+    });
+    
+    $(document).on('click', '.spc_card', function(){
+    	$('.intRoute').hide();
+    	$('.fav_star').removeClass('on');
+    });
+    
+    var setInt;
+    
+    $('.noti_close').on('click', function(){
+    	if($('.notice_slideWrap .swiper-slide').length == 3){
+    		sizeCheck();
+    	}
+    });
+    
+    $('.noti_check').on('click', function(){
+    	sizeCheck();
+    });
+    
+    function sizeCheck(){
+		setInt = setInterval(function(){
+	    	main_slideSize();
+	    	mainSlide_pt();
+	    }, 10);
+			
+		setTimeout(function(){
+	    	clearInterval(setInt);
+	    }, 1000);
+    }
+    
+
+    
+    function mainSlide_pt(){
+    	var header_ht = $('.main_header_wrap').height(),
+    		bar_ht = $('#nav .nav_line').height(),
+    		pt = header_ht - bar_ht;
+    	
+    	$('.section01 .slide').css('padding-top', header_ht+'px');
+    }
+    var bot_slide_ht, cont_ht2;
+    function main_slideSize(){
+//        header_ht = parseInt($('.section01 .slide').css('padding-top')),
+        header_ht = parseInt($('.main_header_wrap').height()),
+        footer_ht = $('.anchor_wrap').height();
+        
+        if( $('.no_special_wrap').length > 0 ){
+           bot_slide_ht = $('.no_special_wrap').height() + parseInt($('.no_special_wrap').css('bottom'))
+        } else if( $('.special_slider_wrap').length > 0 ){
+           bot_slide_ht = $('.special_slider_wrap .swiper-slide').not('.on').height() + $('.swiper_control').height() + parseInt($('.swiper_control').css('margin-top')) + parseInt($('.special_slider_wrap').css('bottom'))
+        }
+        
+        
+        if($(window).height() >= 850){
+        	cont_ht2 = $(window).height() - header_ht
+        } else {
+        	cont_ht2 = 850 - header_ht
+        }
+        
+//        cont_ht = $(window).height() - header_ht - slide_ht - footer_ht - ($('.quick_reservation_wrap').height()/2),
+//        cont_ht = $('.section01').height() - header_ht - slide_ht - footer_ht - ($('.quick_reservation_wrap').height()/2),
+//        cont_ht = $('.section01 .slide_inner').height() - bot_slide_ht - ($('.quick_reservation_wrap').outerHeight()/2),
+        
+        if($(window).width() >= 1280){
+        	cont_ht = cont_ht2 - bot_slide_ht - ($('.quick_reservation_wrap').outerHeight()/2)
+        } else {
+        	if($(window).height() >= 850){
+        		cont_ht = $(window).height() - header_ht - bot_slide_ht - ($('.quick_reservation_wrap').outerHeight()/2)
+        	} else {
+        		cont_ht = 266;
+        	}
+        	
+        }
+        
+        
+//        slide_ht = cont_ht - per;
+//        slide_ht = (cont_ht * per)/100;
+        var $minh = 920;
+        
+        $('.section01 .slide .slide_inner').css('min-height', cont_ht2)
+        $('.main_slider_wrap').height(cont_ht+'px');
+        if(parseInt($('.main_slider_wrap').css('max-height')) >= cont_ht){
+        	$('.quick_reservation_wrap').css('margin-top',cont_ht+'px')
+        } else {
+        	$('.quick_reservation_wrap').css('margin-top',parseInt($('.main_slider_wrap').css('max-height'))+'px')
+        }
+        
+    }
+    
+    
+//  poopup_position();
+    
+    function poopup_position(){
+        var position = $('.quick_reservation_wrap2Inner').offset().top;
+        
+        $('.quick_reservationBox .quick_reservation_wrap').css('top', position+'px');
+    }
+});
+//})();
+//mega end

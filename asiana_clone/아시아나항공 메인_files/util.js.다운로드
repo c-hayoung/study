@@ -1,0 +1,1334 @@
+var $thisObj;
+
+$(document).ready(function () {
+
+	String.prototype.trim = String.prototype.trim || function() {
+		return this.replace(/^\s+/, '').replace(/\s+$/, '');
+	}
+
+	String.prototype.toCamelCase = String.prototype.toCamelCase || function () {
+		var arr = this.split(/[_-]/);
+		var newStr = "";
+		for (var i = 1; i < arr.length; i++) {
+			newStr += arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+		}
+		return arr[0] + newStr;
+	}
+
+	String.prototype.capitalize = String.prototype.capitalize || function () {
+		this.toLowerCase()
+				.replace(/(^|[^a-z0-9-])([a-z])/g, function(m, m1, m2, p) {
+					return m1 + m2.toUpperCase();
+				});
+		// IE11에서 아래 구문 인식불가로 인해 임시 수정
+		//return this.replace(/(^|\s)\S/g, l => l.toUpperCase());
+	}
+
+	String.prototype.setComma = String.prototype.setComma || function () {
+		var reg = /(^[+-]?\d+)(\d{3})/;
+		var number = this + "";
+
+		while (reg.test(number)) {
+			number = number.replace(reg,'$1'+','+'$2');
+		}
+
+		return number;
+	}
+
+	Number.prototype.setComma = String.prototype.setComma || function () {
+		console.log("util");
+	}
+
+	String.prototype.lpad = String.prototype.lpad || function(padLength, padString){
+		var s = this;
+		while(s.length < padLength)
+			s = padString + s;
+		return s;
+	}
+
+	String.prototype.rpad = String.prototype.rpad || function(padLength, padString){
+		var s = this;
+		while(s.length < padLength)
+			s += padString;
+		return s;
+	}
+
+	$.fn.serializeObject = function() {
+		var obj = null;
+		try {
+			if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+				var arr = this.serializeArray();
+				if (arr) {
+					obj = {};
+					thisObj = null;
+					jQuery.each(arr, function() {
+
+						// 기존 동일한 이름으로 객체가 있는 경우 배열 처리
+						if (obj.hasOwnProperty(this.name)) {
+							// 배열로 처리된 경우 단순 push
+							if (typeof obj[this.name] == "object" && obj[this.name].hasOwnProperty("length")) {
+								obj[this.name].push(this.value);
+							} else {
+								var temp = obj[this.name]; // 기존값 저장
+								obj[this.name] = [];
+								obj[this.name].push(temp);
+								obj[this.name].push(this.value);
+							}
+						} else {
+							obj[this.name] = this.value;
+						}
+
+						/*
+						if (this.name == "changeFile") {
+							if (!obj.hasOwnProperty("changeFile")) {
+								obj.changeFile = [];
+							}
+							obj.changeFile.push(this.value);
+						} else {
+							obj[this.name] = this.value;
+						}
+						*/
+
+					});
+				}
+			}
+		} catch (e) {
+			alert(e.message);
+		} finally {}
+
+		return obj;
+	};
+});
+
+var htmlAlert = '';
+htmlAlert += '<div class="layer_wrap" id="flyasiana-alert">';
+htmlAlert += '	<div class="dim_layer"></div>';
+htmlAlert += '	<div class="layer_pop" style="width:500px;">';
+htmlAlert += '		<div class="pop_cont">';
+htmlAlert += '			<p class="pop_tit st1">$_msg1$</p>';
+htmlAlert += '			<p class="pop_tit st3">$_msg2$</p>';
+htmlAlert += '		</div>';
+htmlAlert += '		<div class="btn_wrap_ceType2">';
+htmlAlert += '			<button type="button" class="btn_M red alert-ok">$_btn_ok$</button>';
+htmlAlert += '		</div>';
+htmlAlert += '		<a href="#none" class="dim_close"><span class="hidden">$_btn_close$</span></a>';
+htmlAlert += '	</div>';
+htmlAlert += '</div>';
+
+var htmlConfirm = '';
+htmlConfirm += '<div class="layer_wrap" id="flyasiana-confirm">';
+htmlConfirm += '	<div class="dim_layer"></div>';
+htmlConfirm += '	<div class="layer_pop" style="width:600px;">';
+htmlConfirm += '		<div class="pop_cont">';
+htmlConfirm += '			<h4>$_msg1$</h4>';
+htmlConfirm += '			<p class="pop_tit st3">$_msg2$</p>';
+htmlConfirm += '		</div>';
+htmlConfirm += '		<div class="btn_wrap_ceType2">';
+htmlConfirm += '			<button type="button" class="btn_M white confirm-cancel">$_btn_cancel$</button>';
+htmlConfirm += '			<button type="button" class="btn_M red confirm-ok">$_btn_ok$</button>';
+htmlConfirm += '		</div> 			';
+htmlConfirm += '		<a href="#none" class="dim_close"><span class="hidden">$_btn_close$</span></a>';
+htmlConfirm += '	</div>';
+htmlConfirm += '</div>';
+
+var flyasiana = {
+	getLangCd: function () {
+		var _langCd = "KO";
+		var _url = location.pathname.replace("/C/", "");
+		var _arrUrl = _url.indexOf("/") > -1 ? _url.split("/") : ["UNKNOWN"];
+
+		if (_arrUrl.length >= 2) {
+        	_langCd = _arrUrl[1];
+        }
+
+        return _langCd.toUpperCase();
+
+	}, setBtnLabel: function () {
+		var _btnOk = $("meta[name='PCCM201804030000731200_31']").attr("content");	// 확인
+		var _btnCancel = $("meta[name='PCCM201804030000731200_32']").attr("content"); //취소
+		var _btnClose = $("meta[name='PCCM201804030000731200_33']").attr("content"); //닫기
+
+		htmlAlert = htmlAlert.replace("$_btn_ok$", _btnOk).replace("$_btn_close$", _btnClose);
+		htmlConfirm = htmlConfirm.replace("$_btn_ok$", _btnOk).replace("$_btn_cancel$", _btnCancel).replace("$_btn_close$", _btnClose);
+
+	}, alert: function (_msg1, _msg2, $callback) {
+		this.setBtnLabel();
+
+		$("body")
+			.find("#flyasiana-alert").remove().end()
+			.append(htmlAlert.replace("$_msg1$", _msg1 == undefined ? "" : _msg1).replace("$_msg2$", _msg2 == undefined ? "" : _msg2));
+
+		openLayerPopup("flyasiana-alert");
+
+		$("#flyasiana-alert").find("button.alert-ok:visible, a.dim_close").off("click").on("click", function () {
+			flyasiana.close(this);
+			typeof $callback == "function" ? $callback() : "";
+		});
+
+	}, confirm: function (_msg1, _msg2, $callbackOk, $callbackCancel) {
+		this.setBtnLabel();
+
+		$("body")
+			.find("#flyasiana-confirm").remove().end()
+			.append(htmlConfirm.replace("$_msg1$", _msg1 == undefined ? "" : _msg1).replace("$_msg2$", _msg2 == undefined ? "" : _msg2));
+
+		openLayerPopup("flyasiana-confirm");
+
+		$("#flyasiana-confirm").find("button.confirm-ok:visible").off("click").on("click", function () {
+			flyasiana.close(this);
+			typeof $callbackOk == "function" ? $callbackOk() : "";
+		});
+
+		$("#flyasiana-confirm").find("button.confirm-cancel:visible, a.dim_close").off("click").on("click", function () {
+			flyasiana.close(this);
+			typeof $callbackCancel == "function" ? $callbackCancel() : "";
+		});
+	}, close: function ($this) {
+		var thisLayerPop = $($this).closest('.layer_wrap');
+		thisLayerPop.hide();
+		if ($('.layer_wrap:visible').length == 0) {
+			$('body').css('overflow-y', 'auto');
+		}
+
+		if ($thisObj != null) {
+			$($thisObj).focus();
+			$thisObj = null;
+		}
+	}
+}
+
+/**
+ * URL 파라미터 조회
+ */
+$.urlParam = function (key) {
+	var results = new RegExp('[\?&]' + key + '=([^&#]*)').exec(window.location.href);
+	if (results == null) {
+		return '';
+	} else {
+		return results[1] || '';
+	}
+};
+
+// Date Array => Date String
+var fnArrayToDate = function (arrDate, format) {
+	var strDate = "";
+	if (arrDate != null && arrDate.length >= 3) {
+		strDate = moment(arrDate[0] + '-' + (arrDate[1]+"").lpad(2, "0") + '-' + (arrDate[2]+"").lpad(2, "0")).format(format);
+	}
+
+	return moment(strDate).isValid() ? strDate : "";
+};
+
+// OutLink 공통 처리
+var fnGoOutlink = function (obj) {
+	var url = $(obj).attr("url");
+	var target = $(obj).attr("target");
+	var message = $(obj).attr("message");	// 이동 시 confirm 메시지
+	var loginYn = $(obj).attr("loginYn");	// 로그인 체크 Y/N
+	var acnoParam = $(obj).attr("acnoParam");	// 회원번호 파라미터명
+	var metaId = $(obj).attr("logId");	// 로그 생성 필요 시, META ID
+	var confirmMessage = "";
+
+	target = (target == 1 || target == 'S' || target == '_self') ? "_self" : "_blank";
+	metaId = (metaId == null || metaId == undefined) ? "" : metaId;
+	confirmMessage += $("meta[name='PCCM201804030000731200_34']").attr("content");	// 로그인 후 해당 페이지로 이동됩니다.
+	confirmMessage += target === "_blank" ? " (" + $("meta[name='PCCM201804030000731200_35']").attr("content") + ")" : "";	// 새창
+	confirmMessage += "<br/>" + $("meta[name='PCCM201804030000731200_36']").attr("content");	// 로그인 하시겠습니까?
+
+	if (loginYn === "Y") {
+		$.ajax({
+			type: "POST"
+			, dataType: "text"
+			, async : false
+			, contentType : "application/json; charset=UTF-8"
+			, url : "/C/KR/KO/check-login.json"
+			, data : ""
+			, success : function(response) {
+				if ($.trim(response) === "9999") {
+					if(acnoParam != undefined && $.trim(acnoParam) != "") {
+						confirmMessage = $("meta[name='PCCM201804030000731200_37']").attr("content");	// 로그인 페이지로 이동하시겠습니까?
+						confirmMessage += target === "_blank" ? " (" + $("meta[name='PCCM201804030000731200_35']").attr("content") + ")" : "";	//새창
+						url = location.href;
+					}
+
+                    var confirmText = $("meta[name='PCCM201804030000731200_38']").attr("content");	// 로그인이 필요한 페이지입니다.
+					$thisObj = $(obj);
+
+					flyasiana.confirm(
+						confirmText
+						, confirmMessage
+						, function () {
+							fnGoUrlBefore(obj, "", "/I/KR/KO/viewLogin.do?callType=IBE&movePage=" + url, target, metaId);
+						});
+					return false;
+				} else {
+					if(acnoParam != undefined && $.trim(acnoParam) != "") {
+						url += (url.indexOf("?") > -1 ? "&" : "?") + acnoParam + "=" + $.trim(response);
+					}
+					fnGoUrlBefore(obj, message, url, target, metaId);
+				}
+			}, error : function(response){
+				var errorMessage1 = $("meta[name='PCCM201804030000731200_42']").attr("content");	// 처리 중 오류가 발생하였습니다.
+				var errorMessage2 = $("meta[name='PCCM201804030000731200_43']").attr("content");	// 다시 시도하거나 관리자에게 문의바랍니다.
+                flyasiana.alert("[" + response.status + "] " + errorMessage1, errorMessage2);
+			}
+		});
+	} else {
+		fnGoUrlBefore(obj, message, url, target, metaId);
+	}
+};
+
+// 페이지 이동 전 확인메시지 창
+var fnGoUrlBefore = function ($this, _message, _url, _target, _metaId) {
+	if(_message != undefined && _message !== "" && _url.indexOf("flyasiana.com") < 0) {
+		//fnGoUrl(_url, _target, _metaId); return;
+		
+		var confirmMessage = $("meta[name='PCCM201804030000731200_39']").attr("content");	// 외부 페이지로 이동됩니다.
+	    confirmMessage += _target === "_blank" ? " (" + $("meta[name='PCCM201804030000731200_35']").attr("content") + ")" : "";	// 새창
+
+        $thisObj = $this;
+
+		flyasiana.confirm(
+			confirmMessage
+			, _message
+			, function () {
+				fnGoUrl(_url, _target, _metaId);
+			}
+		);
+	} else {
+		fnGoUrl(_url, _target, _metaId);
+	}
+};
+
+// 페이지 이동
+var fnGoUrl = function (_url, _target, _metaId) {
+/*
+	var link = document.createElement('a');
+	link.target = _target;
+	link.href = _url;
+
+	if (_metaId !== "") {
+		fnWriteMetaAccessLog(_metaId);
+	}
+
+	link.click();
+	// iE 하위버전에서 스크립트 미동작으로 아래와 같이 수정
+*/
+	if (_target === "_blank") {
+		var new_window = null;
+		new_window = window.open(_url);
+
+		if (new_window == null){
+			var inform1 = $("meta[name='PCCM201804030000731200_40']").attr("content"); // 팝업이 차단되어있습니다.
+			var inform2 = $("meta[name='PCCM201804030000731200_41']").attr("content"); // 인터넷 브라우저에서 팝업차단 해제바랍니다.
+			flyasiana.alert(inform1, inform2);
+			return false;
+		} else {
+			if (_metaId !== "") {
+				fnWriteMetaAccessLog(_metaId);
+			}
+		}
+	} else {
+		if (_metaId !== "") {
+			fnWriteMetaAccessLog(_metaId);
+		}
+		location.href = _url;
+	}
+
+};
+
+// 페이징 처리
+var paging = function (data, fnCallback, $area, $form) {
+	$area = $area || $('div.paging');
+	fnCallback = fnCallback || function (page) {
+		$form = $form || $("#frmSearch");
+		$form
+			.find("input[name='page']").val(page).end()
+			.submit();
+	};
+
+	$area.hide();
+	if(data.totalPages > 0) {
+		var page = parseInt(data.number) + 1;
+		var pageSize = parseInt(data.size);
+		var totalPages = parseInt(data.totalPages);
+
+        var startPage = page - ((page-1)%10);
+        var endPage = (page - ((page-1)%10)) + 9;
+        if(totalPages < endPage){
+            endPage = totalPages;
+        }
+
+		if (totalPages < 1) {
+			totalPages = 1;
+		}
+
+		var firstBtn = ' <a href="#first" class="btn_first"><span class="hidden">' + $("meta[name='PCCM201804030000731200_67']").attr("content") + '</span></a>\n'; // 처음
+		var prevBtn = '	<a href="#prev" class="btn_prev"><span class="hidden">' + $("meta[name='PCCM201804030000731200_65']").attr("content") + '</span></a>\n'; // 이전
+		var nextBtn = '	<a href="#next" class="btn_next"><span class="hidden">' + $("meta[name='PCCM201804030000731200_66']").attr("content") + '</span></a>\n'; // 다음
+		var lastBtn = '	<a href="#last" class="btn_last"><span class="hidden">' + $("meta[name='PCCM201804030000731200_68']").attr("content") + '</span></a>\n'; // 맨끝
+		var $wrap = $(
+			'<div>'
+			+ firstBtn
+			+ prevBtn
+			+ nextBtn
+			+ lastBtn
+			+ '</div>'
+		);
+
+		for(var i = startPage ; i <= endPage ; i++ ){
+			if ($wrap.find('a._pagerNo').length === 0) {
+				$wrap.find('a.btn_prev').after('<a href="#' + i + '" class="' + (page==i?'on':'') + ' _pagerNo" data-page-no="' + i + '">' + i + (page==i?'<span class="hidden">' + $("meta[name='PCCM201804030000731200_69']").attr("content") + '</span>':'') + '</a>\n');
+			} else {
+				$wrap.find('a._pagerNo').last().after('<a href="#' + i + '" class="' + (page==i?'on':'') + ' _pagerNo" data-page-no="' + i + '">' + i + (page==i?'<span class="hidden">' + $("meta[name='PCCM201804030000731200_69']").attr("content") + '</span>':'') + '</a>\n');
+			}
+		}
+
+		$area.html($wrap.html());
+
+		$area
+			.find(".btn_first").on("click", function() {
+				if(typeof fnCallback == 'function'){
+					fnCallback(1);
+				}
+			}).end()
+			.find(".btn_prev").on("click", function() {
+				var movePage = page - pageSize > 1 ? page - pageSize : 1;
+				if(typeof fnCallback == 'function'){
+					fnCallback(movePage);
+				}
+			}).end()
+			.find("._pagerNo").on("click", function() {
+				var movePage = $(this).attr("data-page-no");
+				if(typeof fnCallback == 'function'){
+					fnCallback(movePage);
+				}
+			}).end()
+			.find(".btn_next").on("click", function() {
+				var movePage = page + pageSize < totalPages ? page + pageSize : totalPages;
+				if(typeof fnCallback == 'function'){
+					fnCallback(movePage);
+				}
+			}).end()
+			.find(".btn_last").on("click", function() {
+				if(typeof fnCallback == 'function'){
+					fnCallback(totalPages);
+				}
+			}).end();
+
+		$area.show();
+	}
+};
+
+/*
+* paging 커스텀  (cms 필요)
+* author tm.yun
+*/
+
+var mfui = mfui || {};
+mfui._languageCode = $('html').attr('lang').toUpperCase();
+mfui._uiLangs = {};
+
+switch(mfui._languageCode) {
+case 'KO' :
+	mfui._uiLangs.PAG001 = '처음';
+	mfui._uiLangs.PAG002 = '이전';
+	mfui._uiLangs.PAG003 = '다음';
+	mfui._uiLangs.PAG004 = '맨끝';
+
+	mfui._uiLangs.LAY001 = '닫기';
+	break;
+
+case 'EN' :
+	mfui._uiLangs.PAG001 = 'first';
+	mfui._uiLangs.PAG002 = 'Previous';
+	mfui._uiLangs.PAG003 = 'next';
+	mfui._uiLangs.PAG004 = 'At the end';
+
+	mfui._uiLangs.LAY001 = 'close';
+	break;
+
+case 'JA' :
+	mfui._uiLangs.PAG001 = '初めて';
+	mfui._uiLangs.PAG002 = '前';
+	mfui._uiLangs.PAG003 = '次の';
+	mfui._uiLangs.PAG004 = '最後';
+
+	mfui._uiLangs.LAY001 = '閉じる';
+	break;
+
+case 'CH' :
+	mfui._uiLangs.PAG001 = '第一';
+	mfui._uiLangs.PAG002 = '前';
+	mfui._uiLangs.PAG003 = '下';
+	mfui._uiLangs.PAG004 = '最后';
+
+	mfui._uiLangs.LAY001 = '关闭';
+	break;
+
+case 'DE' :
+	mfui._uiLangs.PAG001 = 'zuerst';
+	mfui._uiLangs.PAG002 = 'Bisherige';
+	mfui._uiLangs.PAG003 = 'Nächster';
+	mfui._uiLangs.PAG004 = 'Am Ende';
+
+	mfui._uiLangs.LAY001 = 'Schließen';
+	break;
+
+case 'FR' :
+	mfui._uiLangs.PAG001 = 'premier';
+	mfui._uiLangs.PAG002 = 'précédent';
+	mfui._uiLangs.PAG003 = 'prochain';
+	mfui._uiLangs.PAG004 = 'À la fin';
+
+	mfui._uiLangs.LAY001 = 'Fermer';
+	break;
+
+case 'RU' :
+	mfui._uiLangs.PAG001 = 'первый';
+	mfui._uiLangs.PAG002 = 'предыдущий';
+	mfui._uiLangs.PAG003 = 'следующий';
+	mfui._uiLangs.PAG004 = 'В конце';
+
+	mfui._uiLangs.LAY001 = 'Закрыть';
+	break;
+
+case 'ZH' :
+	mfui._uiLangs.PAG001 = '第一';
+	mfui._uiLangs.PAG002 = '前';
+	mfui._uiLangs.PAG003 = '下';
+	mfui._uiLangs.PAG004 = '最後';
+
+	mfui._uiLangs.LAY001 = '關閉';
+	break;
+
+case 'ES' :
+	mfui._uiLangs.PAG001 = 'primero';
+	mfui._uiLangs.PAG002 = 'Anterior';
+	mfui._uiLangs.PAG003 = 'siguiente';
+	mfui._uiLangs.PAG004 = 'Al final';
+
+	mfui._uiLangs.LAY001 = 'Cerrar';
+	break;
+}
+
+var multiPaging = function (data, fnCallback, $area, $form, postFix) {
+	$area = $area || $('div.paging');
+
+	fnCallback = fnCallback || function (page) {
+		$form = $form || $("#frmSearch");
+		$form
+			.find("input[name='page']").val(page).end()
+			.submit();
+	};
+	$area.hide();
+	if(data.totalPages > 0) {
+		var page = parseInt(data.number) + 1;
+		var pageSize = parseInt(data.size);
+		var totalPages = parseInt(data.totalPages);
+
+        var startPage = page - ((page-1)%10);
+        var endPage = (page - ((page-1)%10)) + 9;
+        if(totalPages < endPage){
+            endPage = totalPages;
+        }
+
+		if (totalPages < 1) {
+			totalPages = 1;
+		}
+
+		var firstBtn = ' <a href="#first" class="btn_first btn_first' + postFix + '"><span class="hidden">' + mfui._uiLangs.PAG001 + '</span></a>\n';
+		var prevBtn = '	<a href="#prev" class="btn_prev btn_prev' + postFix + '"><span class="hidden">' + mfui._uiLangs.PAG002 + '</span></a>\n';
+		var nextBtn = '	<a href="#next" class="btn_next btn_next' + postFix + '"><span class="hidden">'+ mfui._uiLangs.PAG003 +'</span></a>\n';
+		var lastBtn = '	<a href="#last" class="btn_last btn_last' + postFix + '"><span class="hidden">'+ mfui._uiLangs.PAG004 +'</span></a>\n';
+		var $wrap = $(
+			'<div>'
+			+ firstBtn
+			+ prevBtn
+			+ nextBtn
+			+ lastBtn
+			+ '</div>'
+		);
+
+		for(var i = startPage ; i <= endPage ; i++ ){
+			if ($wrap.find('a._pagerNo' + postFix).length === 0) {
+				$wrap.find('a.btn_prev' + postFix).after('<a href="#' + i + '" class="' + (page==i?'on':'') + ' _pagerNo'+ postFix +'" data-page-no="' + i + '">' + i + (page==i?'<span class="hidden">' + $("meta[name='PCCM201804030000731200_69']").attr("content") + '</span>':'') +'</a>\n');
+			} else {
+				$wrap.find('a._pagerNo' + postFix).last().after('<a href="#' + i + '" class="' + (page==i?'on':'') + ' _pagerNo'+ postFix +'" data-page-no="' + i + '">' + i + (page==i?'<span class="hidden">' + $("meta[name='PCCM201804030000731200_69']").attr("content") + '</span>':'') + '</a>\n');
+			}
+		}
+
+		$area.html($wrap.html());
+
+		$area
+			.find(".btn_first" + postFix).on("click", function() {
+				if(typeof fnCallback == 'function'){
+					fnCallback(1);
+				}
+			}).end()
+			.find(".btn_prev" + postFix).on("click", function() {
+				var movePage = page - pageSize > 1 ? page - pageSize : 1;
+				if(typeof fnCallback == 'function'){
+					fnCallback(movePage);
+				}
+			}).end()
+			.find("._pagerNo" + postFix).on("click", function() {
+				var movePage = $(this).attr("data-page-no");
+				if(typeof fnCallback == 'function'){
+					fnCallback(movePage);
+				}
+			}).end()
+			.find(".btn_next" + postFix).on("click", function() {
+				var movePage = page + pageSize < totalPages ? page + pageSize : totalPages;
+				if(typeof fnCallback == 'function'){
+					fnCallback(movePage);
+				}
+			}).end()
+			.find(".btn_last" + postFix).on("click", function() {
+				if(typeof fnCallback == 'function'){
+					fnCallback(totalPages);
+				}
+			}).end();
+		$area.show();
+	}
+};
+
+// 메타 데이터 접근(조회) 이력 생성
+var fnWriteMetaAccessLog = function (id) {
+	if (id != undefined && id !== "") {
+		$.ajax({
+			type: "POST"
+			, dataType: "text"
+			, async : true
+			, contentType : "application/json; charset=UTF-8"
+			, url : "/C/KR/KO/" + id + "/meta-access-log.json"
+			, data : ""
+		});
+	}
+};
+
+// 공통 탭, 레이어팝업 처리
+var fnCommonTabLayer = function () {
+	if (!$.tab) {
+		// 탭 Active
+		var tabId = $.urlParam("tabId");
+
+		if (tabId && tabOpen && $.isFunction(tabOpen)) {
+			tabOpen(tabId);
+		}
+	}
+
+	if (!$.layer) {
+		// 레이어 팝업 띄우기
+		var layerId = $.urlParam("layerId");
+
+		var isNotOpen = false;
+		isNotOpen = !layerId || !$('#' + layerId).length || !openLayerPopup || !$.isFunction(openLayerPopup);
+
+		if (! isNotOpen) {
+			if (! $.urlParam("keyId")) {
+				openLayerPopup(layerId);
+			}
+		}
+	}
+}
+
+// E카드 레이어 띄움
+var fnEcard = function (id) {
+	$.ecard.init(id);
+};
+// E카드 레이어 생성,
+$.ecard = {
+	map: {}
+	, init: function (id) {
+		$.ecard.get(id);
+		$.ecard.preview();
+	}
+	, open: function (type) {
+		type = type || 'form';
+		// 레이어 띄움
+		$.ecard.close();
+		if('form' == type){
+			openLayerPopup('ecardLayerFrm');
+		} else {
+			openLayerPopup('ecardLayerPrvw');
+		}
+	}
+	, close: function () {
+		// 레이어 닫기
+		$('div.layer_wrap').filter('[id^=ecardLayer]').hide();
+		$('body').css('overflow-y','auto');
+	}
+	, get: function (id) {
+		loadingOpen('entire');
+		var arrUrl = ['/C', $.cookie.get('NATION'), $.cookie.get('LANG'), 'ecard/detail']
+		// e카드 상세 내용 조회
+		$.ajax({
+			type: 'POST'
+			, url: arrUrl.join('/')
+			, contentType : "application/json; charset=UTF-8"
+			, data: JSON.stringify({id: id})
+			, success: function(data){
+				loadingClose('entire');
+				if (!data || $.isEmptyObject(data)) {
+					return false;
+				}
+				$.ecard.form(data);
+			}
+		});
+	}
+	, set: function () {
+		var to = $('meta[name="PCCM201804030000731200_52"]').attr('content');
+		to = to.replace("%to%", $.ecard.map['toName']);
+		var from = $('meta[name="PCCM201804030000731200_53"]').attr('content');
+		from = from.replace("%from%", $.ecard.map['fromName']);
+		
+		var contents = $.ecard.map['toContents'].replace(/</gim, "&lt;").replace(/>/gim, "&gt;");
+
+		// 데이터 세팅
+		$('#ecardLayerPrvw').find('div.img_area').html('<img src="' + $.ecard.map['imgPcEcardPath'] + '" alt="' + $.ecard.map['title'] + '">');
+		$('#ecardLayerPrvw').find('div.cont_view p.tit').text(to.replace(/</gi, "&lt;").replace(/>/gi, "&gt;"));
+		$('#ecardLayerPrvw').find('div.cont_view pre.message').html(contents);
+		$('#ecardLayerPrvw').find('div.cont_view p.from').text(from.replace(/</gi, "&lt;").replace(/>/gi, "&gt;"));
+
+
+		// 레이어 노출
+		$.ecard.open('preview');
+	}
+	, preview: function () {
+		// 레이어 생성
+		var $layer = $(
+			'<div class="layer_wrap" id="ecardLayerPrvw" style="display:none">'
+			+ '	<div class="dim_layer"></div>'
+			+ '	<div class="layer_pop" style="width:600px;">'
+			+ '		<div class="pop_cont">'
+			+ '			<h4>'+ $('meta[name="PCCM201804030000731200_44"]').attr('content') +'</h4>'
+			+ '			<div class="scroll_cont" tabindex="0">'
+			+ '				<div class="ecard_wrap">'
+			+ '					<div class="img_area">'
+			+ '						<img src="/C/pc/image/sub/img_ecard01.jpg" alt="">'
+			+ '					</div>'
+			+ '					<div class="cont_view">'
+			+ '						<p class="tit"> 님께</p>'
+			+ '						<pre class="message"></pre>'
+			+ '						<p class="from"> 드림</p>'
+			+ '					</div>'
+			+ '				</div>'
+			+ '			</div>'
+			+ '		</div>	'
+			+ '		<div class="btn_wrap_ceType2">'
+			+ '			<button type="button" class="btn_M white _modify">'+ $('meta[name="PCCM201804030000731200_54"]').attr('content') +'</button>'
+			+ '			<button type="button" class="btn_M red _send">'+ $('meta[name="PCCM201804030000731200_55"]').attr('content') +'</button>'
+			+ '		</div> 	'
+			+ '		<a href="#none" class="dim_close"><span class="hidden">'+ mfui._uiLangs.LAY001 +'</span></a>'
+			+ '	</div>'
+			+ '</div>'
+		);
+
+		$layer
+			.find('button._modify').off('click').on('click', function () {
+				$.ecard.open('form');
+			}).end()
+			.find('button._send').off('click').on('click', function () {
+				$.ecard.send();
+			}).end();
+
+		$('div.container')
+			.find('#ecardLayerPrvw').remove().end()
+			.append($layer);
+
+	}
+	, form: function (data) {
+		// 초기화
+		$.ecard.map = {};
+
+		// img src
+		var imgServer = $("meta[name='imgServer']").attr("content");
+		var imgPcEcardPath = imgServer + data.imgPcEcardPath
+			, altTxt = data.title;
+
+		var $layer = $(
+			'<div class="layer_wrap" id="ecardLayerFrm" style="display:none;">'
+			+ '	<div class="dim_layer"></div>'
+			+ '	<div class="layer_pop" style="width:600px;">'
+			+ '		<div class="pop_cont">'
+			+ '			<h4>'+ $('meta[name="PCCM201804030000731200_44"]').attr('content') +'</h4>'
+			+ '			<div class="scroll_cont" tabindex="0">'
+			+ '				<form id="frmEcard">'
+			+ '					<div class="ecard_wrap">'
+			+ '						<div class="img_area">'
+			+ '							<img src="' + imgPcEcardPath + '" alt="' + altTxt + '" onError="this.src=\'/C/pc/image/sub/img_ecard01.jpg\'">'
+			+ '						</div>'
+			+ '						<div class="cont_group">'
+			+ '							<p class="tit">'
+			+ '								<label for="name1">'+ $('meta[name="PCCM201804030000731200_45"]').attr('content') +'</label>'
+			+ '							</p>'
+			+ '							<div class="ipt">'
+			+ '								<input id="fromName" name="fromName" maxlength="30" type="text" placeholder="'+ $('meta[name="PCCM201804030000731200_47"]').attr('content') +'" title="'+ $('meta[name="PCCM201804030000731200_56"]').attr('content') +'" style="width:183px">'
+			+ '								<input id="fromEmail" name="fromEmail" type="text" placeholder="'+ $('meta[name="PCCM201804030000731200_48"]').attr('content') +'" title="'+ $('meta[name="PCCM201804030000731200_57"]').attr('content') +'" style="width:230px">'
+			+ '							</div>'
+			+ '						</div>'
+			+ '						<div class="cont_group">'
+			+ '							<p class="tit">'
+			+ '								<label for="name2">'+ $('meta[name="PCCM201804030000731200_46"]').attr('content') +'</label>'
+			+ '							<div class="ipt">'
+			+ '								<input id="toName" name="toName" maxlength="30" type="text" placeholder="'+ $('meta[name="PCCM201804030000731200_47"]').attr('content') +'" title="'+ $('meta[name="PCCM201804030000731200_58"]').attr('content') +'" style="width:183px">'
+			+ '								<input id="toEmail" name="toEmail" type="text" placeholder="'+ $('meta[name="PCCM201804030000731200_48"]').attr('content') +'" title="'+ $('meta[name="PCCM201804030000731200_59"]').attr('content') +'" style="width:230px">'
+			+ '							</div>'
+			+ '						</div>'
+			+ '						<div class="cont_group">'
+			+ '							<div class="byte_wrap">'
+			+ '								<p class="tit fl">'
+			+ '									<label for="msg1">'+ $('meta[name="PCCM201804030000731200_49"]').attr('content') +'</label>'
+			+ '								</p>'
+			+ '								<div class="txt_count fr"><em>0</em>/500 bytes</div>'
+			+ '							</div>'
+			+ '							<div class="ipt">'
+			+ '								<div class="textarea_wrap">'
+			+ '									<textarea id="toContents" name="toContents" rows="4" cols="50" style="height: 184px" title="전하는 내용"></textarea>'
+			+ '								</div>'
+			+ '							</div>'
+			+ '							<p class="mar_to20 col_gray">'+ $('meta[name="PCCM201804030000731200_50"]').attr('content') +'</p>'
+			+ '						</div>'
+			+ '					</div>'
+			+ '				</form>'
+			+ '			</div>'
+			+ '		</div>'
+			+ '		<div class="btn_wrap_ceType2">'
+			+ '			<button type="button" class="btn_M red _btnPreview">'+ $('meta[name="PCCM201804030000731200_51"]').attr('content') +'</button>'
+			+ '		</div>'
+			+ '		<a href="#none" class="dim_close"><span class="hidden">'+ mfui._uiLangs.LAY001 +'</span></a>'
+			+ '	</div>'
+			+ '</div>'
+		);
+
+		// 상세 데이터 세팅
+		$layer.find('form#frmEcard').append('<input type="hidden" name="langCd" value="' + $.cookie.get('LANG') + '" />');
+		$layer.find('form#frmEcard').append('<input type="hidden" name="cardNm" value="' + data.cardNm + '" />');
+
+		// 이벤트
+		$layer
+			.find('textarea').off('change keyup input').on('change keyup input', function (e) {
+				var $this = $(this)
+					, currVal = $this.val()
+					, cnt = tmpCnt = encodeURI(currVal).split(/%..|./).length-1
+					, maxByte = 500;
+
+					if(cnt > maxByte){
+						for(var i = 0; i < currVal.length ; i++){
+							var tmpVal = currVal.substring(0, currVal.length-i);
+							tmpCnt = encodeURI(tmpVal).split(/%..|./).length-1;
+
+							if(tmpCnt <= maxByte){
+								$this.val(tmpVal);
+								break;
+							}
+						}
+					}
+				$this.closest('div.cont_group').find('div.txt_count em').text(tmpCnt);
+			}).end()
+			.find('button._btnPreview').off('click').on('click', function () {
+				var paramArr = $(this).closest('div.layer_wrap').find('form#frmEcard').serializeArray();
+				$.each(paramArr, function (i, item) {
+					$.ecard.map[item.name] = item.value;
+				})
+				$.ecard.map['imgPcEcardPath'] = imgPcEcardPath;
+				$.ecard.map['title'] = altTxt;
+
+				// data validation check
+				if(!$.ecard.validation()) {
+					return false;
+				}
+
+				$.ecard.set();
+
+			}).end();
+
+		$('div.container')
+			.find('#ecardLayerFrm').remove().end()
+			.append($layer);
+
+		$.ecard.open('form');
+
+	}
+	, validation: function () {
+		var $frm = $('div#ecardLayerFrm').find('form#frmEcard');
+
+		var tmpResult = true;
+		$frm.find('input').each(function (i, obj) {
+			if('' == $(obj).val()){
+				var altVal = $('meta[name="PCCM201804030000731200_60"]').attr('content');
+				altVal = altVal.replace("%title%", $(obj).attr('title'));
+				flyasiana.alert(altVal);
+				$(obj).focus();
+				
+				tmpResult = false;
+				return false;
+			}else{
+				if( $(obj)[0].id == 'fromEmail' || $(obj)[0].id == 'toEmail' ){
+					var exptextEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;		
+					if(exptextEmail.test($(obj).val())==false){
+						if($('#_dummy-nation').text()=='KR'){
+							flyasiana.alert($(obj).attr('title') + '값 확인 후 다시 시도하여 주시기 바랍니다.');
+						}else if($('#_dummy-nation').text()=='EN'){
+							flyasiana.alert($(obj).attr('title') + 'Please try again.');				
+						}else{
+							flyasiana.alert($(obj).attr('title') + 'Please try again.');
+						}
+						tmpResult = false;
+						return false;
+					}
+				}
+			}
+		});
+		if(!tmpResult){
+			return false;
+		}
+		
+		// 2018-06-14 추후 사용할지 몰라서 체크문구 추가 요청 by 현업
+		//if($('#fromEmail').val() == $('#toEmail').val()) {
+		//	flyasiana.alert('보내시는 분 이메일과 받는분 이메일이 같을 경우 메일이 정상 발송되지 않을 수 있습니다.');
+		//}
+
+		if('' == $frm.find('textarea#toContents').val()){
+			flyasiana.alert($('meta[name="PCCM201804030000731200_61"]').attr('content'));
+			$frm.find('textarea#toContents').focus();
+			return false;
+		}
+		return true;
+	}
+	, send: function () {
+		loadingOpen('entire');
+		var arrUrl = ['/C', $.cookie.get('NATION'), $.cookie.get('LANG'), 'ecard/send']
+		$.ajax({
+			type: 'POST'
+			, url: arrUrl.join('/')
+			, contentType : "application/json; charset=UTF-8"
+			, dataType: 'TEXT'
+			, data: JSON.stringify($.ecard.map)
+			, success: function(result){
+				loadingClose('entire');
+				$.ecard.close();
+				if('SUCCESS' == result){
+					flyasiana.alert($('meta[name="PCCM201804030000731200_62"]').attr('content'));
+				} else {
+					flyasiana.alert($('meta[name="PCCM201804030000731200_64"]').attr('content') + '<br/>' + $('meta[name="PCCM201804030000731200_63"]').attr('content') );
+				}
+			}
+		});
+	}
+};
+
+/*
+	SNS 추가
+	- param info
+	  필수 : sns, url
+	  선택 : title(kakaotalk_custom), content(twitter, weibo, kakaostory)
+*/
+var fnShareSns = function(sns, url, title, content) {
+	var o;
+	var _url = encodeURIComponent(url);
+	var _title = title;
+	var _content = content;
+	var _br  = encodeURIComponent('\r\n');
+
+	action_logging({_n_m05: sns, _n_m06: _title});
+
+	switch(sns)
+	{
+		case 'facebook':
+			_url = encodeURIComponent(decodeURIComponent(_url).split("#")[0]);
+
+			o = {
+				method:'popup',
+				url: 'http://www.facebook.com/sharer.php?u=' + _url
+			};
+			break;
+
+		case 'twitter':
+			_url = encodeURIComponent(decodeURIComponent(_url).split("#")[0]);
+
+			o = {
+				method:'popup',
+				url:'https://twitter.com/intent/tweet?text=' + encodeURIComponent(_content) + '&url=' + _url
+			};
+			break;
+
+	   case 'weibo':
+		   o = {
+			   method:'popup',
+			   url:'http://service.weibo.com/share/share.php?url=' + _url + '&searchPic=true&title=' + encodeURIComponent(_content)
+		   };
+		   break;
+
+	   case 'kakaotalk':
+			_url = encodeURIComponent(decodeURIComponent(_url).split("#")[0]);
+
+			o = {
+			   method:'kakao',
+			   url: _url
+			};
+			break;
+
+	   case 'kakaostory':
+			_url = decodeURIComponent(_url).split("#")[0];
+
+		   o = {
+			   method:'ks',
+			   url : _url,
+			   txt : _content,
+		   };
+		   break;
+	   default:
+		   alert("지원하지 않는 SNS입니다.");
+		   break;
+	}
+
+	switch(o.method)
+	{
+		case 'popup':
+			window.open(o.url);
+			break;
+
+		case 'facebook':
+			FB.ui({
+				method: 'share',
+				display: 'popup',
+				//quote: _content,
+				href: decodeURIComponent(_url)
+			}, function(response){});
+			break;
+
+		case 'ks':
+			Kakao.init('c9b0fda0da0846db23ae305bd7f7183c');
+
+			Kakao.Story.share({
+				url: o.url,
+				text : _content
+			});
+			Kakao.cleanup();
+			break;
+
+		case 'kakao':
+			Kakao.init('c9b0fda0da0846db23ae305bd7f7183c');
+
+			var a = 1;
+			if (a == 1) {					//og태그 방식
+				Kakao.Link.sendScrap({
+					requestUrl: decodeURIComponent(o.url),
+					success: function () {
+						Kakao.cleanup();
+					}
+				});
+			} else {
+				Kakao.Link.sendCustom({ 	// 커스텀
+					templateId: 9292,
+					templateArgs: {
+						'title': _title,
+						'description': _content,
+						'image': 'https://flyasiana.com//C/pc/image/sub/sharekakao.jpg',
+						'url': o.url
+					},
+					success: function () {
+						Kakao.cleanup();
+					}
+				});
+			}
+			break;
+	}
+};
+
+
+
+/**
+	기타 필요한 util 추가
+*/
+$(document).ready(function () {
+
+	/**
+		쿠키 관련 유틸
+	*/
+	$.cookie = {
+		map: {},
+		init: function () {
+			var map = this.map,
+				tempArr = document.cookie.split('; ');
+
+			$(tempArr).each(function () {
+				var entyty = this.split('=');
+
+				map[entyty[0]] = entyty[1];
+			});
+		},
+		get: function (key) {
+			if ($.isEmptyObject(this.map)) {
+				this.init();
+			}
+			return this.map[key];
+		},
+		getCookie: function (cName) {
+			cName = cName + '=';
+			var cookieData = document.cookie;
+			var start = cookieData.indexOf(cName);
+			var cValue = '';
+			if(start != -1) {
+				start += cName.length;
+				var end = cookieData.indexOf(';', start);
+				if(end == -1) {
+					end = cookieData.length;
+				}
+				cValue = cookieData.substring(start, end);
+			}
+			return unescape(cValue);
+		}
+		, setCookie: function (cName, cValue, cDay) {
+			var expire = new Date();
+			expire.setDate(expire.getDate() + cDay);
+			cookies = cName + '=' + escape(cValue) + '; path=/;'; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
+			if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
+			document.cookie = cookies;
+		}
+		, setCookieDm: function (cName, cValue, cDay, cDomain) {
+			var expire = new Date();
+			expire.setDate(expire.getDate() + cDay);
+			cookies = cName + '=' + escape(cValue) + '; path=/;'; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
+			if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
+			cookies += ' domain=' + cDomain + ';';
+			document.cookie = cookies;
+		}
+		, removeCookie: function (cName) {
+			asiana.setCookie(cName, '', -1);
+		}
+	};
+
+	//if (_GEO === 'CN' || (!_GEOOrigin && $('meta[name="nation"]').attr('content') === 'CN')) {
+	if (location.pathname.indexOf('/meal-reward/') > -1 || location.pathname.indexOf('gateway.html') > -1 || _GEO === 'CN' || (!_GEOOrigin && $('meta[name="nation"]').attr('content') === 'CN')) {
+	} else {
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	}
+
+	/**
+		메뉴 관련 유틸
+	 	내부용, 외부로 나가는 케이스가 발생 할 수 있으므로 URL조회 후 외부 페이지 인지 판단 후 외부 URL일 때 해당 JS 호출 하도록 수정 필요함
+	*/
+	$.menu = {
+		move: function (id, option) {
+			option = option || {};
+
+			var url = this.getUrlById(id);
+
+			if (!$.isEmptyObject(option) && option.target == '_blank') {
+				url += this.getParam(option);
+				window.open(url);
+			} else {
+				setTimeout(function () {loadingOpen('entire');}, 1);
+				url += this.getParam(option);
+				location.href = url;
+			}
+		},
+		getParam: function (option) {
+			var paramUrl = '';
+
+			if (option.target) {
+				delete option.target;
+			}
+
+			if (!$.isEmptyObject(option)) {
+				paramUrl += '?' + $.param(option);
+			}
+			return paramUrl;
+		},
+		getMeta: function (name) {
+			var meta = $('meta').filter('[name="' + name + '"]').attr('content');
+			if (meta) {
+				return meta;
+			}
+		},
+		getUrlById: function (id) {
+			var arrUrl = ['/C', this.getMeta('nation'), this.getMeta('lang'), 'gnb/id', id, 'url'],
+				result = '';
+			$.ajax({
+				type: "GET", async : false, url: arrUrl.join('/'), dataType: 'TEXT',
+				success : function(response) {
+					result = response;
+					loadingClose('entire');
+				},
+				error: function () {
+					loadingClose('entire');
+				}
+			})
+			.always(function () {
+				loadingClose('entire');
+			});
+			return result;
+		}
+	};
+});
+
+//적립제휴사 aj렌터카 링크
+var fnGoAjRentCarLink = function () {
+	$.ajax({
+		type: "POST"
+		, dataType: "text"
+		, async : false
+		, contentType : "application/json; charset=UTF-8"
+		, url : "/C/KR/KO/check-login.json"
+		, data : ""
+		, success : function(response) {
+			if ($.trim(response) === "9999") {
+				var $meta = $('meta');
+				var nation = $meta.filter('[name="nation"]').attr('content');
+				var lang = $meta.filter('[name="lang"]').attr('content');
+				cms.goToLink('/I/' + nation + '/' + lang + '/viewLogin.do?callType=IBE&movePage=' + encodeURIComponent(location.href));
+				return false;
+			} else {
+				var url = '';	
+				switch(memberGrade) {
+					case "A": // Diamond Plus Permanent
+						url = 'http://www.ajrentacar.co.kr/partner/asianagold/index.do';
+						break;
+					case "D" : // Diamond
+						url = 'http://www.ajrentacar.co.kr/partner/asianagold/index.do';
+						break;
+					case "G": // Gold
+						url = 'http://www.ajrentacar.co.kr/partner/asianagold/index.do';
+						break;
+					case "K": // Magic Miles
+						url = 'http://www.ajrentacar.co.kr/partner/asianagold/index.do';
+						break;
+					case "M": // Diamond Plus
+						url = 'http://www.ajrentacar.co.kr/partner/asianagold/index.do';
+						break;
+					case "P": // Platinum
+						url = 'http://www.ajrentacar.co.kr/partner/asianagold/index.do';
+						break;
+					case "S": // Silver
+						url = 'http://www.ajrentacar.co.kr/partner/asianasilver/index.do';
+						break;
+					default:
+						url = 'http://www.ajrentacar.co.kr/partner/asianasilver/index.do';
+						break;
+				}	
+				window.open(url,'_blank');
+			}
+		}, error : function(response){
+			var errorMessage1 = $("meta[name='PCCM201804030000731200_42']").attr("content");	// 처리 중 오류가 발생하였습니다.
+			var errorMessage2 = $("meta[name='PCCM201804030000731200_43']").attr("content");	// 다시 시도하거나 관리자에게 문의바랍니다.
+            flyasiana.alert("[" + response.status + "] " + errorMessage1, errorMessage2);
+		}
+	});
+};
+
+var fnGoOutlinkPartnerEarn = function (obj) {
+	var url = $(obj).attr("url");
+	var target = $(obj).attr("target");
+	var message = $(obj).attr("message");	// 이동 시 confirm 메시지
+	var loginYn = $(obj).attr("loginYn");	// 로그인 체크 Y/N
+	var acnoParam = $(obj).attr("acnoParam");	// 회원번호 파라미터명
+	var metaId = $(obj).attr("logId");	// 로그 생성 필요 시, META ID
+	var confirmMessage = "";
+
+    target = (target == 1 || target == 'S' || target == '_self') ? "_self" : "_blank";
+    metaId = (metaId == null || metaId == undefined) ? "" : metaId;
+    confirmMessage = "로그인 후 해당 페이지로 이동됩니다." + (target === "_blank" ? " (새창)" : "") + "<br/>로그인 하시겠습니까?";
+
+    switch(flyasiana.getLangCd()){
+        	case "EN": confirmMessage = "You will be moved to the respective page after logging in." + (target === "_blank" ? " (New window)" : "") + "<br/>Would you like to log in?"; break;
+            case "JA": confirmMessage = "ログイン後に該当のページに移動します。" + (target === "_blank" ? " （新しいウィンドウ）" : "") + "<br/>ログインしますか？"; break;
+            case "CH": confirmMessage = "登录后跳转至相应页面。" + (target === "_blank" ? " （新窗口）" : "") + "<br/>是否要登录？"; break;
+            case "ZH": confirmMessage = "登錄後前往相應頁面。" + (target === "_blank" ? " （新視窗）" : "") + "<br/>是否要登錄？"; break;
+            case "DE": confirmMessage = "Sie werden nach der Anmeldung zur entsprechenden Seite weitergeleitet." + (target === "_blank" ? " (Neues Fenster)" : "") + "<br/>Möchten Sie sich anmelden?"; break;
+            case "FR": confirmMessage = "Vous serez redirigé(e) vers la page concernée après vous être connecté(e)." + (target === "_blank" ? " (Nouvelle fenêtre)" : "") + "<br/>Souhaitez-vous vous identifier ?"; break;
+            case "RU": confirmMessage = "Вам будет необходимо перейти на соответствующую страницу после входа в систему." + (target === "_blank" ? " (Новое окно)" : "") + "<br/>Хотите выполнить вход?"; break;
+            case "ES": confirmMessage = "Se le trasladará a la página respectiva después de iniciar sesión." + (target === "_blank" ? " (Nueva ventana)" : "") + "<br/>¿Desea iniciar sesión?"; break;
+    }
+
+	if (loginYn === "Y") {
+		$.ajax({
+			type: "POST"
+			, dataType: "text"
+			, async : false
+			, contentType : "application/json; charset=UTF-8"
+			, url : "/C/KR/KO/check-login.json"
+			, data : ""
+			, success : function(response) {
+				if ($.trim(response) === "9999") {
+					if(acnoParam != undefined && $.trim(acnoParam) != "") {
+						confirmMessage = "로그인 페이지로 이동하시겠습니까?" + (target === "_blank" ? " (새창)" : "");
+						switch(flyasiana.getLangCd()){
+                            case "EN": confirmMessage = "Would you like to go to the login page?" + (target === "_blank" ? " (New window)" : ""); break;
+                            case "JA": confirmMessage = "ログインページへ移動しますか？" + (target === "_blank" ? " （新しいウィンドウ）" : ""); break;
+                            case "CH": confirmMessage = "是否要跳转至登录页面？" + (target === "_blank" ? " (新窗口)" : ""); break;
+                            case "ZH": confirmMessage = "是否要前往登錄頁面？" + (target === "_blank" ? " (新視窗)" : ""); break;
+                            case "DE": confirmMessage = "Möchten Sie zur Seite zum Anmelden wechseln?" + (target === "_blank" ? " (Neues Fenster)" : ""); break;
+                            case "FR": confirmMessage = "Souhaitez-vous vous rendre sur la page de connexion ?" + (target === "_blank" ? " (Nouvelle fenêtre)" : ""); break;
+                            case "RU": confirmMessage = "Хотите перейти на страницу входа в систему?" + (target === "_blank" ? " (Новое окно)" : ""); break;
+                            case "ES": confirmMessage = "¿Desea ir a la página de inicio de sesión?" + (target === "_blank" ? " (Nueva ventana)" : ""); break;
+						}
+						url = location.href;
+					}
+                    var confirmText = "로그인이 필요한 페이지입니다.";
+                    switch(flyasiana.getLangCd()){
+                        case "EN": confirmText = "You must be logged in to access this page."; break;
+                        case "JA": confirmText = "ログインが必要なページです。"; break;
+                        case "CH": confirmText = "为需要登录的页面。"; break;
+                        case "ZH": confirmText = "為需要登錄的頁面。"; break;
+                        case "DE": confirmText = "Sie müssen für Zugriff auf diese Seite angemeldet sein."; break;
+                        case "FR": confirmText = "Vous devez être connecté(e) pour accéder à cette page."; break;
+                        case "RU": confirmText = "Для доступа к данной странице вам необходимо войти в систему."; break;
+                        case "ES": confirmText = "Debe iniciar sesión para acceder a esta página."; break;
+                    }
+                    $thisObj = $(obj);
+
+					flyasiana.confirm(
+						confirmText
+						, confirmMessage
+						, function () {
+							fnGoUrlBefore(obj, "", "/I/KR/KO/viewLogin.do?callType=IBE&movePage=" + url, target, metaId);
+						});
+					return false;
+				} else {
+					if(acnoParam != undefined && $.trim(acnoParam) != "") {
+						url += (url.indexOf("?") > -1 ? "&" : "?") + acnoParam + "=" + $.trim(response);
+					}
+					confirmMessage = $("#_ml-PCCM201802220000728410_08").text();
+					message = $("#_ml-PCCM201802220000728410_09").text();
+					flyasiana.confirm(
+						confirmMessage, message
+						, function () {
+							fnGoUrl(url, target, metaId);
+						}
+					);
+				}
+			}, error : function(response){
+			    var errorMessage = "처리 중 오류가 발생하였습니다. 다시 시도하거나 관리자에게 문의바랍니다.";
+			    switch(flyasiana.getLangCd()){
+                    case "EN": errorMessage = "A temporary error has occurred while processing. Please try again or contact the administrator."; break;
+                    case "JA": errorMessage = "一時的にエラーが発生しました。 もう一度トライするか管理者にお問い合わせください。"; break;
+                    case "CH": errorMessage = "处理中发生错误。请重试或咨询管理员。"; break;
+                    case "ZH": errorMessage = "處理中發生錯誤。請再試一次或諮詢管理員。"; break;
+                    case "DE": errorMessage = "Es ist ein temporärer Fehler bei der Bearbeitung aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie den Administrator."; break;
+                    case "FR": errorMessage = "Une erreur temporaire est survenue lors du traitement. Veuillez réessayer ou contacter l’administrateur."; break;
+                    case "RU": errorMessage = "Во время обработки данных произошел сбой. Повторите попытку или свяжитесь с администратором."; break;
+                    case "ES": errorMessage = "Se ha producido un error durante el procesamiento. Inténtelo de nuevo o póngase en contacto con el administrador."; break;
+                }
+				flyasiana.alert("[" + response.status + "] " + errorMessage);
+			}
+		});
+	} else {
+		confirmMessage = $("#_ml-PCCM201802220000728410_08").text();
+		message = $("#_ml-PCCM201802220000728410_09").text();
+		flyasiana.confirm(
+			confirmMessage, message
+			, function () {
+				fnGoUrl(url, target, metaId);
+			}
+		);
+	}
+};

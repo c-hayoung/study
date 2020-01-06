@@ -1,0 +1,2029 @@
+/*
+* @author 			: di.choi / sh.kim
+* @description		: 메인 UI
+* @document version	: OZ_UI설계(Web)_MN메인_Ver1.70_20180110				 
+* @version			: 0.02
+* @history			: 
+*/
+var mfui = mfui || {};
+mfui._languageCode = $('html').attr('lang');
+mfui._uiLangs = mfui._uiLangs  || {};
+
+switch(mfui._languageCode) {
+case 'KO' :
+	mfui._uiLangs.UM0001 = '선택됨';
+	mfui._uiLangs.UM0002 = '번째 슬라이드';
+	mfui._uiLangs.UM0003 = '번째 슬라이드 페이지';
+	mfui._uiLangs.UM0004 = '로 구성된 표입니다.';
+	mfui._uiLangs.UM0005 = '즐겨찾기 선택됨';
+	mfui._uiLangs.UM0006 = '즐겨찾기 선택 안됨';
+	mfui._uiLangs.UM0007 = '추천상품';
+	break;
+case 'EN' :
+	mfui._uiLangs.UM0001 = 'Selected';
+	mfui._uiLangs.UM0002 = 'slide';
+	mfui._uiLangs.UM0003 = 'slide page';
+	mfui._uiLangs.UM0004 = 'The table consists of';
+	mfui._uiLangs.UM0005 = 'Selected as Favorites';
+	mfui._uiLangs.UM0006 = 'Not selected as Favorites';
+	mfui._uiLangs.UM0007 = 'Recommended product';
+	break;
+case 'JA' :
+	mfui._uiLangs.UM0001 = '選択済み';
+	mfui._uiLangs.UM0002 = '番目スライド';
+	mfui._uiLangs.UM0003 = '番目スライドのページ';
+	mfui._uiLangs.UM0004 = 'で構成された表です。';
+	mfui._uiLangs.UM0005 = 'お気に入りの選択完了';
+	mfui._uiLangs.UM0006 = 'お気に入りの選択未完了';
+	mfui._uiLangs.UM0007 = 'オススメ商品';
+	break;
+case 'CH' :
+	mfui._uiLangs.UM0001 = '已选择';
+	mfui._uiLangs.UM0002 = '第 张幻灯片';
+	mfui._uiLangs.UM0003 = '第 张幻灯片页面';
+	mfui._uiLangs.UM0004 = '由 构成的表。';
+	mfui._uiLangs.UM0005 = '已选择收藏';
+	mfui._uiLangs.UM0006 = '未选择收藏';
+	mfui._uiLangs.UM0007 = '推荐商品';
+	break;
+case 'DE' :
+	mfui._uiLangs.UM0001 = 'Ausgewählt';
+	mfui._uiLangs.UM0002 = 'Folie.';
+	mfui._uiLangs.UM0003 = 'Folien-Seite.';
+	mfui._uiLangs.UM0004 = 'Die Tabelle besteht aus';
+	mfui._uiLangs.UM0005 = 'Als Favorit ausgewählt';
+	mfui._uiLangs.UM0006 = 'Nicht als Favorit ausgewählt';
+	mfui._uiLangs.UM0007 = 'Empfohlenes Produkt';
+	break;
+case 'FR' :
+	mfui._uiLangs.UM0001 = 'Sélectionné';
+	mfui._uiLangs.UM0002 = 'Diapositive';
+	mfui._uiLangs.UM0003 = 'Page';
+	mfui._uiLangs.UM0004 = 'Le tableau se compose de';
+	mfui._uiLangs.UM0005 = 'Sélectionné parmi les favoris';
+	mfui._uiLangs.UM0006 = 'Non sélectionné parmi les favoris';
+	mfui._uiLangs.UM0007 = 'Produit recommandé';
+	break;
+case 'RU' :
+	mfui._uiLangs.UM0001 = 'Выбрано';
+	mfui._uiLangs.UM0002 = 'Слайд ';
+	mfui._uiLangs.UM0003 = 'Страница слайда';
+	mfui._uiLangs.UM0004 = 'Таблица состоит из';
+	mfui._uiLangs.UM0005 = 'Добавлено в избранное';
+	mfui._uiLangs.UM0006 = 'Удалено из избранного';
+	mfui._uiLangs.UM0007 = 'Рекомендованный продукт';
+	break;
+case 'ZH' :
+	mfui._uiLangs.UM0001 = '已選擇';
+	mfui._uiLangs.UM0002 = '第 張投影片';
+	mfui._uiLangs.UM0003 = '第 張投影片頁面';
+	mfui._uiLangs.UM0004 = '由 構成的表。';
+	mfui._uiLangs.UM0005 = '已選擇收藏';
+	mfui._uiLangs.UM0006 = '未選擇收藏';
+	mfui._uiLangs.UM0007 = '推薦商品';
+	break;
+case 'ES' :
+	mfui._uiLangs.UM0001 = 'Seleccionado';
+	mfui._uiLangs.UM0002 = 'Diapositiva n.º';
+	mfui._uiLangs.UM0003 = 'Página de diapositiva n.º';
+	mfui._uiLangs.UM0004 = 'La tabla consiste en';
+	mfui._uiLangs.UM0005 = 'Seleccionado como favoritos';
+	mfui._uiLangs.UM0006 = 'No seleccionado como favoritos';
+	mfui._uiLangs.UM0007 = 'Producto recomendado';
+	break;
+}
+
+
+(function(){ // 외부 라이브러리와 충돌을 막고자 모듈화.
+    // 브라우저 및 버전을 구하기 위한 변수들.
+    'use strict';
+    var agent = navigator.userAgent.toLowerCase(),
+        name = navigator.appName,
+        browser;
+
+    // MS 계열 브라우저를 구분하기 위함.
+    if(name === 'Microsoft Internet Explorer' || agent.indexOf('trident') > -1 || agent.indexOf('edge/') > -1) {
+        browser = 'ie';
+        if(name === 'Microsoft Internet Explorer') { // IE old version (IE 10 or Lower)
+            agent = /msie ([0-9]{1,}[\.0-9]{0,})/.exec(agent);
+            browser += parseInt(agent[1]);
+        } else { // IE 11+
+            if(agent.indexOf('trident') > -1) { // IE 11
+                browser += 11;
+            } else if(agent.indexOf('edge/') > -1) { // Edge
+                browser = 'edge';
+            }
+        }
+    } else if(agent.indexOf('safari') > -1) { // Chrome or Safari
+        if(agent.indexOf('opr') > -1) { // Opera
+            browser = 'opera';
+        } else if(agent.indexOf('chrome') > -1) { // Chrome
+            browser = 'chrome';
+        } else { // Safari
+            browser = 'safari';
+        }
+    } else if(agent.indexOf('firefox') > -1) { // Firefox
+        browser = 'firefox';
+    }
+
+    // IE: ie7~ie11, Edge: edge, Chrome: chrome, Firefox: firefox, Safari: safari, Opera: opera
+    document.getElementsByTagName('html')[0].className = browser;
+}());
+
+//asiana main ui
+var amui = amui || {};
+var isOpenLayer = false;
+
+// 이벤트 데이터 조회 유무
+var _isLoadedEvent = false;
+/*
+* @function			: createFullpage
+* @param			: 없음
+* @description		: 풀페이지 레이아웃 적용 
+* @history			: 시작...
+*/
+
+(function($){
+	'use strict';
+
+	amui.easingAnc = [0.15, 0.21, 0.3, 1]; //easing
+	amui.ancSpd = 300; //easing
+	amui.rspHeight = 850; //responsiveHeight default
+	amui.notiLeng = $('.notice:visible').length;
+	amui.notiHeight = $('.main_notibox').outerHeight();
+	amui.isReRender = false;
+	amui.quickStepOpen = false;
+	amui.isEnterkey = false;
+	amui.isReFullpage = false; //resize multiple times issue
+	amui.scrollOverflow = true; //type : const / platform에 따라 t / f 
+
+	var createFullpage = {
+			_scope 	: null
+			,_speed : 600
+			,_animateStatus : false
+			,_fullobj : null
+	};
+	var cf = createFullpage;
+
+	
+	//pc로 접속했는지 체크
+	var filter = "win16|win32|win64|mac|macintel";
+	var isMobile = filter.indexOf(navigator.platform.toLowerCase()) < 0;
+
+	if(isMobile){
+		amui.scrollOverflow = false;
+	} 
+
+	// 초기화 또는 시작
+	cf.init = function(){
+		//fullpage 생성
+		 $('#fullpage').fullpage({
+			// anchors: ['section01', 'section02', 'section03', 'section04', 'section05', 'section06'],
+			// fullpage destroy시 다른섹션에서 공지영역 닫을 경우 탑영역으로 이동후 재이동되는 문제로 앵커삭제처리
+            menu: '#fullMenu',
+            navigation: true,
+            scrollingSpeed: 1000,
+            easingcss3: 'ease-out',
+            autoScrolling:true,
+            scrollOverflow:amui.scrollOverflow,          
+            verticalCentered: false, //centered
+            responsiveWidth: 1280, //reponsive width scroll 
+            responsiveHeight: amui.rspHeight, //reponsive height scroll 
+			css3:false, //to avoid problems with css3 transforms and fixed elements in Chrome
+            onLeave: function(index, nextIndex, direction){
+                var nextIndex = nextIndex - 1;
+				var veloCont = '.section:eq(' + nextIndex + ') .velocont';
+				var anchWid = $('#fullMenu li').width();
+				var anchAllLi = $('#fullMenu li');
+				
+				//mobile PC버전 오류방지
+				if(isMobile){
+					anchWid = window.innerWidth/5;
+				} 
+
+				function anchMove(){
+					anchAllLi.removeClass('on');
+					anchAllLi.eq(nextIndex).addClass('on');
+					$('.anch_box').velocity('stop').velocity({left:anchWid*nextIndex},amui.ancSpd,amui.easingAnc);
+				}
+				
+				if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+					anchMove();
+				} else {
+					//풀페이지 해제되었을때 ie nextIndex 오류방지
+					if(nextIndex == 4){
+						if($(window).scrollTop() > 100){
+							anchMove();
+						}
+					} else {
+						anchMove();
+					}
+				}
+
+                if (direction == 'down' ) {
+
+                    // width 1280 , height amui.rspHeight 이상에서만 실행
+                    if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+						$(veloCont).velocity({translateY: [0,'30vh']},1500,"ease-out");       
+						fixedWhite();    
+					}
+
+                } else if (direction ==  'up' && nextIndex !== 0 ) {
+                    // width 1280 , height amui.rspHeight 이상에서만 실행
+                    if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+                        //푸터에서 이벤트로 올라갈때 모션 x
+                        if(nextIndex !==4){
+                            $(veloCont).velocity({translateY: [0,'-30vh']},1500,"ease-out");
+						}
+						fixedWhite();
+					}
+				};
+				
+				//풀페이지 모드시 마지막 이벤트 섹션일때만 헤더 bg처리
+				function fixedWhite(){
+					if(nextIndex == 4){
+						$('header.main').addClass('fixed_white');
+					}else{
+						$('header.main').removeClass('fixed_white');
+					}	
+				}
+
+				//항공권예약 섹션이동시 헤더 bg해제
+				if(nextIndex == 0){
+                    if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+						$('header.main').removeClass('fixed_white');
+					}
+				}
+
+				//이벤트 섹션 이동 시
+				if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+					if(nextIndex >= 3) {
+						if (!_isLoadedEvent) {
+							_isLoadedEvent = true;
+							cmsEvent.init();
+						}
+					}
+				} else {
+					//풀페이지 해제되었을때 ie nextIndex 오류방지
+					if(nextIndex >= 3){
+						if($(window).scrollTop() > 100){
+							if (!_isLoadedEvent) {
+								_isLoadedEvent = true;
+								cmsEvent.init();
+							}
+						}
+					}
+				}
+
+				//섹션 이동시 선택됨 title 추가
+				$('.full_menu > li > a').attr('title','');
+				$('.full_menu > li').eq(nextIndex).find('a').attr('title',mfui._uiLangs.UM0001);
+
+				setTimeout(function(){
+					if(nextIndex == 1) {
+						//alert('지금이야dd :: '+nextIndex);
+						drawPnrList();
+					} else if(nextIndex == 2){
+						//alert('지금이야dd :: '+nextIndex);
+						drawCheckInList();
+					}
+				},1500);
+
+			},			
+            afterRender: function(){
+				$.fn.fullpage.setMouseWheelScrolling(true);
+
+                //상단으로 이동
+                $('#goTop').on('click', function(){
+					if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+						$.fn.fullpage.moveTo(1);
+					}else{
+						$('html, body').velocity('scroll',{offset:'0'});
+					}
+				});
+				
+				//초기 선택됨 title 추가
+				$('.full_menu').find('.on a').attr('title',mfui._uiLangs.UM0001);
+				
+				/*	@ Anchor Click & Move
+					1.풀페이지 실행시 : moveTo
+					2.풀페이지 해제시 : scrollTop (섹션이 길경우 해당 섹션의 상단으로 이동)
+				//*/
+				$('#fullMenu li a').on('click', function(){
+					var anchAllLi = $('#fullMenu li');
+					var anchLi = $(this).parent('li');
+					var anchIdx = anchLi.index();
+					var secHeight = $('.section').eq(anchIdx).outerHeight();
+					var conHeight = $('#container').outerHeight();
+					var hBody = $('html,body');
+					var scrSpeed = 500;
+					var visibleNotiHeight = $('.main_notibox:visible').outerHeight();
+					
+					// console.log(secHeight,anchIdx);
+					if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+						// console.log('moveto');
+						$.fn.fullpage.moveTo(anchIdx+1);
+					} else{
+						// console.log('scrolltop');
+						if(anchIdx == 0){
+							hBody.velocity('stop').velocity('scroll',{offset:0},scrSpeed);
+						} else if(anchIdx == 4) {
+							hBody.velocity('stop').velocity('scroll',{offset:conHeight-secHeight-visibleNotiHeight-20+'px'},scrSpeed);
+						} else {
+							hBody.velocity('stop').velocity('scroll',{offset:anchIdx*secHeight-20+'px'},scrSpeed);
+						}
+					}
+
+					//항공권예약 섹션에서 퀵예매 영역 입력중일때 
+					//하단 퀵메뉴 링크 이동할경우
+					//항공권예약 섹션의 오픈된 퀵예매 영역 접기
+					if($('#foldSection1:visible').length == 1){
+						if(anchIdx !== 0){
+							$('#foldSection1').trigger('click');
+						}
+					}
+
+				});
+
+				/*	@ 로드후 긴급공지 영역 1개 이상 있을경우
+					1.amui.isReRender : destroy & Init 한번만 실행하기 위한 스위칭
+					2.풀페이지 check / destroy & init
+					3.풀페이지 해제시 scroll Fix white header 재실행
+				*/
+
+				//mobile pc버전 시점차이로 인한 분기
+				if(isMobile){
+					setTimeout(function(){
+						notiLengCheck();
+					},2000);
+				} else {
+					notiLengCheck();
+				}
+
+				function notiLengCheck(){
+					amui.notiLeng = $('.notice:visible').length;
+					if(amui.notiLeng > 0  && !amui.isReRender){
+						notiRerender();
+					}
+				}
+			},
+			afterResponsive: function(isResponsive){
+				if(isResponsive){
+					if(window.innerWidth < 1280 || $(window).height() < amui.rspHeight){
+						// console.log('isResponsive');
+						//풀페이지 해제 해상도에서만 실행
+						$('#fullpage').addClass('destroy');
+					} else {
+						$('#fullpage').removeClass('destroy');
+					}
+				} 
+			}			
+		});
+	};
+
+	
+	cf.init();
+	$.fn.fullpage.setMouseWheelScrolling(false);
+	amui.mainLayer = cf;
+
+	function notiRerender(){
+			
+		amui.isReRender = true;		
+		amui.notiLeng = $('.notice:visible').length;
+		amui.notiHeight = $('.main_notibox').outerHeight();
+		amui.rspHeight = amui.rspHeight + amui.notiHeight;
+
+		var headWrapHeight = $('.main_header_wrap').height();
+		var winHid = $(window).height();
+		var winWid = window.innerWidth;
+		/*
+		$('.section01 .slide').css({
+			'padding-top': headWrapHeight+'px'
+		});
+
+		//풀페이지 모드에서 긴급공지있을때 섹션 카피 겹침방지
+		if(amui.notiLeng == 0){
+			$('.section').not('.section05').find('.slide').css({
+				'padding-top': '123px'
+			});
+			$('.section05 .slide_inner').css({
+				'padding-top': '123px'
+			});
+		} else {
+			if(winWid >= 1280 && winHid >= amui.rspHeight){
+				$('.section').not('.section05').find('.slide').css({
+					'padding-top': headWrapHeight+'px'
+				});
+				$('.section05 .slide_inner').css({
+					'padding-top': headWrapHeight+'px'
+				});
+			}
+		}
+		*/
+
+		fpDestInit();
+
+	
+		if(winWid < 1280 || winHid < amui.rspHeight){
+			scrollFixwhite();
+		}
+
+		function scrollFixwhite(){
+			var isWinTop = true;
+			$(window).on('scroll', function(){
+				var winScrollTop = $(window).scrollTop();
+				if(winScrollTop == 0){
+					if(!isWinTop){
+						isWinTop = true;
+						$('header.main').removeClass('fixed_white');
+					}
+				} else {
+					if(isWinTop){
+						isWinTop = false;
+						$('header.main').addClass('fixed_white');
+					}
+				}
+			});
+		}
+			
+		//작은해상도에서 공지 다닫고 해상도 와이드로 변경시
+		//풀페이지 조건체크하여 풀페이지 destroy & Init
+		$(window).on('resize', function(){
+			checkNDestInit();
+		});
+				
+		/*	@ 긴급공지 영역 닫을때마다 
+			특가영역 위치 조정 & 풀페이지 check
+			항공권예약 섹션 PaddingTop Recheck
+		*/
+		//$('.noti_close, .noti_check').on('click', function(){
+		$('.noti_check').on('click', function(){	
+			$(this).parents('.notice').velocity('stop').velocity('slideUp');
+
+			// notibox height - this closing notice height
+			amui.notiHeight = amui.notiHeight - $(this).parents('.notice').outerHeight();
+			amui.rspHeight = amui.rspHeight - $(this).parents('.notice').outerHeight();
+			amui.notiLeng = $('.notice:visible').length-1;
+			var winWid = window.innerWidth;
+			var winHid = $(window).height();
+			// console.log(amui.notiLeng, amui.notiHeight, amui.rspHeight);	
+			
+			checkNDestInit();
+			
+			var headWrapHeight = $('.main_header_wrap').height();
+			var thisNotiHeight = $(this).parents('.notice').outerHeight();
+			
+			if(amui.notiLeng == 0){
+				//destInit 후 paddingTop 조정되어야함
+				$('.section').not('.section05').find('.slide').velocity('stop').velocity({
+					'padding-top': '123px'
+				});
+				$('.section05 .slide_inner').velocity('stop').velocity({
+					'padding-top': '123px'
+				});
+			} else {
+
+				//풀페이지 모드 상관없이 컨텐츠 겹침으로 인한 섹션 padding 재조정 : 첫번째 섹션 
+				$('.section01').find('.slide').velocity('stop').velocity({
+					'padding-top': headWrapHeight-thisNotiHeight-$('#nav .nav_line').height()+'px'
+				});
+
+				//풀페이지 모드일때만 컨텐츠 겹침으로 인한 섹션 padding 재조정
+				if(winWid >= 1280 && winHid >= amui.rspHeight){
+					$('.section').not('.section05').find('.slide').velocity('stop').velocity({
+						'padding-top': headWrapHeight-thisNotiHeight-$('#nav .nav_line').height()+'px'
+					});
+					$('.section05 .slide_inner').velocity('stop').velocity({
+						'padding-top': headWrapHeight-thisNotiHeight-$('#nav .nav_line').height()+'px'
+					});
+				}				
+			}
+		});
+
+	}
+
+})(jQuery);
+
+
+/*	@ fpDestInit
+	풀페이지 destroy & Init
+*/
+//mega start
+var qrw_mt = parseInt($('.quick_reservation_wrap').css('margin-top'));
+//mega end
+function fpDestInit(){
+	$('#fullpage').removeClass('destroy');
+	$.fn.fullpage.destroy('all');
+
+	//destroy 끝난 후 init하도록 셋팅
+	//풀페이지 모드에서 다른섹션 이동 후 풀와이드로 변경시 배경짤림 이슈
+	setTimeout(function() {
+		amui.mainLayer.init();
+		$.fn.fullpage.reBuild();
+	},100);	
+
+
+	//fullmenu init
+	function fullMenuInit(){
+		var anchAllLi = $('#fullMenu li');
+		anchAllLi.removeClass('on');
+		anchAllLi.eq(0).addClass('on');
+		$('.anch_box').velocity('stop').velocity({left:0},amui.ancSpd,amui.easingAnc);
+	}
+	fullMenuInit();
+	
+}
+
+/*	@ checkNDestInit
+	풀페이지 해상도 조건 만족할때만 destroy & Init
+*/
+function checkNDestInit(){
+	var winWid = window.innerWidth;
+	var winHid = $(window).height();
+	if(winWid >= 1280 && winHid >= amui.rspHeight){
+		if(!amui.isReFullpage){
+			//리사이징후 풀페이지 모드시 height강제 설정으로 인한 레이아웃 깨짐 방지
+			$('.section01 .slide').css('height','auto');
+			$('.section05 .slide').height($(window).height());
+			fpDestInit();
+			amui.isReFullpage = true;
+			// console.log('fullpage true');
+		}
+	} else {
+		if(amui.isReFullpage){
+			amui.isReFullpage = false;
+			// console.log('fullpage false');
+		}
+	}
+}
+
+var mt_new;
+
+mt_new = $('.main_slideWrap').height()
+//퀵예매 영역 Open & Fold
+var ieBool = (function(){
+	return $('html').hasClass('ie11') || $('html').hasClass('ie10') || $('html').hasClass('edge');
+})();
+function quickAreaOpen(){
+    //    mega start
+	mt_new = $('.main_slideWrap').height();
+	
+	$('.quick_reservation_wrap').css({
+//    	'z-index':'1000',
+    	'top':'110px'
+    });
+    $('.section01 .layer_bgBlack').show();
+    $('.main_header_wrap').addClass('blur bg_black');
+    $('.anchor_wrap').addClass('blur bg_black');
+    $('.main_slideWrap').addClass('blur');
+    $('.special_slider_wrap').addClass('blur');
+   
+    $('.no_special_wrap').addClass('blur');
+   
+    $('.anchor_wrap').css('z-index','1');
+    
+    //$('.section01 .slide_inner').css('z-index','300')
+//	$('.section01 .m_copy').velocity('slideUp');        
+    if(ieBool){
+    	$('.quick_reservation_wrap').css({marginTop:0});
+    	$('.special_slider_wrap').css({bottom:'-157px'});
+    	$('.no_special_wrap').css({bottom:'-157px'});
+	}else{
+		$('.quick_reservation_wrap').velocity({marginTop:0});
+		$('.special_slider_wrap').velocity({bottom:'-157px'});
+		$('.no_special_wrap').velocity({bottom:'-157px'});
+	}
+   
+    
+//  mega end
+	$('#foldSection1').show();
+	$.fn.fullpage.setMouseWheelScrolling(false);
+	amui.quickStepOpen = true;
+}
+
+function quickAreaFold(){	
+    //    mega start
+	if($('.section01 .swiper-wrapper > div').hasClass('on')){
+		if(ieBool){
+			$('.quick_reservation_wrap').css({marginTop:'230px'});
+		}else{
+			$('.quick_reservation_wrap').velocity({marginTop:'230px'});
+		}
+	} else {		
+		if(ieBool){
+			$('.quick_reservation_wrap').css({marginTop:mt_new+'px'});			
+		}else{
+			$('.quick_reservation_wrap').velocity({marginTop:mt_new+'px'});
+			
+		}
+	}
+    $('.section01 .layer_bgBlack').hide();
+    $('.main_header_wrap').removeClass('blur bg_black');
+    $('.anchor_wrap').removeClass('blur bg_black');
+    $('.main_slideWrap').removeClass('blur');
+    $('.special_slider_wrap').removeClass('blur');
+	
+	$('.no_special_wrap').removeClass('blur');
+	
+	$('.anchor_wrap').css('z-index','105');
+	$('.quick_reservation_wrap').css({
+//		'z-index':'901',
+		'top':'0'
+	});
+	if(ieBool){
+		$('.special_slider_wrap').css({bottom:'60px'});
+		$('.no_special_wrap').css({bottom:'60px'});
+	}else{
+		$('.special_slider_wrap').velocity({bottom:'60px'});
+		$('.no_special_wrap').velocity({bottom:'60px'});
+	}
+//    mega end
+	$('#foldSection1').hide();
+	$.fn.fullpage.setMouseWheelScrolling(true);
+	amui.quickStepOpen = false;
+}
+
+$('#foldSection1').on('click', function(){
+	layerAllClose();
+	quickAreaFold();
+});
+
+
+//full menu anchor resize
+$(window).on('resize', function(){
+	var winWid = window.innerWidth;
+	var winHid = $(window).height();
+
+	//currentIdx
+	var currentIdx = $('.full_menu').find('.on').index();
+	//resize li width
+	anchWid = $('.full_menu > li').width();
+	$('.anch_box').velocity('stop').velocity({left:anchWid*currentIdx},0,amui.easingAnc);
+	
+	/*	@ fullpage 리사이징 이슈
+		case : Notice 공지영역 다 닫힌 후 풀페이지 모드에서 리사이징하여 풀페이지 해제후 다시 풀페이지모드 실행시
+		Issue : responsive 모드로 destroy 클래스가 추가되어 이벤트 영역 내부 스크롤 안생김
+		solution : 리사이징시 해당사이즈 이상일때 removeClass destroy
+	*/
+	if(window.innerWidth >= 1280 && $(window).height() >= amui.rspHeight){
+		//console.log('fullpage Mode Remove Destroy');
+		$('#fullpage').removeClass('destroy');
+	}
+});
+
+
+
+
+//***********************
+//		메인 공통기능 
+//***********************
+/*
+* @function			: layerAllClose
+* @param			: 
+* @description		: 레이어 닫기, 열려진 모든레이어 닫기, 딤팝업 센터, 테이블캡션
+* @history			: 
+*/
+$('.layer_close').on('click', function(){
+	$(this).closest('.shadow_layer').hide();
+	$(this).parent('div').prev('.ipt_elt').removeClass('on');
+
+	//접근성 포커스
+	if(callTag.length){
+		callTag.focus(); 
+		callTag = '';
+	} else {
+		if($(this).parents('div').hasClass('input_wrap')){
+			$(this).parent('div').prev('.ipt_elt').find('a').focus();
+		}
+	}
+
+	//관심노선 포커스
+	if($(this).parent('div').hasClass('intRoute')){
+		$('.fav_star').focus();
+	}
+});
+
+
+// 레이어 팝업 포커스 & 루프
+;(function(global, $) {
+	
+	//딤레이어 루프
+	function focusLoof(){
+		$('.layer_wrap, .layer_tooltip').each(function(){
+			
+			var _focusable = [];
+			var _el_firstFocus = '';
+			var _el_lastFocus = '';
+			var _this = $(this);
+			var _thisId = _this.attr('id');
+	
+			_this.find('*').each(function(i, val) {
+				if(val.tagName.match(/^A$|AREA|INPUT|TEXTAREA|SELECT|BUTTON/) && parseInt(val.getAttribute("tabIndex")) !== -1) {
+					_focusable.push(val);
+				}
+				if((val.getAttribute("tabIndex") !== undefined) && (parseInt(val.getAttribute("tabIndex")) >= 0)) {
+					_focusable.push(val);
+				}
+			});
+	
+			_el_firstFocus = _focusable[0];
+			_el_lastFocus = _focusable[_focusable.length-1];
+	
+			$(_el_firstFocus).on({
+				'keydown' : function(e){
+					if (e.target == this){
+						var keyCode = e.keyCode;
+						if (keyCode == 9){
+							if (e.shiftKey){
+								$(_el_lastFocus).focus();
+								e.preventDefault();
+							}
+						}
+					}
+				}
+			});
+			$(_el_lastFocus).on({
+				'keydown' : function(e){
+					var keyCode = e.keyCode;
+					if (keyCode == 9){
+						if (!e.shiftKey){
+							$(_el_firstFocus).focus();
+							e.preventDefault();
+						}
+					}
+				}
+			});
+	
+		});
+	}
+
+	focusLoof();
+
+	//딤레이어 포커스
+	$(document).on('click', 'button,a', function(){
+		if(isOpenLayer){
+			var focusElem = $(this);
+
+			$('.dim_close').on('click', function(){
+				isOpenLayer = false;
+				focusElem.focus();
+			});
+		}
+		
+		//딤레이어 2개이상 오픈시 마지막 딤 해제
+		if($('.layer_wrap:visible').length > 1){
+			$('.layer_wrap:visible').last().find('.dim_layer').hide();
+			focusLoof();
+		}
+	});
+
+	//쿠폰팝업 포커스 동적바인딩
+	$(document).on('click',
+	'.icon_coupon, .coupon_down button, .btn_wrap_ceType2 button', function(){
+		var focusElem = $(this);
+		$('.dim_close, button[name=cancel]').on('click', function(){
+			isOpenLayer = false;
+			focusElem.focus();
+		});
+	});
+
+})(window, window.jQuery);
+
+
+//접근성 / 전체공항 버튼의 경우 callTag에 저장
+$('.airport_open').each(function(){
+	$(this).on('click', function(){
+
+		//최근검색 레이어에서 호출시
+		if($(this).hasClass('btn_popup')){
+			callTag = $(this).parent('div').parent('.shadow_layer').prev('.ipt_elt').find('a');
+		} else {
+			callTag = $(this);
+		}
+
+		//전체도시레이어 오픈시 첫번째 a태그로 포커스
+		var visibleAirport = $('.select_airport:visible');
+		if(visibleAirport.length == 1){
+			visibleAirport.find('a').first().focus();
+		}
+
+	});
+});
+
+// layer popup close / 열려진 다른 레이어 닫기 위함
+var layerAllClose = function(){
+	$('.shadow_layer').hide();
+	$('.calendar_layer').hide();
+	$('.hdlayer_wrap').hide();
+};
+
+
+//키보드 사용자 풀메뉴에서 엔터키 사용시 풀페이지 해제 및 포커스
+$('#fullMenu li a').on({
+	'keydown' : function(e){
+		if (e.target == this){
+			var keyCode = e.keyCode;
+			if (keyCode == 13){
+				// console.log('엔터키, 풀페이지해제');
+				$.fn.fullpage.destroy('all');
+				$('#fullpage').addClass('destroy');
+				$('.section05 .section_copy').first().css({
+					'padding-top':'123px',
+					'margin-top':'0px'
+				});
+
+				amui.isEnterkey = true;
+
+				//섹션 컨텐츠 호출
+				drawPnrList();
+				drawCheckInList();
+
+				if (!_isLoadedEvent) {
+					_isLoadedEvent = true;
+					cmsEvent.init();
+				}
+
+				//섹션에 포커스 갈수있도록 tabindex 추가
+				$('.section').attr('tabindex',0);
+
+				$('#fullMenu li a').on('click', function(){
+					var anchAllLi = $('#fullMenu li');
+					var anchLi = $(this).parent('li');
+					var anchIdx = anchLi.index();
+					var anchWid = $('.full_menu > li').width();
+					var secHeight = $('.section').eq(anchIdx).outerHeight();
+					var conHeight = $('#container').outerHeight();
+					var hBody = $('html,body');
+					var scrSpeed = 500;
+
+					//anch move
+					anchAllLi.removeClass('on');
+					anchAllLi.eq(anchIdx).addClass('on');
+					$('.anch_box').velocity('stop').velocity({left:anchWid*anchIdx},amui.ancSpd,amui.easingAnc);
+
+					// section scroll animate 
+					if(anchIdx == 0){
+						hBody.velocity('stop').velocity('scroll',{offset:0},scrSpeed);
+					} else if(anchIdx == 4) {
+						hBody.velocity('stop').velocity('scroll',{offset:conHeight-secHeight+'px'},scrSpeed);
+					} else {
+						hBody.velocity('stop').velocity('scroll',{offset:anchIdx*secHeight-20+'px'},scrSpeed);
+					}
+					
+					function sectionFocus(){
+						$('.section').eq(anchIdx).focus();
+						$('.full_menu > li > a').attr('title','');
+						$('.full_menu > li').eq(anchIdx).find('a').attr('title',mfui._uiLangs.UM0001);
+					}
+					sectionFocus();
+
+				});
+
+				//상단으로 이동
+				$('#goTop').on('click', function(){
+					$('html, body').velocity('scroll',{offset:'0'});
+					$('#wrap').prepend('<a href="#none" class="removefocus">a</a>');
+					$('.removefocus').focus().remove();
+				});
+
+				scrollFixwhite();
+			}
+		}
+	}
+});
+
+//데이터테이블 장차법 caption구현
+function tableCaption(scope){
+	//var scope = $(".table_list");
+
+	if(
+		($(scope).find('>caption').length>0) &&
+		($(scope).find('>caption p').length==0 || $.trim($(scope).find('>caption p').text())=='')
+
+	){		
+		var msg='';
+
+		if( $(scope).find("thead").length > 0 ){
+			$(scope).find("thead th").each(function(a){
+				var amsg=String($(this).text() || '');
+				amsg=$.trim(amsg);
+	
+				if($.trim(amsg)!=''){
+					msg+=((msg=='')?'':',')+amsg;
+				}
+			});
+		}else{
+			$(scope).find('tbody th').each(function(a){
+				var amsg=String($(this).text() || '');
+				amsg=$.trim(amsg);
+	
+				if($.trim(amsg)!=''){
+					msg+=((msg=='')?'':',')+amsg;
+				}
+			});
+		}
+
+		if(msg!=''){
+			msg+=mfui._uiLangs.UM0004;
+		};
+
+		$(scope).find('caption p').remove();			
+		$(document.createElement('p')).html(msg).appendTo($(scope).find('>caption'));
+	};
+};
+
+$(".table_list, .table_form").each(function(){
+	var _this = $(this);
+	tableCaption(_this);
+});
+
+
+//접근성 닫고나서 콜한 a태그로 포커스이동
+var callTag = '';
+
+//예매 영역 a링크 클릭시 focus Trigger
+$('.ipt_elt').find('a').each(function(){
+	//전체도시보기 예외처리
+	if(!$(this).hasClass('airport_open')){
+		$(this).on('click', function(){
+			$(this).parent('.ipt_elt').find('input:text').trigger('focus');
+		});
+	}
+});
+
+//접근성 퀵예매 default 선택된 탭 선택됨 타이틀 설정
+$('.tab_triptype li.on a').attr('title',mfui._uiLangs.UM0001);
+
+
+//툴팁 레이어 오픈
+$('.tooltip_wrap').each(function(i){
+	var tlpClose = $(this).find('.tooltip_close');
+	var tlpBtn = $(this).find('.btn_info');
+	var tlpBtns = $('.btn_info');
+	var tlpLayers = $('.layer_tooltip');
+	tlpBtn.on('click', function(){
+		var openTlp = tlpBtn.next('.layer_tooltip');
+		
+		if(!$(this).hasClass('open')){
+			tlpLayers.hide();
+			tlpBtns.removeClass('open');
+			$(this).addClass('open');
+			openTlp.show();
+		} else{
+			$(this).removeClass('open');
+			openTlp.hide();
+		}	
+	});
+	tlpBtn.index = i
+});
+
+
+//레이어 닫기 / 툴팁
+$('.tooltip_close').each(function(){
+	$(this).on('click', function(){
+		var thisLayerPop = $(this).parent('div');
+		thisLayerPop.hide();
+		thisLayerPop.prev('a').removeClass('open').focus();
+	});
+});
+
+/* fullpage 이벤트 겹침 마우스호버시 풀페이지 스톱 */
+//헤더 마이아시아나 알림함, shadow_layer, 출도착조회 리스트, 스크롤컨트
+$(document).on('mouseenter','.shadow_layer, #layerMyasiana, .departure_list_wrap, .scroll_cont, .scroll_cont2',function(){		
+	$.fn.fullpage.setMouseWheelScrolling(false);
+});
+
+$(document).on('mouseleave','.shadow_layer, #layerMyasiana, .departure_list_wrap, .scroll_cont, .scroll_cont2',function(){
+	//항공권예약 퀵예매스탭 레이어에서 마우스 아웃시 풀페이지 풀려버리는것 방지
+	if(!$(this).parents('div').hasClass('quick_reservation_wrap')){
+		$.fn.fullpage.setMouseWheelScrolling(true);
+	}
+});
+
+// 관심노선 즐겨찾기 퀵예매 닫혀있을때만 마우스아웃시 풀페이지 스크롤링 false
+$(document).on('mouseleave','.intRoute',function(){
+	if($('#foldSection1:visible').length == 0){
+		$.fn.fullpage.setMouseWheelScrolling(true);
+	}
+});		
+
+
+//퀵예매스텝에서 열려진 레이어 없으면 퀵예매영역닫기
+function secFoldTrigger(){
+	if(amui.quickStepOpen){
+		$('#foldSection1').trigger('click');
+	}
+}
+
+//퀵예매 스탭 레이어 닫을때 열린 레이어 체크
+//ie브라우저 시점 차이로 0.3초뒤에 열린레이어 recheck
+$(document).on('click','.quick_reservation_wrap .layer_close, .quick_reservation_wrap .btn_cal_close', function(){
+	setTimeout(function() {
+		var quickRevWrap = $('.quick_reservation_wrap');
+		var shaLayerLeng = quickRevWrap.find('.shadow_layer:visible').length;
+		var calLayerLeng = quickRevWrap.find('.calendar_layer:visible').length;
+		var calElt = $('.quick_reservation_wrap .ipt_elt.calr');
+		var calEltOnLeng = $('.quick_reservation_wrap .ipt_elt.calr.on').length;
+
+		// console.log(shaLayerLeng,calLayerLeng);
+		if(shaLayerLeng+calLayerLeng == 0){
+			// console.log('zero');
+
+			/* 국내선 최근검색리스트 및 도착지 입력후 포커스 이동시 에러로 인한 조건 추가 (ie)
+				- 이슈 : 반응속도 지연으로 인한 velocity 에러 
+				- 조치 : 탑승일에 포커스도 없다면 foldTrigger 실행
+			*/
+			if(calEltOnLeng == 0){
+				secFoldTrigger();
+			} 
+			
+			if(calEltOnLeng == 1){
+				calElt.next('.calendar_layer').show();
+			}
+		}	
+	}, 300);
+});
+
+
+/* 국내선 최근검색리스트 클릭시 에러로 인한 조건 추가(crome)
+	- 이슈 : 탑승일 인풋에 포커스 되어 있지만 캘린더 레이어가 안뜨는 에러
+	- 조치 : 탑승일 인풋이 포커스 되어 있을 경우 캘린더 레이어 show
+*/
+$(document).on('click', '.search_lately > ul > li > a', function(){
+	setTimeout(function(){
+		var calElt = $('.quick_reservation_wrap .ipt_elt.calr');
+		var calEltOnLeng = $('.quick_reservation_wrap .ipt_elt.calr.on').length;
+		if(calEltOnLeng == 1){
+			calElt.next('.calendar_layer').show();
+		}
+	},100);
+});
+
+
+//조회영역 red 활성화시 퀵예매 영역접기 및 인풋영역 on클래스 제거
+$(document).off('focus').on('focus','#registTravel', function(){
+	if($('#registTravel').hasClass('red')){
+		$('.quick_step_wrap .ipt_elt').removeClass('on');
+		secFoldTrigger();
+	}
+});
+
+$('#allChecked').on('change', function(){
+	secFoldTrigger();
+});
+
+
+
+//***********************
+//		section05 이벤트
+//***********************
+/*
+* @function			: eventSlider
+* @param			: 
+* @description		: 이벤트
+* @history			: 
+*/
+
+/* 이벤트 슬라이더 */
+function eventSection(){
+	eventSlider();
+	eventBookmark();
+};
+
+// 이벤트 슬라이더 re function
+function eventSlider(){
+	var eventSwiper = new Swiper('.event_slider', {
+		slidesPerView: 3,
+		slidesPerGroup: 1,
+		loop: true,
+		spaceBetween: 20,
+		prevButton: '.evt_prev',
+		nextButton: '.evt_next',
+		pagination: '.evt_paging',
+		paginationclickable: true,
+		paginationBulletRender: function (swiper,index, className) {
+			return '<a href="#none" class="'+className+'"><span class="hidden">'+(index+1)+ mfui._uiLangs.UM0002 +'</span></a>';
+		},
+		paginationClickable: true,
+		// loop:true,
+		speed:500,
+		onInit: function(swiper){
+			
+			// 진입시 첫번째 슬라이드로 포커스
+			// $('.event_slider').find('.swiper-slide').first().find('a').one('focus',function(){
+			// 	//console.log('포커스');
+			// 	$('div[data-swiper-slide-index=0]').first().find('a').focus();
+			// });
+
+			actSlideFocus(3);
+		},
+		onSlideChangeStart: function(swiper){
+			$('.event_slider').find('.swiper-slide').removeClass('blind');
+		},
+		onSlideChangeEnd: function(swiper){
+			actSlideFocus(3);
+		}
+	});
+}        
+
+/* swiper 슬라이드 키보드 접근성 */
+//노출되어 있는 슬라이드만 접근
+function actSlideFocus(sldLeng){
+	$('.event_slider').each(function(){
+		var actSlide = $(this).find('.swiper-slide-active');
+		var actSlideAll = actSlide.nextAll().andSelf().slice(0,sldLeng);
+		$(this).find('.swiper-slide').addClass('blind');
+		actSlideAll.removeClass('blind');
+	});
+}
+ 
+function eventBookmark(){
+	var cardSpd = 400;
+	
+	//이벤트 카드 호버
+	$('.event_card').each(function(){
+
+		//이벤트 1개 이상일때 실행
+		if(!$(this).parents().hasClass('single')){
+			var thisCard = $(this);
+			var evtInfo = thisCard.find('.evt_info');
+			var bookMark = thisCard.find('.bookmark_wrap');
+
+			thisCard.on('mouseenter focus', function(){
+				thisCard.addClass('open');
+				bookMark.hide();
+				evtInfo.velocity('stop').velocity({height:'100%'},cardSpd);
+			});
+			thisCard.on('mouseleave blur', function(){
+				thisCard.removeClass('open');
+				bookMark.show();
+				evtInfo.velocity('stop').velocity({height:'60px'},cardSpd);
+			});
+		}
+
+	});
+
+};
+
+
+//부가서비스
+$('.service_box > a').on('mouseenter focus', function(){
+	$(this).find('dd').velocity('stop').velocity({height:'100%',bottom:0},400);
+});
+$('.service_box > a').on('mouseleave blur', function(){
+	$(this).find('dd').velocity('stop').velocity({height:0,bottom:'-110px'},400);
+});
+
+
+/* 특가 슬라이더 */
+$('.special_slider_wrap').each(function(){
+	specialSlider();
+});
+amui.specialSliderLastFlg = false;
+function specialSlider(){
+	var perveiw = 5;
+	var slideTotal = $('.special_slider_wrap .swiper-slide').length;
+	var loopChk = ($('.special_slider_wrap .swiper-slide').length > 4 ) ? true : false; 
+	 specialSwiper = new Swiper('.special_slider', {
+		slidesPerView: 5,
+		slidesPerGroup: 1,
+		spaceBetween: 20,
+		//pagination: '.spc_paging',
+		simulateTouch:false,
+//		autoplay:true,
+//        speed:2000,
+        prevButton: '.spc_prev',
+		nextButton: '.spc_next',
+		paginationBulletRender: function (swiper,index, className) {
+			return '<a href="#none" class="'+className+'"><span class="hidden">'+(index+1)+ mfui._uiLangs.UM0002 +'</span></a>';
+		},
+		paginationClickable: true,
+		loop:loopChk,
+		speed:500,
+		onInit: function(swiper){
+			// 진입시 첫번째 슬라이드로 포커스
+			if(window.innerWidth > 1600){
+				perveiw = 5;
+				//maga start
+			} else if(window.innerWidth <= 1600 && window.innerWidth > 1400){
+				perveiw = 4;
+				//maga end
+			} else {
+				perveiw = 3;
+			}
+			$('.special_slider_wrap .spc_paging').remove();
+			var spcObj = $(document.createElement('DIV')).addClass('swiper-pagination spc_paging swiper-pagination-clickable swiper-pagination-bullets');
+			for(var i=0, itotal=Math.ceil(slideTotal/perveiw); i<itotal; i++){
+				spcObj.append($('<a href="#none" class="swiper-pagination-bullet"><span class="hidden" data-realidx="'+swiper.activeIndex+'">' + (i + 1)+ mfui._uiLangs.UM0003 +'</span></a>'))
+			};
+//			swiper.slideTo(0); 
+			
+			$('.special_slider_wrap .swiper_control').append(spcObj);
+			$('.special_slider_wrap .spc_paging a').on('click',function(){
+				$(this).siblings().removeClass('swiper-pagination-bullet-active');
+				$(this).addClass('swiper-pagination-bullet-active');
+				swiper.slideTo($(this).find('span').attr('data-realidx')*($(this).index()+1));
+			});
+			//first bullet active
+			$('.spc_paging a').first().addClass('swiper-pagination-bullet-active');
+
+			$('.special_slider').find('.swiper-slide').first().find('a').one('focus',function(){
+				//console.log('포커스');
+				$('.special_slider').find('div[data-swiper-slide-index=0]').first().find('a').focus();
+			});
+			// $('.spc_paging').find('a:nth-child(5)').first().addClass('swiper-pagination-bullet-active');
+
+/*			//클릭시 영역확장
+			var lastSpcIdx = $('.special_slider').find('.swiper-slide').last().index();
+			var spcSlideLeng = $('.special_slider').find('.swiper-slide').length;
+
+			$('.spc_card').off('click').on('click', function(){
+
+				//보이는 영역의 마지막 슬라이드
+				if($(this).parent('.swiper-slide').next('div').hasClass('blind')){
+					// console.log('last', specialSwiper.activeIndex);
+					specialSwiper.slideTo(specialSwiper.activeIndex + 1);
+				}
+
+				//전체루프 슬라이드 중 마지막 슬라이드
+				if($(this).parent('div').index() == lastSpcIdx){
+					// console.log('realLast');
+					specialSwiper.slideNext();
+					amui.specialSliderLastFlg = true;
+				}
+					
+				//열린 레이어 닫기, 선택한 특가슬라이드 오픈
+				spcAllClose();
+
+				$(this).parent('.swiper-slide').velocity('stop').velocity({width:'527px',height:'340px'}).addClass('on');
+				$(this).next('.info_detail').show().find('.graph_list').velocity('stop').velocity({height:'180px'});
+				
+				$('.spc_detail_close').off('click').on('click',function(){
+					$(this).parents('.swiper-slide').velocity('stop').velocity({width:'304px',height:'200px'}).removeClass('on');
+					$(this).parent('.info_detail').hide().find('.graph_list').velocity('stop').velocity({height:'0'});
+					$(this).parent('.info_detail').prev('.spc_card').focus();
+				});
+
+			});*/
+		
+			spcSlideFocus(perveiw);
+
+		},
+		onSlideChangeStart: function(swiper){
+			$('.special_slider').find('.swiper-slide').removeClass('blind');
+			spcAllClose();
+		},
+		onSlideChangeEnd: function(swiper){
+			spcSlideFocus(perveiw);
+			
+			var actIdx = swiper.realIndex;
+			var spcPaging = swiper.container.find('.spc_paging a');
+			if( swiper.realIndex > slideTotal ){
+				actIdx = swiper.realIndex - slideTotal;
+			};
+			
+			for( i=0, iTotal = slideTotal/perveiw; i < iTotal; i++ ){
+				if( actIdx == i*perveiw ){
+					spcPaging.removeClass('swiper-pagination-bullet-active')
+					spcPaging.eq(i).addClass('swiper-pagination-bullet-active');
+				}
+			};
+			/*swiper.slideTo($(this).find('span').attr('data-realidx')*($(this).index()+1));*/
+		},
+		onSlideNextEnd: function(swiper){
+			//mega start
+			if(amui.specialSliderLastFlg){
+				var spcLastSlide = $('.special_slider .swiper-slide').not('.blind').last().prev().find('.spc_card');
+				spcLastSlide.parent('.swiper-slide').velocity('stop').velocity({width:'527px',height:'340px'}).addClass('on');
+				spcLastSlide.next('.info_detail').show().find('.graph_list').velocity('stop').velocity({height:'180px'});
+				amui.specialSliderLastFlg = false;
+			}
+			//mega end
+		}
+	});
+
+//	 mega start
+//	$('.special_slider_wrap .special_slider').on('mouseenter', function(){
+//		specialSwiper.autoplay.stop();
+//	});
+//	$('.special_slider_wrap .special_slider').on('mouseleave', function(){
+//		specialSwiper.autoplay.start();
+//	});
+//	mega end
+	/* swiper 슬라이드 키보드 접근성 */
+	//노출되어 있는 슬라이드만 접근
+	function spcSlideFocus(sldLeng){
+		$('.special_slider').each(function(){
+			var actSlide = $(this).find('.swiper-slide-active');
+			var actSlideAll = actSlide.nextAll().andSelf().slice(0,sldLeng);
+			$(this).find('.swiper-slide').addClass('blind');
+			actSlideAll.removeClass('blind');
+		});
+	}
+
+	/*	@ 해상도별 헤더영역 및 특가영역 처리
+		width 1600 이상 : 특가영역 5개 / fixedWhite 처리
+		width 1600 이하 : 특가영역 3개 / fixedWhite 처리
+	*/
+	var winWid = window.innerWidth;
+	var winHid = $(window).height();
+	var isWide = false;
+	
+	//maga start
+	//width 1600 이상일때
+	if(winWid > 1600){
+		wideOn();
+	} else if(winWid <= 1600 && winWid > 1400){
+		wide_centerOff();
+		specialSwiper.init();
+	} else {
+		//isWide = true;
+		wideOff();
+		specialSwiper.init();
+		
+	}
+
+	//리사이징시
+	$(window).on('resize', function(){
+		winWid = window.innerWidth;
+		if(winWid > 1600){
+			//if(isWide){
+				wideOn();
+			//}
+		} else if(winWid <= 1600 && winWid > 1400){
+			wide_centerOff();
+		} else {
+			//if(!isWide){
+				wideOff();
+			//}
+		}
+		specialSwiper.init();
+	});	
+
+	function wideOn(){
+		//isWide = false;
+		$('.special_slider_wrap').removeClass('no_wide no_centerwide');
+		specialSwiper.params.slidesPerView = 5;
+		perveiw = 5;
+		// console.log('wideOn');
+	}
+	function wide_centerOff(){
+		//isWide = true;
+		$('.special_slider_wrap').addClass('no_centerwide');
+		$('.special_slider_wrap').removeClass('no_wide');
+		specialSwiper.params.slidesPerView = 4;
+		perveiw = 4;
+		
+		scrollFixwhite();
+	}
+	function wideOff(){
+		//isWide = true;
+		$('.special_slider_wrap').addClass('no_wide');
+		$('.special_slider_wrap').removeClass('no_centerwide');
+		specialSwiper.params.slidesPerView = 3;
+		perveiw = 3;
+		
+		//$('.special_slider_wrap').addClass('no_wide');
+		//specialSwiper.params.slidesPerView = 3;
+		//perveiw = 3;
+		
+		// console.log('wideOff');
+
+		//풀페이지 해제후 스크롤할때 최상단이 아니면 헤더 bg 처리
+		scrollFixwhite();
+	}
+	//maga end
+}
+
+//height amui.rspHeight 미만 : fixdWhite 처리
+var winWid = window.innerWidth;
+var winHid = $(window).height();
+
+if(winWid < 1280 || winHid < amui.rspHeight){
+	scrollFixwhite();
+}
+
+$(window).on('resize', function(){
+	winWid = window.innerWidth;
+	winHid = $(window).height();
+
+	if(winWid < 1280 || winHid < amui.rspHeight){
+		scrollFixwhite();
+	}
+	checkNDestInit();
+});	
+
+function scrollFixwhite(){
+	var isWinTop = true;
+	$(window).on('scroll', function(){
+		var winScrollTop = $(window).scrollTop();
+		if(winScrollTop == 0){
+			if(!isWinTop){
+				isWinTop = true;
+				$('header.main').removeClass('fixed_white');
+			}
+		} else {
+			if(isWinTop){
+				isWinTop = false;
+				$('header.main').addClass('fixed_white');
+			}
+		}
+	});
+}
+
+//특가 슬라이드 닫기 noVelocity
+function spcAllClose(){
+	//maga start
+	$('.special_slider').find('.swiper-slide').css({width:'280px',height:'180px'}).removeClass('on');
+	$('.info_detail').hide().find('.graph_list').css({height:'0'});
+	//$('.section01 .special_slider_wrap').css('z-index','900');
+	//maga end
+}
+
+//메인 페이지 로딩바 오픈
+function loadingOpen(_type, _option, _testType){
+	var _scope;
+	//console.log(_type+', '+_option);
+	if( _type == "area" ){
+		_scope = $(_option);
+		
+		if( _testType == 'type1' ){
+			_scope.prepend('<div class="loading_wrap type_main"><section><span class="hidden">Loading</span><div class="loading_img"><img src="/C/pc/image/common/loading_1.gif"></div></section></div>');
+		}else if( _testType == 'type2' ){
+			_scope.prepend('<div class="loading_wrap type_main"><section><span class="hidden">Loading</span><div class="loading_img"><img src="/C/pc/image/common/loading_1.gif"></div></section></div>');
+		}else{
+			_scope.prepend('<div class="loading_wrap type_main"><section><span class="hidden">Loading</span><div class="loading_img"><img src="/C/pc/image/common/loading_1.gif"></div></section></div>');
+		};
+		//slide될 내용 불러온뒤 슬라이드 활성화
+		//specialSlider();
+	}else if(  _type == "entire" ){
+		_scope = $('#wrap');
+		_scope.find('.loading_wrap').remove();
+		_scope.prepend('<div class="loading_wrap type_full"><section><span class="hidden">Loading</span><div class="loading_img"><img src="/C/pc/image/common/loading_1.gif"></div></section></div>');
+	};
+};
+
+function loadingClose(_type, _option){
+	if( _type == "area" ){
+		_scope = $(_option);
+		var _scopeParents = _scope.find('.loading_wrap');
+		if( _scopeParents.length > 0 ){
+			_scopeParents.remove();
+		};
+		//slide될 내용 불러온뒤 슬라이드 활성화
+		//specialSlider();
+	}else if(  _type == "entire" ){
+		_scope = $('#wrap');
+		_scope.find('.loading_wrap').remove();
+	};
+};
+
+function openLayerPopupAD(layerId, focusEl, positionY) {
+	
+		var _body			= $('body');
+		var _thisLayerWrap	= $('#' + layerId + '');
+		var _thisBtn		= $('#btn_' + layerId + '');
+		var _thisLayer		= _thisLayerWrap.find('.layer_pop');
+		
+		/* 같은 레이어 호출시 레이어 닫은 후 포커스 가야할 버튼 다시 지정 */
+		if(typeof(focusEl) != 'undefined' && focusEl != '') {
+			_thisBtn = $('#' + focusEl);
+		}
+		
+		//_body.css('overflow-y','hidden');
+		$.fn.fullpage.setMouseWheelScrolling(false);
+		
+		_thisLayerWrap.show().find('.layer_pop').attr('tabindex',0);
+		
+		function popCenter() {
+			var popYpos = Math.max(0, (($(window).height() - _thisLayer.outerHeight())/2) + $(window).scrollTop());
+			if(typeof(positionY) != 'undefined' && positionY != '') {
+				popYpos = positionY;
+			}
+			_thisLayer.css('top', popYpos + "px");
+		}
+		
+		popCenter();
+		
+		$(window).resize(function() {
+			popCenter();
+		});
+
+		_thisLayerWrap.find('.layer_pop').focus();
+		
+		var scrollTop =  $(document).scrollTop();
+		_thisLayerWrap.focus();
+		$(document).scrollTop(scrollTop);
+		$('.dim_close').each(function(){
+			$(this).on('click', function(){
+				var thisLayerPop = $(this).closest('.layer_wrap');
+				thisLayerPop.hide();
+
+				_thisBtn.focus();			
+				$.fn.fullpage.setMouseWheelScrolling(true);
+			});
+		});	
+	
+};
+
+/**
+ main 관련 script
+ sj.kim
+ */
+var isNoticeUrgentStop = false;
+var notices_Swiper;
+
+
+$(window).on('load',function(){
+	notices_Swiper = new Swiper('.notice_slideWrap', {
+	    spaceBetween: 0,
+	    direction: 'vertical',
+	    loop:true,
+	    pagination: '.notice_slideWrap .swiper-pagination',
+	    paginationClickable: true,
+	    prevButton:'.notice_slideWrap .swiper-button-prev',
+	    nextButton:'.notice_slideWrap .swiper-button-next',
+	    initialSlide:0,
+	    autoplay:3000,
+	    /*speed:100,*/	    
+	    
+	    autoplayDisableOnInteraction: true,
+	    onInit: function(swipers){
+	    	
+	    	if($('.notice_slideWrap .swiper-slide').length == 3){
+	    		swipers.stopAutoplay();
+        		swipers.lockSwipes();
+	    	} else {
+	    		$('.notice_slideWrap .ps').on('click', function(){
+		            if($(this).hasClass('stop')){
+		                $(this).removeClass('stop');
+		                swipers.startAutoplay();
+		            } else {
+		                $(this).addClass('stop');
+		                swipers.stopAutoplay();
+		            }
+		        });
+	    	}
+	    	 $('div.swiper-slide.urgent.swiper-slide-duplicate').find('a._link_url').on('click', function(){	    		
+				main.urgent.bind.action.link($(this));
+			});
+	    	
+	    	
+	    },
+	    onSlideChangeStart: function(swiper){
+	    	if($('.notice_slideWrap .swiper-slide').eq(swiper.activeIndex).hasClass('blue')){
+	    		$('.swipe_etc .fr').addClass('blue');
+	    	} else {
+	    		$('.swipe_etc .fr').removeClass('blue');
+	    	}
+	    }
+	});
+	if ( $('.notice_slideWrap .swiper-slide').length == 3 ) {
+		notices_Swiper.stopAutoplay();
+		$(".se_top").hide();
+	}
+	
+//	$('.notice_slideWrap').on('mouseenter', function(){
+//		if(!isNoticeUrgentStop){
+//			if ( $('.notice_slideWrap .swiper-slide').length == 3 ) {
+//				notices_Swiper.stopAutoplay();		
+//			} else{
+//				notices_Swiper.stopAutoplay();
+//				$('.notice_slideWrap .pause').hide();
+//				$('.notice_slideWrap .play').show();	
+//			}
+//		} else{
+//			
+//		}
+//	});
+//	
+//	$('.notice_slideWrap').on('mouseleave', function(){
+//		if(!isNoticeUrgentStop){
+//			if ( $('.notice_slideWrap .swiper-slide').length == 3 ) {
+//				notices_Swiper.stopAutoplay();
+//			} else {
+//				notices_Swiper.startAutoplay();
+//				$('.notice_slideWrap .pause').show();
+//				$('.notice_slideWrap .play').hide();
+//			}
+//		} else{
+//			
+//		}
+//	});
+	
+	
+})
+var main = {
+	init: function(){
+		main.urgent.init();		// 긴급공지 레이어 초기화
+		main.cookieNotice();	// 상단 쿠키안내 레이어
+		main.tabletNotice();	// 태블릿 안내 공지
+		//main.cookieNoticeSlide();	// 상단 쿠키안내 레이어
+	}
+	, urgent: {
+		init: function(){
+			var _this = this;
+			_this.$urgentNotice = $('div.notice_slide.urgent.notice')
+			_this.$urgentNoticeList = $('div.swiper-slide.urgent')
+			_this.$urgentLayer = $('div.urgent_layer_popup');
+			_this.$cookieBanner = $('#cookieNotice');
+			//_this.$cookieNoticeSlide = $('#cookieNoticeSlide');
+			_this.$mainLayerPopup = $('div.main_layerPop .mlp_inner')
+			
+			_this.$urgentNoticeList2 = $('div.notice_slideWrap')
+
+			main.urgent.bind.init();
+		}, bind: {
+			init: function(){
+				// 상세보기 레이어 팝업 호출
+				main.urgent.$urgentNoticeList.find('a._link_detail_popup').on('click', function(){
+					var id = $(this).attr('href').substring(1);
+					var $targetLayer = $('#_' + id);
+					openLayerPopupAD('_' + id);
+				});
+				// 자세히 보기 버튼 이벤트
+				main.urgent.$urgentNoticeList.find('a._link_url').on('click', function(){
+					main.urgent.bind.action.link($(this));
+				});
+				// 자세히 보기 버튼 이벤트
+				main.urgent.$urgentLayer.find('button._link_url').on('click', function(){
+					main.urgent.bind.action.link($(this));
+				});
+				// 띠배너 닫기 버튼
+				main.urgent.$urgentNoticeList2.find('.noti_close').on('click', function(){
+					//main.urgent.bind.action.hide($(this).parents('.swiper-slide'));
+					main.urgent.bind.action.hide($(".notice_slideWrap .swiper-slide-active"));
+					
+					// $(this).parents('.notice').velocity('slideUp');
+
+					// // notibox height - this closing notice height
+					// amui.notiHeight = amui.notiHeight - $(this).parents('.notice').outerHeight();
+					// amui.rspHeight = amui.rspHeight - $(this).parents('.notice').outerHeight();
+					// amui.notiLeng = $('.notice:visible').length-1;
+					// // console.log(amui.notiLeng, amui.notiHeight, amui.rspHeight);	
+					
+					// checkNDestInit();
+					
+					// var headWrapHeight = $('.main_header_wrap').height();
+					// var thisnotiHeight = $(this).parents('.notice').outerHeight();
+					
+					// if(amui.notiLeng == 0){
+					// 	//destInit 후 paddingTop 조정되어야함
+					// 	$('.section01 .slide').velocity({
+					// 		'padding-top': '123px'
+					// 	});
+					// } else {
+					// 	$('.section01 .slide').velocity({
+					// 		'padding-top': headWrapHeight-thisNotiHeight+'px'
+					// 	});
+					// }
+				});
+
+				main.urgent.$cookieBanner.find('.noti_check').on('click', function(){
+					main.cookie.set('USE_COOKIE_Y', 'USE_COOKIE_Y' , 3653);
+				});
+				
+				main.urgent.$mainLayerPopup.find('.pop_close').on('click', function(){
+					main.urgent.bind.action.layerhide($(this).parents('.mlp_inner'));
+				});
+
+				main.urgent.$mainLayerPopup.each(function(){
+					var key = $(this).data('key');
+					if(!main.cookie.get('MLP_' + key)) {
+						$(this).show();
+					}
+				});
+				
+				// 페이지 최초 로드시, 쿠키에 있는 공지의 경우 hide 처리 필요
+				main.urgent.$urgentNoticeList.each(function(){
+					
+					var key = $(this).data('key');
+					if(main.cookie.get('UG_' + key)) {
+						$(this).remove();
+						//main.urgent.$urgentNotice.show();
+					}
+					if(!main.cookie.get('UG_' + key)) {
+						$(this).show();
+						main.urgent.$urgentNotice.show();
+					}
+				})
+				
+				
+
+			}
+			, action: {
+				link: function(item){
+					var linkType = $(item).data('link-type');
+					var linkUrl = $(item).data('link-url');
+					var linkTarget = $(item).data('link-target');
+
+					var link = document;
+					if(linkType == 'MENU') {
+						linkUrl = $.menu.getUrlById(linkUrl);
+					} else {
+						if(linkTarget == '_blank') {
+							link = window.open("about:blank");
+						}
+					}
+					link.location.href = linkUrl;
+				}
+				, hide: function(item){
+					// 관리자 미리보기에서 호출되는 경우
+					
+					if(location.pathname.indexOf('preview') > 0) {
+						return;
+					}
+					
+					var key = $(item).data('key');
+					notices_Swiper.removeSlide(notices_Swiper.realIndex);
+					notices_Swiper.update();
+					main.urgent.init();
+					
+					if ( $('.notice_slideWrap .swiper-slide').length == 3 ) {
+						notices_Swiper.stopAutoplay();
+						notices_Swiper.lockSwipes();
+						$(".se_top").hide();
+						
+					};
+					if ( $('div.notice .swiper-wrapper').find('div').length == 0 ){
+						$('.notice.urgent').velocity('stop').velocity('slideUp');
+					};
+					
+					if($('.notice_slideWrap .swiper-slide-duplicate-active').hasClass('blue')){
+						$('.swipe_etc .fr').addClass('blue');
+					} else {
+						$('.swipe_etc .fr').removeClass('blue');
+					}
+					
+					if(!$('#noti_chk:checkbox').is(':checked')) {
+						return;
+					}
+					
+					$('#noti_chk').prop('checked', false);
+					// 하루 보지 않기 시 실행
+					main.cookie.set('UG_' + key, key, 1);
+				}
+				, layerhide: function(item){
+					// 관리자 미리보기에서 호출되는 경우
+					
+					if(location.pathname.indexOf('preview') > 0) {
+						return;
+					}
+					
+					var key = $(item).data('key');
+					//alert(key);
+					$('div.main_layerPop').find('div').each(function(i,e){
+						if (key == $(this).data('key') ) {
+							$(this).hide();
+							//notices_Swiper.update();
+						}
+					});
+					if(!$(item).find('input:checkbox').is(':checked')) {
+						return;
+					}
+					
+					// 하루 보지 않기 시 실행
+					main.cookie.set('MLP_' + key, key, 1);
+				}
+			}
+		}
+	}
+	/**
+		최초 페이지 진입시에만 노출되고 이후 노출X, PC/MB 동일
+	*/
+	, cookieNotice : function(){
+		if(!main.cookie.get('USE_COOKIE_Y')) {
+			$('#cookieNotice').show();
+		}
+		//main.cookie.set('USE_COOKIE_Y', 'USE_COOKIE_Y' , 3653);
+	}
+//	, cookieNoticeSlide : function(){
+//		if(!main.cookie.get('USE_COOKIE_UGRENT')) {
+//			$('#cookieNoticeSlide').show();
+//		} 
+//		else {
+//			$('#cookieNoticeSlide').hide();
+//		}
+		//main.cookie.set('USE_COOKIE_UGRENT', 'USE_COOKIE_UGRENT' , 1);
+//	}
+	, tabletNotice: function(){
+		var $tablet = $('#tabletNotice');
+		// 띠배너 닫기 버튼
+		$tablet.find('.noti_close').on('click', function(){
+			if($tablet.find('input:checkbox').is(':checked')) {
+				main.urgent.bind.action.hide($(this).parents('.notice'));
+			}
+		});
+
+		// 페이지 최초 로드시, 쿠키에 있는 태블릿의 경우 hide 처리 필요
+		var key = $tablet.data('key');
+		if(!main.cookie.get('UG_' + key)) {
+			$tablet.show();
+		}
+	}
+	, cookie: {
+		get: function(name) {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				key = cookies[i].substr(0, cookies[i].indexOf('='));
+				values = cookies[i].substr(cookies[i].indexOf('=') + 1);
+				key = key.replace(/^\s+|\s+$/g, ''); // 공백 제거
+				if (key == name) {
+					return true;
+				}
+			}
+
+			return false;
+		}, set: function(key, value, day) {
+			var date = new Date();
+			date.setTime(date.getTime() + day * 24*60*60*1000);
+			document.cookie = key + '=' + value + ';expires=' + date.toGMTString() + ';path=/';
+		}
+	}
+
+}
+
+
+var cmsEvent = {
+	init: function () {
+		cmsEvent.getData();
+	}, getMeta: function (name) {
+		var meta = $('meta').filter('[name="' +  name +'"]').attr('content');
+		if (meta) {
+			return meta;
+		}
+	}, getHtml: function () {
+		var _html = "";
+		_html += '<div class="event_card_wrap">';
+		_html += '	<a href="$DETAIL_URL$" class="event_card" onClick="action_logging({pagecode:\'01_EVT_02\'});">';
+		_html += '		<div class="evt_img">';
+		_html += '			<img src="$IMG_URL$" alt="">';
+		_html += '		</div>';
+		_html += '		<div class="evt_info">';
+		_html += '			<dl>';
+		_html += '				<dt>';
+		_html += '					<p class="sub_txt">$CATE_TYPE$</p>';
+		_html += '					<p class="tit">$SUBJECT$</p>';
+		_html += '				</dt>';
+		_html += '				<dd>';
+		_html += '					<div class="date_info">';
+		_html += '						<span class="date">$START_DATE$ ~ $END_DATE$</span>';
+		_html += '					</div>';
+		_html += '				</dd>';
+		_html += '			</dl>';
+		_html += '		</div>';
+		_html += '		$CAMPAIGN$';
+		_html += '		$BOOKMARK$';
+		_html += '	</a>';
+		_html += '</div>';
+
+		return _html;
+	}, getData: function () {
+		var arrUrl = ['/C', cmsEvent.getMeta('nation'), cmsEvent.getMeta('lang'), 'get-event-list.json'];
+
+		$.ajax({
+			type: "POST", dataType: "json", async : true, contentType : "application/json; charset=UTF-8"
+			, url : arrUrl.join('/')
+			, success : function(response) {
+				//console.log("event :: " + response.length);
+				cmsEvent.drawing(response);
+				$.fn.fullpage.reBuild();
+			}, error : function(response){
+				//console.log("event error :: " + response.status);
+				cmsEvent.drawing();
+				$.fn.fullpage.reBuild();
+			}
+		});
+	}, drawing: function (data) {
+		var _html = "";
+		var imgServerPath = cmsEvent.getMeta('imgServer');
+
+		if (data == undefined || data == null || data.length === 0) {
+			$("div.noevent_wrapper").show();
+		} else {
+
+			var context = $("meta[name='context']").attr("content");
+			var nation = $("meta[name='nation']").attr("content");
+			var lang = $("meta[name='lang']").attr("content");
+			var prefix = context + "/" + nation + "/" + lang;
+			$.each(data, function(i, item){
+				var url = prefix + "/event/detail/" + item.id + "";
+				// 아시아나라이크 이벤트 경로 custom으로 되지 않도록 수정 20181204 최철웅
+				if (item.eventCd.cd == "E002" && item.cateCd.cd != "EVENT_4") {
+					url = prefix + "/event/custom/" + item.id + "/" + item.url + "";
+				} else if (item.eventCd.cd == "E004") {
+					url = item.url;
+				}
+				var _row = cmsEvent.getHtml();
+				_row = _row.replace("$DETAIL_URL$", url);
+
+				var isNotContainsImgServerPath = item.topFilePath.indexOf(imgServerPath) == -1;
+				var tmpPath;
+				if (isNotContainsImgServerPath) {
+					tmpPath = imgServerPath + item.topFilePath;
+				} else {
+					tmpPath = item.topFilePath;
+				}
+
+				_row = _row.replace("$IMG_URL$", tmpPath);
+				_row = _row.replace("$CATE_TYPE$", item.cateCd.name);
+				_row = _row.replace("$SUBJECT$", item.subject);
+				_row = _row.replace("$START_DATE$", moment(item.dispStartDate).format("YYYY-MM-DD"));
+				_row = _row.replace("$END_DATE$", moment(item.dispEndDate).format("YYYY-MM-DD"));
+				_row = _row.replace("$BOOKMARK$", item.bookmark == "Y" ?
+						'<div class="bookmark_wrap"><span class="btn_bookmark42 on"><span class="hidden">'+mfui._uiLangs.UM0005+'</span></span"></div>'
+						: '<div class="bookmark_wrap"><span class="btn_bookmark42"><span class="hidden">'+mfui._uiLangs.UM0006+'</span></span></div>');
+				_row = _row.replace("$CAMPAIGN$", item.campaignId == "Y" ?
+						'<div class="mark recmd" <span class="hidden">'+mfui._uiLangs.UM0007+'</span></div>' : '');
+				if (data.length > 2) {
+					_row = '<div class="swiper-slide">' + _row + '</div>';
+				}
+				_html += _row;
+			});
+
+			if (data.length > 2) {
+				$("div._event-slider").find("div.swiper-wrapper").first().html(_html);
+				$("div._event-slider").show();
+			} else if (data.length === 2) {
+				$("div._event-twin").html($("._event-twin").html().replace("$DATA$", _html));
+				$("div._event-twin").show();
+			} else if (data.length === 1) {
+				$("div._event-single").html($("._event-single").html().replace("$DATA$", _html));
+				$("div._event-single").show();
+			}
+
+			// 스와이퍼 및 마우스오버 이벤트 리바인딩
+			eventSection();
+		}
+	}, bookmark: function () {
+		var context = $("meta[name='context']").attr("content");
+		var nation = $("meta[name='nation']").attr("content");
+		var lang = $("meta[name='lang']").attr("content");
+		$.ajax({
+			method: "POST"
+			, url: context + "/" + nation + "/" + lang + '/api/ib0041.json'
+			, dataType: "JSON"
+			, data: data
+			, success: function (success) {
+				callback(success);
+			}
+		});
+	}
+}
+
+
+$(document).ready(function(){
+	main.init();	// 메인 UI 기능 초기화
+})
+
+
+//;(function(global, $ ,amui) {
+// var collisionCalculator = {
+//		 		 
+//		 // 포커스인 레이어  체크 (포커스로 구동되는 레이어체크)
+//		 SpotentryFlag : false,
+//		 build_event : function () {
+//			 // 이벤트가 바인되어 있는지 체크가 필요함 - $.data를 이용
+//			 $(document).on('focusin','.container',function(e){
+//					if($(e.target).hasClass('spotentry')){
+//						this.SpotentryFlag = true; // 포커스인 레이어 열렸다.
+//					}else{
+//						this.SpotentryFlag = false;
+//					}
+//			});
+//			 $(document).on('click','.container',function(e){
+//					if($('.shadow_layer:visible').length >0 && !this.SpotentryFlag){
+//						if(!collisionCalculator.isCollision($('.shadow_layer:visible') , e)){
+//							layerAllClose();
+//						}
+//						
+//					}
+//					this.SpotentryFlag = false;
+//			}); 
+//		 },
+//
+//		 getLayerRectange : function (scope) {
+//			 return{
+//				'ax':$(scope).offset().left || 0,
+//				'ay':$(scope).offset().top ||0,
+//				'rx':$(scope).position().left || 0,
+//				'ry':$(scope).position().top || 0,
+//				'w':$(scope).innerWidth() || 0,
+//				'h':$(scope).innerHeight() || 0
+//			 };
+//		 },
+//		 isCollision : function (scope,e) {
+//			 var bool=false;
+//				var pos={'left':e.pageX, 'top':e.pageY};
+//
+//					var arect=this.getLayerRectange(scope);
+//					var abool=(
+//						(pos.left>=arect.ax && pos.left<=arect.ax+arect.w) &&
+//						(pos.top>=arect.ay && pos.top<=arect.ay+arect.h)
+//					)?true:false;
+//					return abool;
+//		 }
+//		 
+// };
+// amui.collisionCalculator = collisionCalculator
+//})(window, window.jQuery ,window.amui);

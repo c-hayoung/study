@@ -1,0 +1,89 @@
+
+$(document).ready(function() {
+	var chkBrowser = "X";
+	var version = 0;
+	var Browser = { a : navigator.userAgent.toLowerCase() };
+
+	// IE9 이상 IE11 최적화
+	if( Browser.a.indexOf('msie') != -1 ) {
+		// Netscape일 경우 버전 IE11
+		if (navigator.appName != 'Netscape') {
+			version = Browser.a.substr(Browser.a.indexOf('msie')+5, 2).replace(".","");
+			chkBrowser = "Internet Explorer " + version;
+		}else{
+
+		}
+	}
+	// Chrome 52이상
+	if (Browser.a.indexOf("chrome") != -1 && Browser.a.indexOf("safari") != -1) {
+		version = getVersion( 'chrome', Browser.a ).split( '.')[0];
+		if(version < 52){
+			chkBrowser = "Chrome " + version;
+		}
+		// Chrome 50 예외처리 (#31358)
+		if("" + version == "50"){
+			chkBrowser = "X";
+		}
+	}
+	// Safari 9이상
+	if (Browser.a.indexOf("safari") != -1 && Browser.a.indexOf("chrome") == -1) {
+		version = getVersion( 'safari', Browser.a ).split( '.')[0];
+		if(version < 9){
+			chkBrowser = "Safari " + version;
+		}
+		// Safari5 예외 처리 (#31358)
+		if ("" + version == "5") {
+			chkBrowser = "X";
+		}
+	}
+	// Firefox 48이상
+	if (Browser.a.indexOf("firefox") != -1) {
+		version = getVersion( 'firefox', Browser.a ).split( '.')[0];
+		if(version < 48){
+			chkBrowser = "Firefox " + version;
+		}
+	}
+	// Edge 13이상
+	if (Browser.a.indexOf("edge") != -1) {
+		version = getVersion( 'edge', Browser.a ).split( '.')[0];
+		if(version < 13){
+			chkBrowser = "Edge " + version;
+		}
+	}
+	// Opera 12이상
+	if (Browser.a.indexOf("opr") != -1) {
+		version = getVersion( 'opr', Browser.a ).split( '.')[0];
+		if(version < 12){
+			chkBrowser = "Opera " + version;
+		}
+	}
+
+	var noticeCookie = $.cookie.getCookie("broserNotice");  // 쿠키변수 이름
+	var nation = $.cookie.getCookie("NATION"); // 국가
+	var lang = $.cookie.getCookie("LANG").toLowerCase(); // 언어
+
+	if (noticeCookie == "no"){
+	}else if(chkBrowser == "X"){
+	}else{
+		location.href = "/C/pc/checkBrowser/" + lang + "/checkBrowser.html";
+	}
+
+
+});
+
+function getVersion ( browserName, ua ) {
+	var matchs = ua.match( /version\/([\d.]*)/ );
+
+	if ( matchs && matchs.length > 1 ) {
+		return matchs[1];
+	} else {
+		var reg = new RegExp( browserName + '/([\\d.]*)' );
+		matchs = ua.match( reg );
+
+		if ( matchs && matchs.length > 1 ) {
+			return matchs[1];
+		} else {
+			return '0';
+		}
+	}
+}

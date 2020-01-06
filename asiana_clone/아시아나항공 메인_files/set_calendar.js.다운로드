@@ -1,0 +1,2069 @@
+//datepicker 추가 이상윤 2017-11-02
+(function(factory) {
+	if ( typeof define === "function" && define.amd ) {
+		// AMD. Register as an anonymous module.
+		define( [ "../widgets/datepicker" ], factory );
+	} else {
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}
+
+(function(datepicker){
+	 $.datepicker._updateDatepicker_original = $.datepicker._updateDatepicker;
+		$.datepicker._updateDatepicker = function(inst) {
+			$.datepicker._updateDatepicker_original(inst);
+			var afterShow = this._get(inst, 'afterShow');
+			var monthMove = '';
+			if (afterShow) {
+				afterShow.apply((inst.input ? inst.input[0] : null));  // trigger custom callback
+				inst.input.find('a[data-handler="prev"]').attr('href','#none');
+				inst.input.find('a[data-handler="next"]').attr('href','#none');
+			};
+
+			inst.input.find('.ui-datepicker-group').each(function(){
+				// 캘린더 Table Caption 추가
+				var _capThis = $(this);
+				var capText = _capThis.find('.ui-datepicker-title').text();
+				var _capTarget = _capThis.find('.ui-datepicker-calendar');
+				
+				_capTarget.prepend('<caption>'+capText+' '+_calendarLangs.J0001+'</caption>')
+			});
+			
+			$('.ui-datepicker-next').on('click',function(){
+				monthMove = 'left';
+				if( inst.input.find('.ui-datepicker-next').hasClass('ui-state-disabled') ){
+					$(inst.input.find('.ui-datepicker-group-last a.ui-state-default')[0]).focus();
+				}else{
+					inst.input.find('.ui-datepicker-next').focus();
+				};
+			});
+			$('.ui-datepicker-prev').on('click',function(){
+				monthMove = 'right';
+				if( inst.input.find('.ui-datepicker-prev').hasClass('ui-state-disabled') ){
+					$(inst.input.find('.ui-datepicker-group-first a.ui-state-default')[0]).focus();
+				}else{
+					inst.input.find('.ui-datepicker-prev').focus();
+				};
+			});
+			monthMove = '';
+			
+
+			// 포커스 아웃시, 레이어 자동 닫힘
+			inst.input.parents('.calendar_layer').on('keydown', function(e) {
+				if ( e.keyCode == 9 && e.shiftKey ) {
+					console.log($('*:focus'));
+					console.log($(this).find('button, a, select').first().attr('class'));
+					if( $('*:focus').attr('class') == $(this).find('button, a, select').first().attr('class') ){
+						e.preventDefault();
+						$(this).find('.btn_cal_close').trigger('click');
+					}
+				}else if (e.keyCode == 9) {
+					if( $('*:focus').attr('class') == $(this).find('button, a, select').last().attr('class') ){
+						e.preventDefault();
+						$(this).find('.btn_cal_close').trigger('click');
+					}
+				};
+			});
+		}
+
+	datepicker.regional.en = {
+		closeText: "Close",
+		prevText: "Previous Month",
+		nextText: "Next Month",
+		currentText: "Today",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday" ],
+		dayNamesShort: [ "(SU)","(MO)","(TU)","(WE)","(TH)","(FR)","(SA)" ],
+		dayNamesMin: [ "SU","MO","TU","WE","TH","FR","SA" ],
+		weekHeader: "Week",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+	
+	datepicker.regional.ja = {
+		closeText: "閉じる",
+		prevText: "前の月",
+		nextText: "来月",
+		currentText: "今日",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日" ],
+		dayNamesShort: [ "(日)","(月)","(火)","(水)","(木)","(金)","(土)" ],
+		dayNamesMin: [ "日","月","火","水","木","金","土" ],
+		weekHeader: "週間",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+	
+	datepicker.regional.ch = {
+		closeText: "关闭",
+		prevText: "上个月",
+		nextText: "下个月",
+		currentText: "今天",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "星期天","星期一","星期二","星期三","星期四","星期五","星期六" ],
+		dayNamesShort: [ "(日)","(一)","(二)","(三)","(四)","(五)","(六)" ],
+		dayNamesMin: [ "日","一","二","三","四","五","六" ],
+		weekHeader: "周",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+
+	datepicker.regional.de = {
+		closeText: "Schließen",
+		prevText: "Vorheriger Monat",
+		nextText: "Nächsten Monat",
+		currentText: "Heute",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag" ],
+		dayNamesShort: [ "(SO)","(MO)","(DI)","(MI)","(DO)","(FR)","(SA)" ],
+		dayNamesMin: [ "SO","MO","DI","MI","DO","FR","SA" ],
+		weekHeader: "Woche",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+
+	datepicker.regional.fr = {
+		closeText: "Fermer",
+		prevText: "Mois précédent",
+		nextText: "Le mois prochain",
+		currentText: "Aujourd'hui",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi" ],
+		dayNamesShort: [ "(DI)","(LU)","(MA)","(ME)","(JE)","(VE)","(SA)" ],
+		dayNamesMin: [ "DI","LU","MA","ME","JE","VE","SA" ],
+		weekHeader: "la semaine",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+
+	datepicker.regional.ru = {
+		closeText: "Закрыть",
+		prevText: "Предыдущий месяц",
+		nextText: "В следующем месяце",
+		currentText: "сегодня",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "воскресенье","понедельник","вторник","среда","четверг","пятница","суббота" ],
+		dayNamesShort: [ "(Вс)","(Пн)","(Вт)","(Ср)","(Чт)","(Пт)","(Сб)" ],
+		dayNamesMin: [ "Вс","Пн","Вт","Ср","Чт","Пт","Сб" ],
+		weekHeader: "неделю",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+
+	datepicker.regional.zh = {
+		closeText: "關閉",
+		prevText: "上個月",
+		nextText: "下個月",
+		currentText: "今天",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "星期天","星期一","星期二","星期三","星期四","星期五","星期六" ],
+		dayNamesShort: [ "(日)","(一)","(二)","(三)","(四)","(五)","(六)" ],
+		dayNamesMin: [ "日","一","二","三","四","五","六" ],
+		weekHeader: "週",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};	
+	
+	datepicker.regional.ko = {
+		closeText: "닫기",
+		prevText: "이전달",
+		nextText: "다음달",
+		currentText: "오늘",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "일요일","월요일","화요일","수요일","목요일","금요일","토요일" ],
+		dayNamesShort: [ "(일)","(월)","(화)","(수)","(목)","(금)","(토)" ],
+		dayNamesMin: [ "일","월","화","수","목","금","토" ],
+		weekHeader: "주",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+
+	datepicker.regional.es = {
+		closeText: "Cerrar",
+		prevText: "Mes anterior",
+		nextText: "Próximo mes",
+		currentText: "Hoy",
+		monthNames: [ "01","02","03","04","05","06",
+		"07","08","09","10","11","12" ],
+		monthNamesShort: [ "1","2","3","4","5","6",
+		"7","8","9","10","11","12" ],
+		dayNames: [ "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado" ],
+		dayNamesShort: [ "(dom)", "(lun)", "(mar)", "(mié)", "(jue)", "(vie)", "(sáb)" ],
+		dayNamesMin: [ "dom", "lun", "mar", "mié", "jue", "vie", "sáb" ],
+		weekHeader: "Semana",
+		dateFormat: "y.mm.dd D",
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: "."
+	};
+	
+	switch(_languageCode) {
+		case 'KO' :
+			datepicker.setDefaults( datepicker.regional.ko );
+			return datepicker.regional.ko;
+			break;
+		case 'EN' :
+			datepicker.setDefaults( datepicker.regional.en );
+			return datepicker.regional.en;
+			break;
+		case 'JA' :
+			datepicker.setDefaults( datepicker.regional.ja );
+			return datepicker.regional.ja;
+			break;
+		case 'CH' :
+			datepicker.setDefaults( datepicker.regional.ch );
+			return datepicker.regional.ch;
+			break;
+		case 'DE' :
+			datepicker.setDefaults( datepicker.regional.de );
+			return datepicker.regional.de;
+			break;
+		case 'FR' :
+			datepicker.setDefaults( datepicker.regional.fr );
+			return datepicker.regional.fr;
+			break;
+		case 'RU' :
+			datepicker.setDefaults( datepicker.regional.ru );
+			return datepicker.regional.ru;
+			break;
+		case 'ZH' :
+			datepicker.setDefaults( datepicker.regional.zh );
+			return datepicker.regional.zh;
+		case 'ES' :
+			datepicker.setDefaults( datepicker.regional.es );
+			return datepicker.regional.es;
+			break;			
+	}
+
+})
+);
+
+var _languageCode = $(location).attr('pathname').split('/')[3].toUpperCase(),
+	_calendarLangs = {};
+
+switch(_languageCode) {
+	case 'KO' :
+		_calendarLangs.J0001 = '달력'; 
+		_calendarLangs.J0002 = '가는 날'; 
+		_calendarLangs.J0003 = '오는 날'; 
+		_calendarLangs.J0004 = '다음달'; 
+		_calendarLangs.J0005 = '이전달';
+		_calendarLangs.J0006 = '선택됨'; 
+		_calendarLangs.J0007 = '시작일과 종료일 선택됨';
+		_calendarLangs.J0008 = '종료일 선택됨';
+		_calendarLangs.J0009 = '시작일 선택됨';
+		break;
+	case 'EN' :
+		_calendarLangs.J0001 = 'Calendar'; 
+		_calendarLangs.J0002 = 'Departure Date'; 
+		_calendarLangs.J0003 = 'Return Date'; 
+		_calendarLangs.J0004 = 'Next Month'; 
+		_calendarLangs.J0005 = 'Previous Month';
+		_calendarLangs.J0006 = 'Selected';
+		_calendarLangs.J0007 = 'Start and end dates selected';
+		_calendarLangs.J0008 = 'End date selected';
+		_calendarLangs.J0009 = 'Start date selected';
+		break;
+	case 'JA' :
+		_calendarLangs.J0001 = 'カレンダー'; 
+		_calendarLangs.J0002 = '往路出発日'; 
+		_calendarLangs.J0003 = '復路出発日'; 
+		_calendarLangs.J0004 = '来月'; 
+		_calendarLangs.J0005 = '前の月';
+		_calendarLangs.J0006 = '選択済み';
+		_calendarLangs.J0007 = '開始日と終了日選択さ';
+		_calendarLangs.J0008 = '終了日選択さ';
+		_calendarLangs.J0009 = '開始日選択さ';
+		break;
+	case 'CH' :
+		_calendarLangs.J0001 = '日历'; 
+		_calendarLangs.J0002 = '去程日期'; 
+		_calendarLangs.J0003 = '回程日期'; 
+		_calendarLangs.J0004 = '下个月'; 
+		_calendarLangs.J0005 = '上个月';
+		_calendarLangs.J0006 = '已选择';
+		_calendarLangs.J0007 = '选择开始和结束日期';
+		_calendarLangs.J0008 = '选择结束日期';
+		_calendarLangs.J0009 = '选择开始日期';
+		break;
+	case 'DE' :
+		_calendarLangs.J0001 = 'Kalender'; 
+		_calendarLangs.J0002 = 'Abflugdatum'; 
+		_calendarLangs.J0003 = 'Rückflugdatum'; 
+		_calendarLangs.J0004 = 'Nächsten Monat'; 
+		_calendarLangs.J0005 = 'Vorheriger Monat';
+		_calendarLangs.J0006 = 'Ausgewählt';
+		_calendarLangs.J0007 = 'Start- und Enddatum ausgewählt';
+		_calendarLangs.J0008 = 'Enddatum ausgewählt';
+		_calendarLangs.J0009 = 'Startdatum ausgewählt';
+		break;
+	case 'FR' :
+		_calendarLangs.J0001 = 'Calendrier'; 
+		_calendarLangs.J0002 = 'Date de départ'; 
+		_calendarLangs.J0003 = 'Date de retour'; 
+		_calendarLangs.J0004 = 'Le mois prochain'; 
+		_calendarLangs.J0005 = 'Mois précédent';
+		_calendarLangs.J0006 = 'Sélectionné';
+		_calendarLangs.J0007 = 'Dates de début et de fin sélectionnées';
+		_calendarLangs.J0008 = 'Date de fin sélectionnée';
+		_calendarLangs.J0009 = 'Date de début sélectionnée';
+		break;
+	case 'RU' :
+		_calendarLangs.J0001 = 'Календарь'; 
+		_calendarLangs.J0002 = 'Дата туда'; 
+		_calendarLangs.J0003 = 'Дата обратно'; 
+		_calendarLangs.J0004 = 'В следующем месяце'; 
+		_calendarLangs.J0005 = 'Предыдущий месяц';
+		_calendarLangs.J0006 = 'Выбрано';
+		_calendarLangs.J0007 = 'Выбранные даты начала и окончания';
+		_calendarLangs.J0008 = 'Дата окончания выбрана';
+		_calendarLangs.J0009 = 'Дата начала выбрана';
+		break;
+	case 'ZH' :
+		_calendarLangs.J0001 = '日曆'; 
+		_calendarLangs.J0002 = '去程日期'; 
+		_calendarLangs.J0003 = '回程日期'; 
+		_calendarLangs.J0004 = '下個月'; 
+		_calendarLangs.J0005 = '上個月';
+		_calendarLangs.J0006 = '已選擇';
+		_calendarLangs.J0007 = '選擇開始和結束日期';
+		_calendarLangs.J0008 = '選擇結束日期';
+		_calendarLangs.J0009 = '選擇開始日期';
+		break;
+	case 'ES' :
+		_calendarLangs.J0001 = 'Calendario'; 
+		_calendarLangs.J0002 = 'Fecha de salida'; 
+		_calendarLangs.J0003 = 'Fecha de llegada'; 
+		_calendarLangs.J0004 = 'Próximo mes'; 
+		_calendarLangs.J0005 = 'Mes anterior';
+		_calendarLangs.J0006 = 'Seleccionado'; 
+		_calendarLangs.J0007 = 'Fechas de inicio y final seleccionadas';
+		_calendarLangs.J0008 = 'Fecha de finalización seleccionada';
+		_calendarLangs.J0009 = 'Fecha de inicio seleccionada';
+		break;
+}
+
+$.datepicker.setDefaults($.datepicker.regional[_languageCode.toLowerCase()]);
+
+/*
+* @author sy.lee
+* @description 공통레이어 닫기 함수추가 제거시에 문의요망!!
+* @class shadow_layer / calendar_layer  <-- 예약클래스
+*/
+var layerAllClose = function(){
+	$('.shadow_layer').hide();
+	$('.calendar_layer').hide();
+	$('.hdlayer_wrap').hide();
+};
+
+/*
+* @author 		: sy.lee
+* @description	: 공통레이어 달력부분 수정
+* @version		: 0.1
+* @history		:
+*/
+var closeCalendar = true;
+function Calendar(param){
+	'use strict';
+	var build_ui = {
+		$_this : $(param),											//함수실행시 매개변수를 this에 저장
+		createdCal : [],
+		init : function(){
+			this.$_this.each(function(){							//각각 this를 CALENDAR에 저장하여 배열에 push
+				var target = $(this);
+				build_ui.createdCal.push(new CALENDAR(target));
+			});
+		}
+	}
+	var CALENDAR = function(_target){
+		var owner = _target;										//받아온 this를 ownwer에 저장하여 사용
+		owner._cal_wrap = $(owner).parents('.calendar_wrap'); 		//owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._txt_wrap = owner._cal_wrap.find('.txt_round_trip'); 	//owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._cal_layer = owner._cal_wrap.next('.calendar_layer'); //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._month_selector = owner._cal_layer.find('.calendar_top'); //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._cal_box = owner._cal_layer.find('.compareCalendar'); //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._btn_close = owner._cal_layer.find('.btn_cal_close'); //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._btn_refresh = owner._cal_layer.find('.cal_reset');   //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._subtitle = owner._cal_layer.find('.cal_status');   //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._label = owner._cal_wrap.find('.spot_place');			//owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._btn_step = owner._cal_layer.find('.btn_step_wrap button'); //owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+		owner._btn_calopen = owner.siblings('.calendar_focus'); 	//owner에 각 프로퍼티 생성 후 selector들 상대경로로 각각 지정
+	var titleDay = false;
+
+		owner.txt_round_click = function(){
+			this._txt_wrap.on("click", function(){
+				owner._cal_layer.show();
+			});
+		};
+		owner.sibling_click = function(){
+			owner._btn_calopen.on("click", function(){
+				var _this = $(this).siblings('.datepicker');
+				//owner.refresh();
+				
+				layerAllClose();							//열려있는 layer popup 전체 닫기
+				owner._label.hide();
+				owner.showLayer();
+				var singleAttr = _this.attr('data-type');
+
+				if(singleAttr == "single"){
+					owner.singleCal();
+				} else if (singleAttr == "single_checkin"){
+					owner.singleCheckIn();
+				} else if (singleAttr == "single_rev"){
+					owner.single_revCal();
+				} else if (singleAttr == "single_last"){
+					owner.single_lastCal();
+				} else if (singleAttr == "single_infinite"){
+					owner.single_infiniteCal();
+				} else if (singleAttr == "single_infinite_last"){
+					owner.single_infinite_lastCal();
+				} else if (singleAttr == "single_omission"){
+					owner.single_omissionCal();
+				} else if (singleAttr == "single_past"){
+					owner.single_pastCal();
+				} else if (singleAttr == "full"){
+					owner.multiCal_full();
+					owner._subtitle.text(_calendarLangs.J0002);
+				} else if(singleAttr == "single_search"){
+					owner.single_searchCal();
+				} else if(singleAttr == "single_searchLast"){
+					owner.single_searchLastCal();
+				} else if(singleAttr == "multi_step"){
+					owner.multiCal_step();
+					owner._subtitle.text(_calendarLangs.J0002);
+				} else if(singleAttr == "single_step"){
+					owner.singleCal_step();
+				}else{
+					owner.multiCal();
+					owner._subtitle.text(_calendarLangs.J0002);
+				};
+				
+				if($(this).parents('.relative_calendar').length > 0) {
+					owner._cal_layer.css({
+						'left' : $('.container').offset().left -_this.offset().left + 'px',
+						'top'  : _this.position().top + _this.outerHeight() + 'px'
+					});
+				}else{
+					owner._cal_layer.css({
+						'top' : _this.position().top + _this.outerHeight() + 'px'
+					});
+				}
+			});
+		};
+		owner.showLayer = function(){								//.calendar_layer show기능을 하는 메소드 생성
+			this._cal_layer.show();
+		};
+		owner.closeLayer = function(){								//.calendar_layer 닫을 시 이벤트 발생 메소드 생성
+			if($(this).val().length > 0){
+				owner._label.hide();								//출/도착지 label 마크업 show hide
+			}else {
+				owner._label.show();
+			}
+			owner._cal_layer.hide();
+			owner._cal_wrap.removeClass('on');
+			owner.btnFocus();
+//			owner._cal_box.datepicker( "destroy" );
+		};
+		owner.refresh = function(){									//새로고침 버튼 클릭시 이벤트 발생 메소드 생성
+			$(this).val('');													//input value 초기화
+			owner._txt_wrap.find('span').text('');
+			owner._label.show();									//출/도착지 label 마크업 show hide
+			$(this).siblings('input[type="hidden"]').val('');	//Refresh시 hidden값 초기화
+			//owner._subtitle.text(_calendarLangs.J0002);
+			owner._cal_box.datepicker( "destroy" );
+			var singleAttr = $(this).attr('data-type');
+
+			if(singleAttr == "single"){
+				owner.singleCal();
+			} else if (singleAttr == "single_checkin"){
+				owner.singleCheckIn();
+			} else if (singleAttr == "single_rev"){
+				owner.single_revCal();
+			} else if (singleAttr == "single_last"){
+				owner.single_lastCal();
+			} else if (singleAttr == "single_infinite"){
+				owner.single_infiniteCal();
+			} else if (singleAttr == "single_infinite_last"){
+				owner.single_infinite_lastCal();
+			} else if (singleAttr == "single_omission"){
+				owner.single_omissionCal();
+			} else if (singleAttr == "single_past"){
+				owner.single_pastCal();
+			} else if (singleAttr == "full"){
+				owner.multiCal_full();
+				owner._subtitle.text(_calendarLangs.J0002);
+			} else if(singleAttr == "single_search"){
+				owner.single_searchCal();
+			} else if(singleAttr == "single_searchLast"){
+				owner.single_searchLastCal();
+			} else if(singleAttr == "multi_step"){
+				owner.multiCal_step();
+				owner._subtitle.text(_calendarLangs.J0002);
+			} else if(singleAttr == "single_step"){
+				owner.singleCal_step();
+			}else{
+				owner.multiCal();
+				owner._subtitle.text(_calendarLangs.J0002);
+			}
+		}
+//		redmine 5446
+//		ex) <input type="hidden" id="departureDate1" value="20171124">
+//		1. 왕복
+//		가는날 : departureDate1
+//		오는날 : arrivalDate1
+//
+//		2. 편도
+//		가는날 : departureDate1
+//
+//		3. 다구간
+//		ex) 총 3개의 여정일 경우
+//		departureDate1, departureDate2, departureDate3
+
+		//single datepicker
+		owner.singleCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = 0; i < 13; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: 0,
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+		
+		//singleCheckIn
+		owner.singleCheckIn = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = 0; i < 13; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: "-1D",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+		
+		//single_omissionCal datepicker
+		owner.single_omissionCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = -12; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(12)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: "-12M",
+				maxDate: "-3D",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+		
+		//single_omissionCal datepicker 의 -9D 타입
+		owner.single_pastCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = -12; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(12)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: "-12M",
+				maxDate: "-9D",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+		
+		//single step(main) datepicker
+		owner.singleCal_step = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = 0; i < 13; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: 0,
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					owner._btn_step.removeClass('gray').addClass('red');
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+
+		//single datepicker rev calrendar (구매내역 기간-시작 ; 12개월 이전까지 검색가능)
+		owner.single_revCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			
+			//월선택 박스 
+			for (var i = -12; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: "-12m",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+
+		//single datepicker last calendar
+		owner.single_lastCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="arrivalDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'arrivalDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = -12; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: "-12m",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					var endDate;
+					endDate = date;
+					_that.val(endDate);
+					_that.endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().endDate = _that.endDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.endDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.endDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "endDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+		
+		//single datepicker rev calrendar (구매내역 기간-시작 ; 12개월 이전까지 검색가능)
+		owner.single_infiniteCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			
+			
+			//월선택 박스 
+			for (var i = -360; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				//minDate: "-12m",
+				maxDate: "0",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+
+		//single datepicker last calendar
+		owner.single_infinite_lastCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="arrivalDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'arrivalDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = -360; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				//minDate: "-12m",
+				maxDate: "0",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+					var endDate;
+					endDate = date;
+					_that.val(endDate);
+					_that.endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().endDate = _that.endDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.endDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.endDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "endDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+
+		// 기내 유실물 조회에서 사용
+		owner.single_searchCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			var _that = $(this);
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+			//월선택 박스 
+			for (var i = -3; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+
+			//date 범위 처리=================================
+			var $fromCal = $(".compareCalendar").eq(1);
+			var fromDate = new Date();
+
+			if($fromCal.html() != ""){
+				fromDate = new Date($fromCal.datepicker('getDate'));
+			}
+			//=================================
+
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: "-3m",
+				maxDate: fromDate,
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+
+					//date 범위 처리=================================
+					if($fromCal.html() != ""){
+						var toDate = new Date($(this).datepicker('getDate'));
+						$fromCal.datepicker('option', 'minDate', toDate);
+					}
+					//=================================
+
+					_that.val(date);
+					_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().startDate = _that.startDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "startDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}
+
+		owner.single_searchLastCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="arrivalDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'arrivalDate1',
+					val: ''
+				}));
+			}
+			
+			//월선택 박스 
+			for (var i = -3; i < 1; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			//date 범위 처리=================================
+			var $toCal = $(".compareCalendar").eq(0);
+			var toDate = new Date();
+
+			if($toCal.html() != ""){
+				toDate = new Date($toCal.datepicker('getDate'));
+			}else{
+				toDate.setMonth(toDate.getMonth()-3);
+			}
+			//=================================
+
+			this._cal_box.datepicker({
+				showButtonPanel: false,
+				numberOfMonths: 2,
+				minDate: toDate,
+				maxDate: "+0m",
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date){
+					owner._label.hide();
+
+					//date 범위 처리=================================
+					if($toCal.html() != ""){
+						var fromDate = new Date($(this).datepicker('getDate'));
+						$toCal.datepicker('option', 'maxDate', fromDate);
+					}
+					//=================================
+
+					var endDate;
+					endDate = date;
+					_that.val(endDate);
+					_that.endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+					_that.data().endDate = _that.endDate;
+					_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+					_that.next().trigger('textchange');
+					$(this).datepicker('refresh');
+					if(closeCalendar) {
+						owner.closeLayer();
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.endDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.endDate);
+						if(date.getTime() == dateStart.getTime()){
+							return [true, "endDay" ];
+						}
+
+					}
+					return [true, ""];
+				},
+				afterShow: function(e){
+		            // 접근성 title 선택됨 추가 180531 JKJ
+					$(this).find('.startDay a').attr('title', _calendarLangs.J0006);
+				}
+			});
+		}// 기내 유실물 조회에서 사용 끝
+
+		//multi datepicker
+		owner.multiCal = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist, dataFocus='';
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'arrivalDate1',
+					val: ''
+				}));
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+
+			owner.txt_round_click();
+			//owner.sibling_click();
+			//월선택 박스 
+			for (var i = 0; i < 13; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+//			
+			
+			this._cal_box.datepicker({
+				numberOfMonths	: 2,
+				showButtonPanel	: false,
+				minDate			: 0,
+				maxDate			: '+361D',
+				dateFormat		: dateFormat,
+				nextText		: _calendarLangs.J0004,
+				prevText		: _calendarLangs.J0005,
+				onSelect		: function(date, inst) {
+					var prevDisabled = $(this).datepicker('getDate');// 선택한 날짜 이전 날은 선택 방지 변수 저장
+					var startDate = date;
+					var endDate;
+					owner._label.hide();
+					//달력 선택영역 활성화(임시)
+					//if(_that.val().length > 0){
+					if(_that.startDate != undefined && _that.endDate == undefined && $.datepicker.parseDate('yy/mm/dd', _that.startDate) <= $(this).datepicker('getDate')){ // 가는날 입력
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						var dateCur = $(this).datepicker('getDate');
+
+						startDate = _that.val().split(" -")[0];
+						endDate = date;
+
+						// 가는 날 선택시 닫힘.
+						_that.data().endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.next().next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))).trigger('textchange');; // 개발쪽 포맷
+//						_that.next().next().trigger('textchange');
+						_that.val(startDate + " - " + endDate);
+
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ){
+							var owner__txt_wrap_findSpan	= owner._txt_wrap.find('span');
+							owner__txt_wrap_findSpan.eq(2).text(" -  " + endDate.split(" ")[0]);
+							owner__txt_wrap_findSpan.eq(3).text(endDate.split(" ")[1]);
+						}
+						if(closeCalendar) {
+							owner.closeLayer();
+						}
+
+						dataFocus = 'end';
+					
+					} else if(_that.startDate != undefined && _that.endDate != undefined) { // 오는날 가는날 모두 입력된후 재입력시(오는날부터 다시 입력)
+						//owner._txt_wrap.find('p').text('');
+
+						_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.data().startDate= _that.startDate; // input.data 시작날짜
+						_that.endDate = undefined;
+						_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))).trigger('textchange');; // 개발쪽 포맷
+//						_that.next().trigger('textchange');
+						owner._subtitle.text(_calendarLangs.J0003);
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ){
+							var owner__txt_wrap_findSpan	= owner._txt_wrap.find('span');
+							owner__txt_wrap_findSpan.eq(0).text(startDate.split(" ")[0]);
+							owner__txt_wrap_findSpan.eq(1).text(startDate.split(" ")[1]);
+						}
+						_that.val(startDate);
+						
+						dataFocus = 'start';
+
+					} else { // 오는날 입력
+						_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.data().startDate= _that.startDate; // input.data 시작날짜
+						_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))).trigger('textchange');; // 개발쪽 포맷
+//						_that.next().trigger('textchange');
+						owner._subtitle.text(_calendarLangs.J0003);
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ){
+							var owner__txt_wrap_findSpan	= owner._txt_wrap.find('span');
+							owner__txt_wrap_findSpan.eq(0).text(startDate.split(" ")[0]);
+							owner__txt_wrap_findSpan.eq(1).text(startDate.split(" ")[1]);
+						}
+
+						//우측 선택시 다시 그리기 때문에 minDate 영향으로 왼쪽으로 이동하는 현상이 있음
+//						 $(this).datepicker('option','minDate', prevDisabled);// 선택한 날짜 이전 날은 선택 방지
+						_that.val(startDate);
+						
+						dataFocus = 'start';
+					}
+					
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						//우측 선택시 다시 그리기 때문에 minDate 영향으로 왼쪽으로 이동하는 현상이 있음 ==> 시작날짜보다 이전일경우 비활성처리
+
+						// if( dateStart.getTime() > date.getTime()){
+						// 	return [false, "" ]; // 선택날짜 이전 날 비활성화
+						// }
+
+						if(date.getTime() == dateStart.getTime()){ // 시작일
+							if(_that.endDate != undefined && date.getTime() == $.datepicker.parseDate('yy/mm/dd', _that.endDate).getTime()){
+								return [true, "startDay endDay startDaySub" ];
+							}
+							return [true, "startDay startDaySub" ];
+						}
+
+					}
+					if(_that.startDate ==undefined || _that.endDate == undefined){
+						return [true, "" ];
+					}
+					var dateEnd = $.datepicker.parseDate('yy/mm/dd', _that.endDate);
+					var inClass ='';
+					//date1 && ((date.getTime() == date1.getTime()) || (date2 && date >= date1 && date <= date2))
+					if(date.getTime() == dateEnd.getTime()){
+						inClass = 'endDay'
+					}else if(dateEnd && date >= dateStart && date <= dateEnd){
+						inClass = 'dp-highlight';
+					}
+					return [true, inClass];
+				},
+				afterShow: function(e) {
+					$(this).find('td[data-handler="selectDay"]').mouseenter(function(e) {
+						e.preventDefault();
+						
+						if(_that.startDate == undefined || _that.endDate != undefined) {
+							return;
+						}
+						var currentDate	= new Date($(this).attr('data-year')+"/"+(parseInt($(this).attr('data-month'))+1)+"/"+$(this).text());
+						var selectedDate	= $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if(selectedDate === null) {
+							selectedDate = new Date();
+						}
+						var allTds = $(this).parents('div.compareCalendar').find('td[data-handler="selectDay"]');
+						allTds.removeClass('dp-highlight');
+						allTds.removeClass('endDay');
+						var found = true;
+						if(currentDate > selectedDate) {
+							var flag_start_check = false;
+							for(var i = 0; i < allTds.length; i++) {
+								if(found) {
+									if($(allTds[i]).hasClass('startDaySub'))
+ 										flag_start_check = true;
+									
+									if(flag_start_check)
+										$(allTds[i]).addClass('dp-highlight');
+								}
+								if ($(allTds[i]).hasClass('ui-datepicker-today') || $(allTds[i]).hasClass('ui-datepicker-current-day')) {
+									found = true;
+								}
+								if (allTds[i] == this) {
+									$(allTds[i]).addClass('endDay');
+									break;
+								}
+							}
+						};
+					});
+
+					$(this).find('.ui-datepicker-calendar > tbody').mouseleave(function(e) {
+						e.preventDefault();
+						
+						if( _that.startDate == undefined) {
+							return;
+						}
+						var allTds = $(this).parents('div.compareCalendar').find('td[data-handler="selectDay"]');
+						allTds.removeClass('dp-highlight');
+						allTds.removeClass('endDay');
+
+						var flag_start_check = false;
+						if(_that.endDate != undefined) {
+							var found = true;
+							for(var i = 0; i < allTds.length; i++) {
+								if(found) {
+									if($(allTds[i]).hasClass('startDaySub'))
+ 										flag_start_check = true;
+									
+ 									if(flag_start_check)
+ 										$(allTds[i]).addClass('dp-highlight');
+								}
+								if ($(allTds[i]).hasClass('ui-datepicker-current-day')) {
+									found = false;
+									$(allTds[i]).addClass('endDay');
+									break;
+									
+								}
+							}
+						}
+					});
+					
+		            if( dataFocus == 'start' ){
+		            	$('.startDay a').focus();
+		            }else if( dataFocus == 'end' ){
+		            	//$('.endDay a').focus();
+		            	$(this).parents('.layer_content').find('.btn_bottom_area .btn_floating').focus();
+		            };
+		            
+		            // 접근성 title 선택됨 추가 180531 JKJ
+		            if( $(this).find('.startDay').hasClass('endDay') ){
+		            	$(this).find('.startDay a').attr('title', _calendarLangs.J0007);
+		            }else{
+						$(this).find('.endDay a').attr('title', _calendarLangs.J0008);
+						$(this).find('.startDay a').attr('title', _calendarLangs.J0009);
+		            };
+		        }
+			});
+		}
+
+		//multi datepicker
+		owner.multiCal_full = function() {								// datepicker 삽입하는 메소드 생성
+			var _that		= $(this);
+			var dateFormat	= _that.attr("data-dateFormat");			// input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist;
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0) {  // input hidden 생성
+				console.log('hidden 생성...');
+				
+				$(this).after($('<input>', {
+					type: 'hidden',
+					id: 'arrivalDate1',
+					val: ''
+				}));
+				$(this).after($('<input>', {
+					type: 'hidden',
+					id	: 'departureDate1',
+					val	: ''
+				}));
+			}
+
+			//월선택 박스 
+			for (var i = 0; i < 13; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+			
+			this._cal_box.datepicker({
+				numberOfMonths: 2,
+				showButtonPanel: false,
+				minDate: 0,
+				maxDate: '+361D',
+				dateFormat: dateFormat,
+				nextText: _calendarLangs.J0004,
+				prevText: _calendarLangs.J0005,
+				onSelect: function(date, inst){
+					var prevDisabled = $(this).datepicker('getDate');// 선택한 날짜 이전 날은 선택 방지 변수 저장
+					var startDate = date;
+					var endDate;
+					owner._label.hide();
+					//달력 선택영역 활성화(임시)
+					//if(_that.val().length > 0){
+					if(_that.startDate != undefined && _that.endDate == undefined && $.datepicker.parseDate('yy/mm/dd', _that.startDate) <= $(this).datepicker('getDate')){ // 가는날 입력
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						var dateCur = $(this).datepicker('getDate');
+						
+						/*if(dateStart.getTime() > dateCur.getTime()){
+							console.log("오는 날짜가 가는 날짜보다 전일입니다.");
+							return false;
+						}*/
+						
+						startDate = _that.val().split(" -")[0];
+						endDate = date;
+						
+						// 가는 날 선택시 닫힘.
+						_that.data().endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.endDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.next().next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+						_that.next().next().trigger('textchange');
+						_that.val(startDate + " - " + endDate);
+						
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ){
+							owner._txt_wrap.find('span').eq(2).text("  " + endDate.split(" ")[0]);
+							owner._txt_wrap.find('span').eq(3).text(endDate.split(" ")[1]);
+						}
+						if(closeCalendar) {
+							owner.closeLayer();
+						}
+						
+					} else if(_that.startDate != undefined && _that.endDate != undefined) { // 오는날 가는날 모두 입력된후 재입력시(오는날부터 다시 입력)
+						owner._txt_wrap.find('span').text('');
+						
+						_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.data().startDate= _that.startDate; // input.data 시작날짜
+						_that.endDate = undefined;
+						_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+						_that.next().trigger('textchange');
+						owner._subtitle.text(_calendarLangs.J0003);
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ){
+							owner._txt_wrap.find('span').eq(0).text(startDate.split(" ")[0]);
+							owner._txt_wrap.find('span').eq(1).text(startDate.split(" ")[1]);
+						}
+						_that.val(startDate);
+						
+					} else { // 오는날 입력
+						_that.startDate = $.datepicker.formatDate("yy/mm/dd",new Date($(this).datepicker('getDate')));
+						_that.data().startDate= _that.startDate; // input.data 시작날짜
+						_that.next().val($.datepicker.formatDate("yymmdd",new Date($(this).datepicker('getDate')))); // 개발쪽 포맷
+						_that.next().trigger('textchange');
+						owner._subtitle.text(_calendarLangs.J0003);
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ){
+							owner._txt_wrap.find('span').eq(0).text(startDate.split(" ")[0]);
+							owner._txt_wrap.find('span').eq(1).text(startDate.split(" ")[1]);
+						}
+						
+						//우측 선택시 다시 그리기 때문에 minDate 영향으로 왼쪽으로 이동하는 현상이 있음
+//						 $(this).datepicker('option','minDate', prevDisabled);// 선택한 날짜 이전 날은 선택 방지
+						_that.val(startDate);
+					}
+				},
+				beforeShowDay: function(date) {
+					if(_that.startDate !=undefined ){
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						//우측 선택시 다시 그리기 때문에 minDate 영향으로 왼쪽으로 이동하는 현상이 있음 ==> 시작날짜보다 이전일경우 비활성처리
+
+						// if( dateStart.getTime() > date.getTime()){
+						// 	return [false, "" ]; // 선택날짜 이전 날 비활성화
+						// }
+
+						if(date.getTime() == dateStart.getTime()){ // 시작일
+							if(_that.endDate != undefined && date.getTime() == $.datepicker.parseDate('yy/mm/dd', _that.endDate).getTime()){
+								return [true, "startDay endDay startDaySub" ];
+							}
+							return [true, "startDay startDaySub" ];
+						}
+
+					}
+					if(_that.startDate ==undefined || _that.endDate == undefined){
+						return [true, "" ];
+					}
+					var dateEnd = $.datepicker.parseDate('yy/mm/dd', _that.endDate);
+					var inClass ='';
+					//date1 && ((date.getTime() == date1.getTime()) || (date2 && date >= date1 && date <= date2))
+					if(date.getTime() == dateEnd.getTime()){
+						inClass = 'endDay'
+					}else if(dateEnd && date >= dateStart && date <= dateEnd){
+						inClass = 'dp-highlight';
+					}
+					return [true, inClass];
+				},
+				afterShow: function(e) {
+
+					$(this).find('td[data-handler="selectDay"]').mouseenter(function(e) {
+						e.preventDefault();
+						if( _that.startDate == undefined ||  _that.endDate != undefined) {
+							return;
+						}
+						var currentDate = new Date($(this).attr('data-year')+"/"+(parseInt($(this).attr('data-month'))+1)+"/"+$(this).text());
+						var selectedDate = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						if (selectedDate === null) {
+							selectedDate = new Date();
+						}
+						var allTds = $(this).parents('div.compareCalendar').find('td[data-handler="selectDay"]');
+						allTds.removeClass('dp-highlight');
+						allTds.removeClass('endDay');
+						var found = true;
+						if (currentDate > selectedDate) {
+							var flag_start_check = false;
+							for (var i = 0; i < allTds.length; i++) {
+								if (found) {
+									if($(allTds[i]).hasClass('startDaySub'))
+ 										flag_start_check = true;
+									
+									if(flag_start_check)
+										$(allTds[i]).addClass('dp-highlight');
+								}
+								if ($(allTds[i]).hasClass('ui-datepicker-today') || $(allTds[i]).hasClass('ui-datepicker-current-day')) {
+									found = true;
+								}
+								if (allTds[i] == this) {
+									$(allTds[i]).addClass('endDay');
+									break;
+								}
+							}
+						}
+					});
+
+					$(this).find('.ui-datepicker-calendar > tbody').mouseleave(function(e) {
+						e.preventDefault();
+						if( _that.startDate == undefined) {
+							return;
+						}
+						var allTds = $(this).parents('div.compareCalendar').find('td[data-handler="selectDay"]');
+						allTds.removeClass('dp-highlight');
+						allTds.removeClass('endDay');
+
+						var flag_start_check = false;
+						if( _that.endDate != undefined){
+							var found = true;
+							for(var i = 0; i < allTds.length; i++) {
+								if(found) {
+									if($(allTds[i]).hasClass('startDaySub'))
+ 										flag_start_check = true;
+
+ 									if(flag_start_check)
+ 										$(allTds[i]).addClass('dp-highlight');
+								}
+								if ($(allTds[i]).hasClass('ui-datepicker-current-day')) {
+									found = false;
+									$(allTds[i]).addClass('endDay');
+									break;
+									
+								}
+							}
+						}
+
+					});
+
+		            
+		            // 접근성 title 선택됨 추가 180531 JKJ
+		            if( $(this).find('.startDay').hasClass('endDay') ){
+		            	$(this).find('.startDay a').attr('title', _calendarLangs.J0007);
+		            }else{
+						$(this).find('.endDay a').attr('title', _calendarLangs.J0008);
+						$(this).find('.startDay a').attr('title', _calendarLangs.J0009);
+		            };
+				}
+			});
+		}
+		
+		//multiCal_step (for main)
+		owner.multiCal_step = function(){								//datepicker 삽입하는 메소드 생성
+			var _that = $(this);
+			var dateFormat = _that.attr("data-dateFormat");			//input.datepicker 의 data 속성 가져와 변수 저장
+			var monthlist, dataFocus='';
+			if(owner._cal_wrap.find('[id^="departureDate"]').length == 0){  // input hidden 생성
+				console.log('hidden 생성...');
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'arrivalDate1',
+					val: ''
+				}));
+				$(this).after( $('<input>', {
+					type: 'hidden',
+					id: 'departureDate1',
+					val: ''
+				}));
+			}
+
+			owner.txt_round_click();
+			//owner.sibling_click();
+			//월선택 박스 
+			for (var i = 0; i < 13; i++) {
+				monthlist += "<option value='" + moment().add(i, 'M').format('MM/DD/YYYY') + "'> " + moment().add(i, 'M').format('YYYY.MM') + "</option>";
+			}
+			this._month_selector.find('select').html(monthlist);
+			this._month_selector.find('option:eq(0)').prop('selected',true);
+//			
+			
+			this._cal_box.datepicker({
+				numberOfMonths	: 2,
+				showButtonPanel	: false,
+				minDate			: 0,
+				maxDate			: '+361D',
+				dateFormat		: dateFormat,
+				nextText		: _calendarLangs.J0004,
+				prevText		: _calendarLangs.J0005,
+				onSelect		: function(date, inst) {
+					var $onSelect_this			= $(this);
+					var jsOnSelect_this_getDate	= $onSelect_this.datepicker('getDate');				// 선택한 날짜 이전 날은 선택 방지 변수 저장
+//					$onSelect_this.datepicker('option', 'minDate', jsOnSelect_this_getDate);		// 선택한 날짜 이전 날은 선택 방지
+					
+					var startDate = date;
+					var endDate;
+					owner._label.hide();
+					
+					// 달력 선택영역 활성화(임시)
+					// if(_that.val().length > 0) {
+					if(_that.startDate != undefined && _that.endDate == undefined && $.datepicker.parseDate('yy/mm/dd', _that.startDate) <= $(this).datepicker('getDate')){ // 가는날 입력
+//						$onSelect_this.datepicker('option', 'minDate', -1);							// 선택한 날짜 이전 날은 선택 방지 해제
+						
+						var dateStart	= $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						var dateCur		= jsOnSelect_this_getDate;
+						
+						/*if(dateStart.getTime() > dateCur.getTime()) {
+							console.log("오는 날짜가 가는 날짜보다 전일입니다.");
+							return false;
+						}*/
+						
+						startDate	= _that.val().split(" -")[0];
+						endDate		= date;
+						
+						// 가는 날 선택시 닫힘.
+						_that.data().endDate	= $.datepicker.formatDate("yy/mm/dd", new Date(jsOnSelect_this_getDate));
+						_that.endDate			= $.datepicker.formatDate("yy/mm/dd", new Date(jsOnSelect_this_getDate));
+						
+						// 개발쪽 포맷
+						_that.next().next().val($.datepicker.formatDate("yymmdd", new Date(jsOnSelect_this_getDate)))
+										   .trigger('textchange');
+						_that.val(startDate + " - " + endDate);
+
+						//추후 수정 할거
+						if(owner._txt_wrap.length > 0 ) {
+							var owner__txt_wrap_findSpan	= owner._txt_wrap.find('span');
+							owner__txt_wrap_findSpan.eq(2).text(" -  " + endDate.split(" ")[0]);
+							owner__txt_wrap_findSpan.eq(3).text(endDate.split(" ")[1]);
+						}
+						owner._btn_step.removeClass('gray').addClass('red');
+						dataFocus = 'end';
+
+					} else if(_that.startDate != undefined && _that.endDate != undefined) { // 오는날 가는날 모두 입력된후 재입력시(오는날부터 다시 입력)
+						var owner__txt_wrap_findSpan	= owner._txt_wrap.find('span');
+						owner__txt_wrap_findSpan.text('');
+
+						_that.startDate			= $.datepicker.formatDate("yy/mm/dd", new Date(jsOnSelect_this_getDate));
+						_that.data().startDate	= _that.startDate; // input.data 시작날짜
+						_that.endDate			= undefined;
+						
+						// 개발쪽 포맷
+						_that.next().val($.datepicker.formatDate("yymmdd", new Date(jsOnSelect_this_getDate)))
+									.trigger('textchange');
+						owner._subtitle.text(_calendarLangs.J0003);
+						// 추후 수정 할거
+						if(owner._txt_wrap.length > 0 ) {
+							owner__txt_wrap_findSpan.eq(0).text(startDate.split(" ")[0]);
+							owner__txt_wrap_findSpan.eq(1).text(startDate.split(" ")[1]);
+						}
+						_that.val(startDate);
+						owner._btn_step.removeClass('red').addClass('gray');
+						dataFocus = 'start';
+					} else { // 오는날 입력
+						_that.startDate			= $.datepicker.formatDate("yy/mm/dd",new Date(jsOnSelect_this_getDate));
+						_that.data().startDate	= _that.startDate; // input.data 시작날짜
+						
+						// 개발쪽 포맷
+						_that.next().val($.datepicker.formatDate("yymmdd",new Date(jsOnSelect_this_getDate)))
+									.trigger('textchange');
+						owner._subtitle.text(_calendarLangs.J0003);
+						// 추후 수정 할거
+						if(owner._txt_wrap.length > 0 ) {
+							var owner__txt_wrap_findSpan	= owner._txt_wrap.find('span');
+							owner__txt_wrap_findSpan.eq(0).text(startDate.split(" ")[0]);
+							owner__txt_wrap_findSpan.eq(1).text(startDate.split(" ")[1]);
+						}
+
+						// 우측 선택시 다시 그리기 때문에 minDate 영향으로 왼쪽으로 이동하는 현상이 있음
+//						 $onSelect_this.datepicker('option','minDate', jsOnSelect_this_getDate);	// 선택한 날짜 이전 날은 선택 방지
+						_that.val(startDate);
+						dataFocus = 'start';
+					}
+
+					
+				},
+				beforeShowDay	: function(date) {
+					if(_that.startDate != undefined) {
+						var dateStart = $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+						//우측 선택시 다시 그리기 때문에 minDate 영향으로 왼쪽으로 이동하는 현상이 있음 ==> 시작날짜보다 이전일경우 비활성처리
+
+						 /*if( dateStart.getTime() > date.getTime()){
+						 	return [false, "" ]; // 선택날짜 이전 날 비활성화
+						 }*/
+
+						if(date.getTime() == dateStart.getTime()){ // 시작일
+							if(_that.endDate != undefined && date.getTime() == $.datepicker.parseDate('yy/mm/dd', _that.endDate).getTime()){
+								return [true, "startDay endDay startDaySub" ];
+							}
+							return [true, "startDay startDaySub" ];
+						}
+
+					}
+					if(_that.startDate == undefined || _that.endDate == undefined) {
+						return [true, "" ];
+					}
+					var dateEnd = $.datepicker.parseDate('yy/mm/dd', _that.endDate);
+					var inClass = '';
+					//date1 && ((date.getTime() == date1.getTime()) || (date2 && date >= date1 && date <= date2))
+					if(date.getTime() == dateEnd.getTime()) {
+						inClass = 'endDay'
+					} else if(dateEnd && date >= dateStart && date <= dateEnd) {
+						inClass = 'dp-highlight';
+					}
+					return [true, inClass];
+				},
+				afterShow		: function(e) {
+					$(this).find('td[data-handler="selectDay"]').mouseenter(function(e) {
+						e.preventDefault();
+						
+						if ( !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ) {
+						    return false;
+					    }else{
+							
+							if(_that.startDate == undefined || _that.endDate != undefined) {
+								return;
+							}
+							var currentDate	= new Date($(this).attr('data-year')+"/"+(parseInt($(this).attr('data-month'))+1)+"/"+$(this).text());
+							var selectedDate	= $.datepicker.parseDate('yy/mm/dd', _that.startDate);
+							if(selectedDate === null) {
+								selectedDate = new Date();
+							}
+							var allTds = $(this).parents('div.compareCalendar').find('td[data-handler="selectDay"]');
+							allTds.removeClass('dp-highlight');
+							allTds.removeClass('endDay');
+							var found = true;
+							if(currentDate > selectedDate) {
+								var flag_start_check = false;
+								for(var i = 0; i < allTds.length; i++) {
+									if(found) {
+										if($(allTds[i]).hasClass('startDaySub'))
+	 										flag_start_check = true;
+										
+										if(flag_start_check)
+											$(allTds[i]).addClass('dp-highlight');
+									}
+									if ($(allTds[i]).hasClass('ui-datepicker-today') || $(allTds[i]).hasClass('ui-datepicker-current-day')) {
+										found = true;
+									}
+									if (allTds[i] == this) {
+										$(allTds[i]).addClass('endDay');
+										break;
+									}
+								}
+							}
+						}
+					});
+
+					$(this).find('.ui-datepicker-calendar > tbody').mouseleave(function(e) {
+						e.preventDefault();
+						
+						if( _that.startDate == undefined) {
+							return;
+						}
+						var allTds = $(this).parents('div.compareCalendar').find('td[data-handler="selectDay"]');
+						allTds.removeClass('dp-highlight');
+						allTds.removeClass('endDay');
+
+						var flag_start_check = false;
+						if(_that.endDate != undefined) {
+							var found = true;
+							for(var i = 0; i < allTds.length; i++) {
+								if(found) {
+									if($(allTds[i]).hasClass('startDaySub'))
+ 										flag_start_check = true;
+									
+ 									if(flag_start_check)
+ 										$(allTds[i]).addClass('dp-highlight');
+								}
+								if ($(allTds[i]).hasClass('ui-datepicker-current-day')) {
+									found = false;
+									$(allTds[i]).addClass('endDay');
+									break;
+									
+								}
+							}
+						}
+					});
+
+					if ( dataFocus == 'start' ){
+						$(this).find('.startDay a').focus();
+					}else if ( dataFocus == 'end' ){
+						$(this).siblings('.btn_cal_close').focus();
+					};
+					
+		            // 접근성 title 선택됨 추가 180531 JKJ
+		            if( $(this).find('.startDay').hasClass('endDay') ){
+		            	$(this).find('.startDay a').attr('title', _calendarLangs.J0007);
+		            }else{
+						$(this).find('.endDay a').attr('title', _calendarLangs.J0008);
+						$(this).find('.startDay a').attr('title', _calendarLangs.J0009);
+		            };
+				}
+			});
+		}
+		owner.btnFocus = function(){
+			owner._btn_calopen.focus();
+		};
+		owner.eventBinder = function(){						//이벤트 한 곳에서 제어하는 메소드 생성
+
+			this.on('focus', function(){
+				var singleAttr = $(this).attr('data-type');
+				layerAllClose();							//열려있는 layer popup 전체 닫기
+				owner._label.hide();
+				owner.showLayer();
+				if(singleAttr == "single"){
+					owner.singleCal();
+				} else if (singleAttr == "single_checkin"){
+					owner.singleCheckIn();
+				} else if (singleAttr == "single_rev"){
+					owner.single_revCal();
+				} else if (singleAttr == "single_last"){
+					owner.single_lastCal();
+				} else if (singleAttr == "single_infinite"){
+					owner.single_infiniteCal();
+				} else if (singleAttr == "single_infinite_last"){
+					owner.single_infinite_lastCal();
+				} else if (singleAttr == "single_omission"){
+					owner.single_omissionCal();
+				} else if (singleAttr == "single_past"){
+					owner.single_pastCal();
+				} else if (singleAttr == "full"){
+					owner.multiCal_full();
+					owner._subtitle.text(_calendarLangs.J0002);
+				} else if(singleAttr == "single_search"){
+					owner.single_searchCal();
+				} else if(singleAttr == "single_searchLast"){
+					owner.single_searchLastCal();
+				}else if(singleAttr == "multi_step"){
+					owner.multiCal_step();
+					owner._subtitle.text(_calendarLangs.J0002);
+				} else if(singleAttr == "single_step"){
+					owner.singleCal_step();
+				}else{
+					owner.multiCal();
+					owner._subtitle.text(_calendarLangs.J0002);
+				}
+				// var today = owner._cal_box.find('.ui-datepicker-today');
+				// var linkToday = today.find('a');
+				// linkToday.append('<em class="txt_today">오늘</em>');
+
+				//171124 추가 lyr
+				if($(this).parents('.relative_calendar').length > 0) {
+					owner._cal_layer.css({
+						'left' : $('.container').offset().left - $(this).offset().left + 'px',
+						'top'  : $(this).position().top + $(this).outerHeight() + 'px'
+					});
+				}else{
+					owner._cal_layer.css({
+						'top' : $(this).position().top + $(this).outerHeight() + 'px'
+					});
+				}
+			});
+			this.on('focusout', function(){
+				var singleAttr = $(this).attr('data-type');
+				if(singleAttr == "single"){
+					if(owner.val().trim()==""){
+						owner._label.show();
+					}
+				}else{
+					if(owner._txt_wrap.text().trim()==""){
+						owner._label.show();
+					}
+				}
+				
+			});
+			owner._btn_close.on('click', function(){
+				owner.closeLayer();
+				owner.btnFocus();
+			});
+			owner._btn_refresh.on('click', function(){
+				owner.refresh();
+			});
+			owner._month_selector.find('select').on('change', function(){
+				owner._cal_box.datepicker( "setDate", $.datepicker.formatDate('y.mm.dd D', new Date($(this).val()) ));
+			});
+			owner._btn_step.on('click', function(){
+				//main  스마트조회
+				if($(this).hasClass('red')){
+
+					// owner.closeLayer(); //닫기충돌로 함수 별도처리
+					if($(this).val().length > 0){
+						owner._label.hide();								//출/도착지 label 마크업 show hide
+					}else {
+						owner._label.show();
+					}
+					owner._cal_wrap.removeClass('on');
+					owner.btnFocus();
+
+					$('#psng').focus();
+				}
+			});
+		}
+		
+		owner.eventDestroy = function(){
+			//TODO
+			owner.refresh();
+			owner._cal_box.datepicker( "destroy" );
+			owner._btn_step.removeClass('red').addClass('gray');
+			owner.closeLayer();
+			secFoldTrigger();
+		}
+		owner.init = function(){
+			owner.eventBinder();									//이벤트 발생 메소드 실행
+			owner.sibling_click();
+		};
+		owner.init();
+		return owner;
+	}
+	
+	
+	
+	build_ui.init();
+	return build_ui;
+	
+
+}
+
+var calc1 = new Calendar('.datepicker');
+// key event 막기
+$(document).on('keydown', '.datepicker', function(event){
+	var code = event.keyCode;
+	if((window.event.keyCode == 13 || event.keyCode == 9)){
+		
+	}else {
+		return false;
+	}
+});
+
