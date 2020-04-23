@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+}
+
+.basic {
+  background-color: #8e44ad;
+}
+
+.wide {
+  background-color: #f1c40f;
+}
+
+.short {
+  background-color: #3498db;
+}
+
+h1 {
+  color: #fff;
+}
