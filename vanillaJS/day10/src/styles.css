@@ -1,0 +1,12 @@
+html, body {
+   width: 100%; height:100%;
+   font-family: sans-serif;
+ }
+ 
+ #headBox {width: 500px; height: auto; margin:auto;}
+ #headBox > h1 {width: 100%; height: 50px;  text-transform: capitalize; font-size: 1.5rem; font-weight: bold; line-height:50px;}
+
+ #gameBox {width: 500px; height: auto; margin:auto;}
+   #gameBox > h2 {width: 100%; height: 30px;}
+   #gameBox > form {width: 100%; height: 50px;}
+   #gameBox > div {width: 100%; height: 30px;}
