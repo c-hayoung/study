@@ -2,11 +2,25 @@ html, body {
    width: 100%; height:100%;
    font-family: sans-serif;
  }
- 
+
+.hidden {display:block; width:0; height:0; overflow:hidden; position:absolute; z-index:-1;}
+
  #headBox {width: 500px; height: auto; margin:auto;}
- #headBox > h1 {width: 100%; height: 50px;  text-transform: capitalize; font-size: 1.5rem; font-weight: bold; line-height:50px;}
+ #headBox > h1 {width: 100%; height: auto;  text-transform: capitalize; font-size: 1.5rem; font-weight: bold; line-height:50px;}
 
  #gameBox {width: 500px; height: auto; margin:auto;}
-   #gameBox > h2 {width: 100%; height: 30px;}
-   #gameBox > form {width: 100%; height: 50px;}
-   #gameBox > div {width: 100%; height: 30px;}
+   #gameBox > h2 {width: 100%; height: auto; font-size:1rem;}
+   #gameBox > form {width: 100%; height: 50px; border:0; margin-bottom: 20px;}
+   #gameBox > form > fieldset {border:0; padding:0;}
+		#gameBox > form #limitNum {display:block; width: 30%; margin-bottom: 10px; box-sizing: border-box;}
+		#gameBox > form label {float:left; margin-right: 10px;}
+		#gameBox > form #yourNum {float:left; width:50px; margin-right: 10px;}
+		#gameBox > form button {width: 50px; border-radius:20%; border:1px solid #aaa; background-color: #fff;}
+   
+   
+		#gameBox > div {width: 100%; height: auto; display:none;}
+		#gameBox > div.action {display:block;}
+			#gameBox > div > p {float:left; width: 100%; margin-bottom: 0; height: auto;}
+			#gameBox > div > p:nth-of-type(3) {font-size:1.2rem; font-weight: bold;}
+			#gameBox > div:after,#gameBox > div::after {content:" "; display:block; width:0; height:0; clear:both;}
+   

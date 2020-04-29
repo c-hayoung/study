@@ -1,38 +1,64 @@
 // <⚠️ DONT DELETE THIS ⚠️>
 // import "./styles.css";
 // <⚠️ /DONT DELETE THIS ⚠️>
+
 const gameForm = document.querySelector(".range_form"),
       rangeInput = gameForm.querySelector("#limitNum"),
-      myNumInput = gameForm.querySelector("#yourNum");
-      playBtn = gameForm.querySelector("button");
+      myNumInput = gameForm.querySelector("#yourNum"),
+      playBtn = gameForm.querySelector("button"),
+      resultZone = document.querySelector(".result_zone"),
+      h2 = document.querySelector('h2');
+
+const yourNumZone = resultZone.querySelector(".your_num");
+const machineNumZone = resultZone.querySelector(".machine_num");
+const compareResultZone = resultZone.querySelector(".result");
 
 const LIMIT = "LIMIT";
 const YOURNUM = "MYCHOICE";
 
+localStorage.setItem(LIMIT,0);
+localStorage.setItem(YOURNUM,"");
+
 function handleRange(){
-   
+   console.log(rangeInput.value);
+   const limitNum = h2.querySelector("span");
+   localStorage.setItem(LIMIT,rangeInput.value);
+   limitNum.innerText = `${rangeInput.value}`;
+}
+
+function handleNum(){
+   localStorage.setItem(YOURNUM,myNumInput.value);
 }
 
 function handleCompare(){
+   const checkNumChange = localStorage.getItem(YOURNUM);
+   const max = localStorage.getItem(LIMIT);
 
+   if(checkNumChange === ""){
+      alert("Please fill the form");
+   }else if(checkNumChange > max){
+      alert(`Please check the numbers. You cannot exceed ${max}.`);
+   }else if(checkNumChange < 0){
+      alert("Please check the numbers. You cannot enter a value less than zero.")
+   }else{
+      const randomNum = Math.floor(Math.random() * max);
+      const yourNum = localStorage.getItem(YOURNUM);
+   
+      yourNumZone.innerText =`${yourNum}`;
+      machineNumZone.innerText = `${randomNum}`;
+      if(yourNum >= randomNum - 5 && yourNum <= randomNum + 5){
+         compareResultZone.innerText = `CORRECT!! YOU WIN!`;
+      }else{
+         compareResultZone.innerText = `YOU LOSE`;
+      }
+      resultZone.classList.add("action");
+   }
 }
-
-function getRandom(){
-   let min = 0;
-   let max = localStorage.getItem(LIMIT);
-   min = Math.ceil(min);
-   max = Math.floor(max);
-   return Math.floor(Math.random() * (max - min + 1 )) + min;
-}
-
-function compareNum(){
-   playBtn.addEventListener("click",handleCompare);
-};
-
 
 function init(){
-   compareNum();
-   rangeInput.addEventListener("change",handleRange)
+   rangeInput.addEventListener("input",handleRange);
+   myNumInput.addEventListener("change",handleNum);
+   playBtn.addEventListener("click",handleCompare);
 };
 
 init();
