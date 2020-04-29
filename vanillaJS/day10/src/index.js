@@ -14,13 +14,12 @@ const machineNumZone = resultZone.querySelector(".machine_num");
 const compareResultZone = resultZone.querySelector(".result");
 
 const LIMIT = "LIMIT";
-const YOURNUM = "MYCHOICE";
+const YOURNUM = "YOURNUM";
 
 localStorage.setItem(LIMIT,0);
 localStorage.setItem(YOURNUM,"");
 
 function handleRange(){
-   console.log(rangeInput.value);
    const limitNum = h2.querySelector("span");
    localStorage.setItem(LIMIT,rangeInput.value);
    limitNum.innerText = `${rangeInput.value}`;
@@ -31,10 +30,9 @@ function handleNum(){
 }
 
 function handleCompare(){
-   const checkNumChange = localStorage.getItem(YOURNUM);
-   const max = localStorage.getItem(LIMIT);
-
-   if(checkNumChange === ""){
+   const checkNumChange = parseInt(localStorage.getItem(YOURNUM));
+   const max = parseInt(localStorage.getItem(LIMIT));
+   if(isNaN(checkNumChange)){
       alert("Please fill the form");
    }else if(checkNumChange > max){
       alert(`Please check the numbers. You cannot exceed ${max}.`);
