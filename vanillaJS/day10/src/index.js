@@ -6,18 +6,27 @@ const gameForm = document.querySelector(".range_form"),
       myNumInput = gameForm.querySelector("#yourNum");
       playBtn = gameForm.querySelector("button");
 
+const LIMIT = "LIMIT";
 const YOURNUM = "MYCHOICE";
 
 function handleRange(){
-
-}
-
-function handleCompare(){
    
 }
 
+function handleCompare(){
+
+}
+
+function getRandom(){
+   let min = 0;
+   let max = localStorage.getItem(LIMIT);
+   min = Math.ceil(min);
+   max = Math.floor(max);
+   return Math.floor(Math.random() * (max - min + 1 )) + min;
+}
+
 function compareNum(){
-   playBtn.addEventListener("click",handleCompare);   
+   playBtn.addEventListener("click",handleCompare);
 };
 
 
