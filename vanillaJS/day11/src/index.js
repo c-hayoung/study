@@ -82,7 +82,7 @@ function handlePress(event){
          result.innerText = parseInt(temp);
       }else{
          localStorage.setItem(CAL_RESULT,temp);
-         temp = eval(`${temp} ${temp_alu} ${input}`);
+         cal_result_num = eval(`${temp} ${temp_alu} ${input}`);
          localStorage.setItem(TEMP_NUM,parseInt(temp));
          loadResult();
       }
