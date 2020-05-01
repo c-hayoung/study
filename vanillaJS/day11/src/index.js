@@ -16,8 +16,6 @@ const TEMP_NUM = "TEMP";
 const ALU = "ALU";
 const CAL_RESULT = "RESULT";
 
-const numArray = [1,2,3,4,5,6,7,8,9,0,"="];
-
 localStorage.setItem(ALU,"");
 localStorage.setItem(CAL_RESULT,0);
 
@@ -82,7 +80,7 @@ function handlePress(event){
          result.innerText = parseInt(temp);
       }else{
          localStorage.setItem(CAL_RESULT,temp);
-         cal_result_num = eval(`${temp} ${temp_alu} ${input}`);
+         temp = eval(`${temp} ${temp_alu} ${input}`);
          localStorage.setItem(TEMP_NUM,parseInt(temp));
          loadResult();
       }
