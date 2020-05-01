@@ -16,8 +16,6 @@ const TEMP_NUM = "TEMP";
 const ALU = "ALU";
 const CAL_RESULT = "RESULT";
 
-localStorage.setItem(ALU,"");
-localStorage.setItem(CAL_RESULT,0);
 
 function loadResult(){
    const cal_result_num = localStorage.getItem(CAL_RESULT);
@@ -38,7 +36,7 @@ function handleClear(){
    loadResult();
 }
 
-function handleMath(){
+function handleMath(event){
    const myAlu = event.path[0].classList.value.charAt(6);
    console.log(myAlu);
    localStorage.setItem(ALU,myAlu);
@@ -92,6 +90,7 @@ function init(){
    numBtns.addEventListener("click",handlePress);
    arithmeticBtns.addEventListener("click",handleMath);
    loadResult();
+   handleClear();
 };
 
 init();
