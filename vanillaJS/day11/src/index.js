@@ -79,12 +79,13 @@ function handlePress(event){
          temp = `${temp}` + `${input}`;
          localStorage.setItem(CAL_RESULT,parseInt(input));
          localStorage.setItem(TEMP_NUM,parseInt(temp));
+         result.innerText = parseInt(temp);
       }else{
          localStorage.setItem(CAL_RESULT,temp);
          temp = eval(`${temp} ${temp_alu} ${input}`);
          localStorage.setItem(TEMP_NUM,parseInt(temp));
+         loadResult();
       }
-      loadResult();
    }
 }
 
