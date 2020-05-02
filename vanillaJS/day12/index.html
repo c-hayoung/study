@@ -10,6 +10,7 @@
       <meta name="author" content="hy">
       <meta name="generator" content="illustrator, photoshop, sublimetext, vscode">
 
+      <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="./src/reset.css">
       <link rel="stylesheet" href="./src/common.css">
       <link rel="stylesheet" href="./src/styles.css">
@@ -37,26 +38,29 @@
    <!-- layout =============== -->
    <div id="wrap">
       <section id="mainBox">
-         <h1><a href="#">welcome back!</a></h1>
+         <h1><a href="#">welcome</a></h1>
          
-         <div id="clock"></div>
-         <form id="">
+         <div id="clock">
+
+         </div>
+         <form id="formBox">
             <fieldset>
-               <legend>
-                  폼
-               </legend>
-
-
-
+               <legend>사용자조작폼</legend>
+               <label class="hidden">사용자이름 입력폼</label>
+               <input type="text" class="input_name" placeholder="Type your name"/>
+               <div class="know_name">
+                  <span></span>
+                  <button type="button">Is it not your name?</button>
+               </div>
             </fieldset>
          </form>
+         
       </section>
       <footer id="footBox">
 
       </footer>
    </div>
    <!-- script ================ -->
-      <script src="./src/main.js"></script>
       <script src="./src/bg.js"></script>
    </body>
 </html>
