@@ -38,15 +38,15 @@
    <!-- layout =============== -->
    <div id="wrap">
       <section id="mainBox">
-         <h1><a href="#">welcome</a></h1>
+         <h1>welcome</h1>
          
          <div id="clock">
 
          </div>
-         <form id="formBox">
+         <form id="nameBox">
             <fieldset>
-               <legend>사용자조작폼</legend>
-               <label class="hidden">사용자이름 입력폼</label>
+               <legend>사용자이름 입력용 폼</legend>
+               <label class="hidden">사용자이름 입력칸</label>
                <input type="text" class="input_name" placeholder="Type your name"/>
                <div class="know_name">
                   <span></span>
@@ -54,7 +54,29 @@
                </div>
             </fieldset>
          </form>
-         
+         <form id="toDoBox">
+            <fieldset>
+               <legend>할 일 입력용 폼</legend>
+               <label class="hidden">할 일 입력칸</label>
+               <input type="text" class="input_to_do" placeholder="What I have to do...">
+               <div>
+                  <ul>
+                     <li class="clearfix">
+                        <span>1</span>
+                        <button>del</button>
+                        <button>edit</button>
+                     </li>
+                     <li>2</li>
+                     <li>1</li>
+                     <li>2</li>
+                     <li>3</li>
+                     <li>4</li>
+                     <li>5</li>
+                  </ul>
+               </div>
+            </fieldset>
+         </form>
+
       </section>
       <footer id="footBox">
 

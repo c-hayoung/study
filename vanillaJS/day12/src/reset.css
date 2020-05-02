@@ -38,7 +38,7 @@ input[type="search"]:hover,
 input[type="url"]:hover, 
 input[type="email"]:hover, 
 input[type="tel"]:hover,
-text-area:hover, select:hover {background-color: #fdc;}
+text-area:hover, select:hover {background-color: transparent;}
 
 input[type="text"]:focus, 
 input[type="password"]:focus, 
@@ -46,4 +46,4 @@ input[type="search"]:focus,
 input[type="url"]:focus, 
 input[type="email"]:focus, 
 input[type="tel"]:focus,
-text-area:focus, select:focus {background-color: #fcd;}
+text-area:focus, select:focus {background-color: transparent;}

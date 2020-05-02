@@ -3,7 +3,7 @@ const body = document.querySelector("body"),
       wrap = body.querySelector("#wrap"),
       mainBox = wrap.querySelector("#mainBox"),
       clockContainer = mainBox.querySelector("#clock"),
-      formBox = mainBox.querySelector("form");
+      nameBox = mainBox.querySelector("#nameBox");
 
 
 
@@ -26,9 +26,9 @@ function getTime(){
 
 
 // 2. Username Persistance
-const headGreeting = mainBox.querySelector("h1>a");
-const nameZone = formBox.querySelector(".input_name");
-const printNameBox = formBox.querySelector(".know_name");
+const headGreeting = mainBox.querySelector("h1");
+const nameZone = nameBox.querySelector(".input_name");
+const printNameBox = nameBox.querySelector(".know_name");
 const printName = printNameBox.querySelector("span");
 const resetName = printNameBox.querySelector("button");
 
@@ -49,7 +49,7 @@ function paintGreeting(){
 
    nameZone.classList.remove("action");
    printNameBox.classList.add('action');
-   printName.innerText = `I'm waiting for you, ${savedName}`;
+   printName.innerText = `I'm waiting for you, ${savedName}!`;
    headGreeting.innerText = "welcome back!!";
    
    resetName.addEventListener("click",askForName);
@@ -60,23 +60,27 @@ function paintGreeting(){
 function handleSubmit(e){
    e.preventDefault();
    const userName = nameZone.value;
-   localStorage.setItem(USER_LS,userName);
-   nameZone.value = "";
-   paintGreeting();
+   if(userName === ""){
+      alert("fill your name");
+   }else{
+      localStorage.setItem(USER_LS,userName);
+      nameZone.value = "";
+      paintGreeting();
+   }
 };
 
 function askForName(){
-   localStorage.setItem(USER_LS,``);
+   localStorage.setItem(USER_LS,"");
    printNameBox.classList.remove('action');
    nameZone.classList.add("action");
-   formBox.addEventListener("submit",handleSubmit);
+   nameBox.addEventListener("submit",handleSubmit);
    headGreeting.innerText = "welcome...?";
 };
 
 
 function loadName(){
    const currentUserName = localStorage.getItem(USER_LS);
-   if(currentUserName === null){
+   if(currentUserName === ""){
       askForName();
    }else{
       paintGreeting();
@@ -85,6 +89,24 @@ function loadName(){
 
 
 // 3. TO DO LIST
+const TODO_LS = "to do List";
+
+function paintToDo(text){
+   const li = document.createElement("li");
+   const delBtn = document.createElement("button");
+
+}
+
+
+function loadToDo(){
+   const savedToDo = localStorage.getItem(TODO_LS);
+   if(savedToDo !== null){
+      const parsedToDo = JSON.parse(savedToDo);
+      parsedToDo.forEach(function(ToDo){
+         paintToDo(ToDo.text);
+      })
+   }
+};
 
 
 
@@ -125,6 +147,9 @@ function init(){
    
    // 2. username
    loadName();
+
+   // 3. to do list
+   loadToDo();
 
    // 4. random background
 	const randomNumber = genRandom();
