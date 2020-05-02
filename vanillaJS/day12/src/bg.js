@@ -1,4 +1,4 @@
-
+//bg.js
 
 
 function init(){
