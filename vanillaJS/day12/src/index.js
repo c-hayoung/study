@@ -215,6 +215,7 @@ function genRandom(){
 
 
 // 5. Weather with Geolocation
+const API_KEY = "df288711221e9c638230c00f24c18005";
 const COORDS = 'coords';
 
 function savedCoords(coordsObj){
@@ -237,7 +238,7 @@ function handleGeoError(){
 }
 
 function askForCoords(){
-	navigator.geolocation.getCurrentPosition(handleHeoSuccess, handleGeoError)
+	navigator.geolocation.getCurrentPosition(handleGeoSuccess, handleGeoError)
 }
 
 function loadCoords(){
