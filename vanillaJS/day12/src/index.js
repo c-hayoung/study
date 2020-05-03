@@ -122,10 +122,12 @@ function finishToDo(e){
    const ck = e.target;
    const ckLi = ck.parentNode.parentNode;
 
+   ck.parentNode.remove();
    ckLi.classList.add("action");
 
+   const FINISHED = `finished`;
    finishedList.push(ckLi.id);
-   localStorage.setItem(`finished`,JSON.stringify(finishedList));
+   localStorage.setItem(FINISHED,JSON.stringify(finishedList));
 }
 
 function paintToDo(text){
