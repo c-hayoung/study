@@ -3,7 +3,9 @@ const body = document.querySelector("body"),
       wrap = body.querySelector("#wrap"),
       mainBox = wrap.querySelector("#mainBox"),
       clockContainer = mainBox.querySelector("#clock"),
-      nameBox = mainBox.querySelector("#nameBox");
+      nameBox = mainBox.querySelector("#nameBox"),
+      toDoBox = mainBox.querySelector("#toDoBox"),
+      toDoZone = mainBox.querySelector(".to_do_zone");
 
 
 
@@ -89,14 +91,75 @@ function loadName(){
 
 
 // 3. TO DO LIST
+const toDoInput = toDoBox.querySelector("input");
+const toDoList = toDoZone.querySelector("ul");
+
 const TODO_LS = "to do List";
+
+let currentToDo = [];
+const finishedList = [];
+
+function saveToDo(){
+   localStorage.setItem(TODO_LS,JSON.stringify(currentToDo));
+}
+
+function deleteToDo(e){
+   e.preventDefault();
+   const del = e.target;
+   const delLi = del.parentNode.parentNode;
+
+   toDoList.removeChild(delLi);
+
+   const cleanToDo = currentToDo.filter(function(toDo){
+      return toDo.id !== parseInt(delLi.id);
+   })
+   currentToDo = cleanToDo;
+   saveToDo();
+}
+
+function finishToDo(e){
+   console.log(`i finish it`);
+   const ck = e.target;
+   const ckLi = ck.parentNode.parentNode;
+
+   ckLi.classList.add("action");
+
+   finishedList.push(ckLi.id);
+   localStorage.setItem(`finished`,JSON.stringify(finishedList));
+}
 
 function paintToDo(text){
    const li = document.createElement("li");
    const delBtn = document.createElement("button");
+   const ckBtn = document.createElement("button");
+   const span = document.createElement("span");
+   const newId = currentToDo.length + 1;
 
+   delBtn.innerHTML = `<i class="far fa-times-circle"></i>`;
+   delBtn.addEventListener("click",deleteToDo);
+   ckBtn.innerHTML = `<i class="far fa-check-circle"></i>`;
+   ckBtn.addEventListener("click",finishToDo);
+   span.innerText = text;
+   li.appendChild(span);
+   li.appendChild(delBtn);
+   li.appendChild(ckBtn);
+   li.id = newId;
+   toDoList.appendChild(li);
+
+   const toDoObj = {
+      text : text,
+      id : newId
+   };
+   currentToDo.push(toDoObj);
+   saveToDo();
 }
 
+function handleToDoSubmit(e){
+   e.preventDefault();
+   const currentvalue = toDoInput.value;
+   paintToDo(currentvalue);
+   toDoInput.value = "";
+}
 
 function loadToDo(){
    const savedToDo = localStorage.getItem(TODO_LS);
@@ -104,8 +167,8 @@ function loadToDo(){
       const parsedToDo = JSON.parse(savedToDo);
       parsedToDo.forEach(function(ToDo){
          paintToDo(ToDo.text);
-      })
-   }
+      });
+   };
 };
 
 
@@ -150,6 +213,7 @@ function init(){
 
    // 3. to do list
    loadToDo();
+   toDoBox.addEventListener("submit",handleToDoSubmit);
 
    // 4. random background
 	const randomNumber = genRandom();
