@@ -95,12 +95,14 @@ const toDoInput = toDoBox.querySelector("input");
 const toDoList = toDoZone.querySelector("ul");
 
 const TODO_LS = "to do List";
+const FINISHED = `finished`;
 
 let currentToDo = [];
-const finishedList = [];
+let finishedList = [];
 
 function saveToDo(){
    localStorage.setItem(TODO_LS,JSON.stringify(currentToDo));
+   localStorage.setItem(FINISHED,JSON.stringify(finishedList));
 }
 
 function deleteToDo(e){
@@ -114,19 +116,26 @@ function deleteToDo(e){
       return toDo.id !== parseInt(delLi.id);
    })
    currentToDo = cleanToDo;
+
+   const cleanFinished = finishedList.filter(function(toDo){
+      return toDo.id !== parseInt(delLi.id);
+   })
+   finishedList = cleanFinished;
    saveToDo();
 }
 
 function finishToDo(e){
-   console.log(`i finish it`);
    const ck = e.target;
    const ckLi = ck.parentNode.parentNode;
 
    ck.parentNode.remove();
    ckLi.classList.add("action");
 
-   const FINISHED = `finished`;
-   finishedList.push(ckLi.id);
+   const finishedObj = {
+      text : ckLi.innerText,
+      id : parseInt(ckLi.id)
+   };
+   finishedList.push(finishedObj);
    localStorage.setItem(FINISHED,JSON.stringify(finishedList));
 }
 
@@ -171,6 +180,13 @@ function loadToDo(){
          paintToDo(ToDo.text);
       });
    };
+   const savedFinished = localStorage.getItem(FINISHED);
+   if(savedFinished !== null){
+      const parsedFinished = JSON.parse(savedFinished);
+      parsedFinished.forEach(function(ToDo){
+         // toDo의 id로 불러오면 될까?
+      })
+   }
 };
 
 
@@ -199,8 +215,39 @@ function genRandom(){
 
 
 // 5. Weather with Geolocation
+const COORDS = 'coords';
 
+function savedCoords(coordsObj){
+	localStorage.setItem(COORDS, JSON.stringify(coordsObj));
+};
 
+function handleGeoSuccess(position){
+	const latitude = position.coords.latitude;
+  	const longitude = position.coords.longitude;
+  	const coordsObj = {
+    	latitude,
+      	// latitude = latitude
+      	longitude
+    };
+  	savedCoords(coordsObj);
+}
+
+function handleGeoError(){
+	console.log("Cant access geo location");
+}
+
+function askForCoords(){
+	navigator.geolocation.getCurrentPosition(handleHeoSuccess, handleGeoError)
+}
+
+function loadCoords(){
+	const loadedCords = localStorage.getItem(COORDS);
+  	if(loadedCords === null){
+    	askForCoords();
+    }else{
+    	//getWeather
+    }
+}
 
 
 
@@ -221,7 +268,8 @@ function init(){
 	const randomNumber = genRandom();
    paintImage(randomNumber);
 
-   // 5. 
+   // 5. weather
+   loadCoords();
 }
 
 init();
