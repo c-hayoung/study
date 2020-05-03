@@ -226,7 +226,7 @@ function getWeather(lat, lon){
     }).then(function(json){
       const temperature = json.main.temp;
       const place = json.name;
-      weatherZone.innerText = `${Math.ceil(temperature)}°C @ ${place}`;
+      weatherZone.innerText = `${Math.ceil(temperature)}℃ @ ${place}`;
     })
 }
 
@@ -240,14 +240,14 @@ function handleGeoSuccess(position){
   	const coordsObj = {
     	latitude,
       	// latitude = latitude
-      	longitude
+      longitude
     };
   	savedCoords(coordsObj);
   	getWeather(latitude, longitude);
 }
 
 function handleGeoError(){
-	console.log("Cant access geo location");
+	console.log("Can't access geo location");
 }
 
 function askForCoords(){
