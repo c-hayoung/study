@@ -29,6 +29,8 @@ function onMouseMove(event){
       // path의 시작점으로부터 이어지는 선 긋기
       ctx.lineTo(x, y);
       ctx.stroke();
+      // ctx.closePath();
+      // closePath가 반복됨
    }
 }
 
