@@ -4,14 +4,12 @@ painting Board made with VanillaJS
 
 
 
-* [ ] Canvas Events
-* [ ] 2D Context
-* [ ] Recap
-* [ ] changing Color
-* [ ] Brush Size
-* [ ] Filling Mode
-* [ ] Saving the image
-* [ ] Conclusions
+* [x] Canvas Events
+* [x] 2D Context
+* [x] changing Color
+* [x] Brush Size
+* [x] Filling Mode
+* [x] Saving the image
 
 
 
