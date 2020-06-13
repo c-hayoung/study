@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const saveBtn = document.getElementById("jsSave");
 
 const INITIAL_COLOR = "#333";
 const CANVAS_SIZE = 500;
@@ -81,6 +82,23 @@ function handleCM(event){
    // console.log(event);
 }
 
+function handleSaveClick(){
+   //canvas의 데이터를 이미지로 얻기.
+   const image = canvas.toDataURL();
+   // const image = canvas.toDataURL("image/jpeg"); //-> jpeg으로 저장하기
+   // console.log(image);
+   // canvas의 저장기능을 위한 a 태그 임시 생성
+   const link = document.createElement("a");
+   
+   //anchor(a)태그의 download기능으로 연결
+   link.href = image;
+   link.download = "PaintJS[🎨]";
+
+   // console.log(link);
+   //fake link click = 다운로드가 실행
+   link.click();
+}
+
 if(canvas){
    canvas.addEventListener("mousemove",onMouseMove);
    canvas.addEventListener("mousedown",startPainting);
@@ -99,4 +117,8 @@ if(range){
 
 if(mode){
    mode.addEventListener("click",handleModeClick);
+}
+
+if(saveBtn){
+   saveBtn.addEventListener("click",handleSaveClick);
 }
