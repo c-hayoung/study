@@ -51,7 +51,7 @@ def p_plus(a,b):
 
 def r_plus(a,b):
   return a + b
-  print("something here", True)  # 실행되지X
+#   print("something here", True)  # 실행되지X
 
 p_result = p_plus(2,3)
 r_result = r_plus(2,3)
@@ -60,18 +60,25 @@ print(p_result,r_result)  # None 5
 
 # ---
 
-
-def minus(a, b):
+def p_minus(a, b):
 	return a - b
 
-result = minus(30, 1)
+result = p_minus(30, 1)
 
 print(result)   # 29
 
-def minus(a, b):
+def k_minus(a, b):
 	return a - b
 
-result = minus(b=30, a=1)
+result = k_minus(b=30, a=1)
 
 print(result)   # -29
 
+# ---
+
+def say_hello_age(name,age):
+  return f"Hello {name} you are {age} years old"  #string에 인자 받아서 사용하기
+#   return "Hello" + name + "you are" + age + "years old"  #+로 string과 인자를 연결시켜주는 방법  
+
+hello = say_hello_age("nico", "12")
+print(hello)
