@@ -53,10 +53,11 @@ def r_plus(a,b):
   return a + b
 #   print("something here", True)  # 실행되지X
 
-p_result = p_plus(2,3)
+# p_result = p_plus(2,3)  # None
 r_result = r_plus(2,3)
 
-print(p_result,r_result)  # None 5
+# print(p_result)
+print(r_result)  # None 5
 
 # ---
 
