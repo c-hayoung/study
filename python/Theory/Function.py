@@ -45,3 +45,33 @@ minus(2,5)
 
 # ---
 
+
+def p_plus(a,b):
+  print(a + b)
+
+def r_plus(a,b):
+  return a + b
+  print("something here", True)  # 실행되지X
+
+p_result = p_plus(2,3)
+r_result = r_plus(2,3)
+
+print(p_result,r_result)  # None 5
+
+# ---
+
+
+def minus(a, b):
+	return a - b
+
+result = minus(30, 1)
+
+print(result)   # 29
+
+def minus(a, b):
+	return a - b
+
+result = minus(b=30, a=1)
+
+print(result)   # -29
+
