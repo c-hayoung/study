@@ -80,5 +80,6 @@ def say_hello_age(name,age):
   return f"Hello {name} you are {age} years old"  #string에 인자 받아서 사용하기
 #   return "Hello" + name + "you are" + age + "years old"  #+로 string과 인자를 연결시켜주는 방법  
 
-hello = say_hello_age("nico", "12")
+# hello = say_hello_age("nico", "12")
+hello = say_hello_age(age="12", name="nico")
 print(hello)
