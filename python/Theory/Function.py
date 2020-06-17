@@ -23,3 +23,25 @@ say_hello()
 say_hello()
 say_hello()
 # function 실행. ()까지 적어줘야 실행.
+
+# ---
+
+
+def say_hello_who(name="anonymous"):
+  print("hello", name)
+
+say_hello_who()
+say_hello_who("Anne")
+
+def plus(a, b):
+  print(a + b)
+
+def minus(a, b=0):
+  print(a - b)
+
+plus(2,5)
+minus(2)
+minus(2,5)
+
+# ---
+
