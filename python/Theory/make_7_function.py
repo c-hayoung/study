@@ -1,6 +1,11 @@
 # plus
-def i_plus(a,b):
-   return int(a) + int(b)
+# def i_plus(a,b):
+#    return int(a) + int(b)
+def c_plus(a,b):
+  if type(b) and type(a) is int or type(a) and type(b) is float :
+    return a + b
+  else:
+    return None
 
 # minus
 def i_minus(a,b):
