@@ -6,5 +6,5 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')/* index.js의 #root에 app.js에 실행된 내용을 집어넣는 기능. */
+  document.getElementById('wrap')/* index.js의 #root에 app.js에 실행된 내용을 집어넣는 기능. */
 );
