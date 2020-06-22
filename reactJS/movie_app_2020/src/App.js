@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes, { string } from "prop-types";
 
 // function Food(props){
 //   /* JSX에서 지정한 props를 인자로 받아온다. */
@@ -34,18 +35,25 @@ const placeILike = [
 ]/* dynamic component generation _ javascript_ map */
 
 
-function Place({name , picture}){
+function Place({name , picture, rating}){
   /* JSX에서 지정한 props를 인자로 받아오고, 그 안의 name값을 직접 인자로 적용하는 방법. */
   return <div>
     <h2>I like {name}</h2>
+    <h4>{rating}/5.0</h4>
     <img src={picture} alt={name} />
   </div>
+}
+
+Place.propTypes = {
+  name: PropTypes.string.isRequired,
+  picture: PropTypes.string.isRequired,
+  rating: PropTypes.number
 }
 
 function App() {
   return (
     <div>
-      {placeILike.map(spot => <Place key={spot.id} name={spot.name} picture={spot.image} />)}
+      {placeILike.map(spot => <Place key={spot.id} name={spot.name} picture={spot.image} rating={spot.rating} />)}
     </div>
   );
 }
