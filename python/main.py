@@ -28,5 +28,5 @@ for link in links[:-1]:
 
 # pages = pages[:-1]
 # 마지막 span을 제외한 나머지 span을 pages에 리스트화
-# [x:y] x번째부터 y번째까지.
-print(pages)
+# [x:y] x번째부터 y번째까지. (0부터 시작, 하지만 -1은 마지막 걸 의미하기 때문에 마지막번째는 바로 직전까지가 됨.)
+print(pages[-1])
