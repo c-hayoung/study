@@ -43,4 +43,7 @@ def extract_indeed_pages():
 
 def extract_indeed_start_num(last_page):
    for page in range(last_page):
-      print(f"start={page*LIMIT}")
+      result = requests.get(f"{URL}&start={page*LIMIT}")
+      # page request 기능 적용.
+      print(result.status_code)
+      # 실행하는지 확인용 console
