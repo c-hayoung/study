@@ -6,25 +6,37 @@ import React from 'react';
 //   return <h1>I like Potato</h1>;
 // }
 
-function Food({fav}){
-  /* JSX에서 지정한 props를 인자로 받아오고, 그 안의 fav값을 직접 인자로 적용하는 방법. */
-  return <h1>I like {fav}</h1>;
+function Food({name , picture}){
+  /* JSX에서 지정한 props를 인자로 받아오고, 그 안의 name값을 직접 인자로 적용하는 방법. */
+  return <div>
+    <h2>I like {name}</h2>
+    <img src={picture} />
+  </div>
 }
+
+const placeILike = [
+  {
+    name: "beach",
+    image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1953&q=80"
+  },
+  {
+    name: "cafe",
+    image: "https://images.unsplash.com/photo-1541173109020-9c5d8a48e169?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=999&q=80"
+  },
+  {
+    name: "sweden",
+    image: "https://images.unsplash.com/photo-1485123263479-f5ea30a2f92d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80"
+  },
+  {
+    name: "home",
+    image: "https://images.unsplash.com/photo-1536349788264-1b816db3cc13?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=633&q=80"
+  }
+]/* dynamic component generation _ javascript_ map */
 
 function App() {
   return (
     <div>
-      <h1>Hello</h1>
-      <Food 
-        fav="kimchi" 
-        something={true} 
-        papapapa={["hello",1,2,3,4,true]} /> 
-      {/* jsx, 임의 지정한 속성(property)을 따옴표와 텍스트로 지정 가능. */}
-      {/* fav라는 property에 kimchi라는 value */}
-      {/* property와 value들을 props라고 부름. */}
-      <Food fav="ramen"/>
-      <Food fav="samgiopsal"/>
-      <Food fav="chukumi"/>
+      {placeILike.map(spot => <Food name={spot.name} picture={spot.image} />)}
     </div>
   );
 }
