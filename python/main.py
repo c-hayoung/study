@@ -22,6 +22,7 @@ for link in links[:-1]:
    # pages.append(link.find("span").string)
    pages.append(int(link.string))
    # a안의 string이 유일하다면 바로 string method를 사용해도 된다.
+   # 추출한 string 정수(integar)화
 #anchor 안에서 모든 span추출해내기
 # for x in sequence : x는 sequence의 요소를 순차적인 인자로 받아오는 것.
 
