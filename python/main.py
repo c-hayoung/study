@@ -30,3 +30,11 @@ for link in links[:-1]:
 # 마지막 span을 제외한 나머지 span을 pages에 리스트화
 # [x:y] x번째부터 y번째까지. (0부터 시작, 하지만 -1은 마지막 걸 의미하기 때문에 마지막번째는 바로 직전까지가 됨.)
 print(pages[-1])
+
+max_page = pages[-1]
+# 마지막 페이지를 찾아내 변수로 만든다.
+
+# --- request each page
+for n in range(max_page):
+   print(f"start={n*50}")
+# range의 현재값을 indeed에서 가져온 요소 개수만큼 곱해준다.
