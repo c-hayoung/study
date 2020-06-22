@@ -1,11 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 
-INDEED_URL = "https://www.indeed.com/jobs?q=python&limit=50"
+LIMIT = 50
+URL = "https://www.indeed.com/jobs?q=python&limit={LIMIT}"
 
 def extract_indeed_pages():
       
-   result = requests.get(INDEED_URL)
+   result = requests.get(URL)
    # getting the html
    # print(result.text)
 
@@ -39,3 +40,7 @@ def extract_indeed_pages():
    # 마지막 페이지를 찾아내 변수로 만든다.
 
    return max_page
+
+def extract_indeed_start_num(last_page):
+   for page in range(last_page):
+      print(f"start={page*LIMIT}")
