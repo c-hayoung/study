@@ -6,7 +6,7 @@ import React from 'react';
 //   return <h1>I like Potato</h1>;
 // }
 
-function Food({name , picture}){
+function Place({name , picture}){
   /* JSX에서 지정한 props를 인자로 받아오고, 그 안의 name값을 직접 인자로 적용하는 방법. */
   return <div>
     <h2>I like {name}</h2>
@@ -33,10 +33,15 @@ const placeILike = [
   }
 ]/* dynamic component generation _ javascript_ map */
 
+function renderSpot(spot){
+  return <Place name={spot.name} picture={spot.image} />
+}
+
 function App() {
   return (
     <div>
-      {placeILike.map(spot => <Food name={spot.name} picture={spot.image} />)}
+      {console.log(placeILike.map(renderSpot))}
+      {placeILike.map(renderSpot)}
     </div>
   );
 }
