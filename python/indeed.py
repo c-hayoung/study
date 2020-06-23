@@ -52,9 +52,15 @@ def extract_indeed_start_num(last_page):
       results = soup.find_all("div",{"class":"jobsearch-SerpJobCard"})
       for result in results:
          title = result.find("h2",{"class":"title"}).find("a")["title"]
-         print(title)
-
-      print(result.status_code)
+         company = result.find("span",{"class":"company"})
+         company_anchor = company.find("a")
+         if company_anchor is not None:
+            company = str(company_anchor.string)
+         else:
+            company = str(company.string)
+         company = company.strip()
+      print(title,company)
+      # print(result.status_code)
       ## page request 기능 적용.
       ## 실행하는지 확인용 console
    return jobs
