@@ -1,61 +1,28 @@
 import React from 'react';
 import PropTypes, { string } from "prop-types";
 
-// function Food(props){
-//   /* JSX에서 지정한 props를 인자로 받아온다. */
-//   console.log(props.fav)
-//   return <h1>I like Potato</h1>;
-// }
-
-const placeILike = [
-  {
-    id: 1,
-    name: "beach",
-    image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1953&q=80",
-    rating: 5
-  },
-  {
-    id: 2,
-    name: "cafe",
-    image: "https://images.unsplash.com/photo-1541173109020-9c5d8a48e169?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=999&q=80",
-    rating: 4.9
-  },
-  {
-    id: 3,
-    name: "sweden",
-    image: "https://images.unsplash.com/photo-1485123263479-f5ea30a2f92d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
-    rating: 5.5
-  },
-  {
-    id: 4,
-    name: "home",
-    image: "https://images.unsplash.com/photo-1536349788264-1b816db3cc13?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=633&q=80",
-    rating:4.7
-  }
-]/* dynamic component generation _ javascript_ map */
-
-
-function Place({name , picture, rating}){
-  /* JSX에서 지정한 props를 인자로 받아오고, 그 안의 name값을 직접 인자로 적용하는 방법. */
-  return <div>
-    <h2>I like {name}</h2>
-    <h4>{rating}/5.0</h4>
-    <img src={picture} alt={name} />
-  </div>
-}
-
-Place.propTypes = {
-  name: PropTypes.string.isRequired,
-  picture: PropTypes.string.isRequired,
-  rating: PropTypes.number
-}
-
-function App() {
-  return (
-    <div>
-      {placeILike.map(spot => <Place key={spot.id} name={spot.name} picture={spot.image} rating={spot.rating} />)}
+// function App -> class App
+class App extends React.Component{
+  state = {
+    count: 0
+  };
+  add = () => {
+    this.state.count++;
+    console.log("add");
+    console.log(this.state.count);
+  };
+  minus = () => {
+    this.state.count--;
+    console.log("minus");
+    console.log(this.state.count);
+  };
+  render(){
+    return <div>
+      <h1>The number is: {this.state.count}</h1>
+      <button onClick={this.add}>Add</button>
+      <button onClick={this.minus}>Minus</button>
     </div>
-  );
+  }
 }
 
 export default App;
