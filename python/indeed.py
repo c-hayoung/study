@@ -42,8 +42,19 @@ def extract_indeed_pages():
    return max_page
 
 def extract_indeed_start_num(last_page):
+   jobs = []
    for page in range(last_page):
+      # pages request
       result = requests.get(f"{URL}&start={page*LIMIT}")
-      # page request 기능 적용.
+
+      # extract title
+      soup = BeautifulSoup(result.text,"html.parser")
+      results = soup.find_all("div",{"class":"jobsearch-SerpJobCard"})
+      for result in results:
+         title = result.find("h2",{"class":"title"}).find("a")["title"]
+         print(title)
+
       print(result.status_code)
-      # 실행하는지 확인용 console
+      ## page request 기능 적용.
+      ## 실행하는지 확인용 console
+   return jobs
