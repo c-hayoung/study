@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 LIMIT = 50
 URL = "https://www.indeed.com/jobs?q=python&limit={LIMIT}"
 
-def extract_indeed_pages():
+def get_last_page():
       
    result = requests.get(URL)
    # getting the html
@@ -65,7 +65,7 @@ def extract_info(html):
 
 
 
-def extract_indeed_start_num(last_page):
+def extract_jobs(last_page):
    jobs = []
    for page in range(last_page):
       print(f"Scrapping page {page}")
@@ -81,4 +81,11 @@ def extract_indeed_start_num(last_page):
          jobs.append(job)
       # print(result.status_code)
       ## 실행하는지 확인용 console
+   return jobs
+
+
+def get_jobs():
+   last_page = get_last_page()
+   jobs = extract_jobs(last_page)
+
    return jobs
