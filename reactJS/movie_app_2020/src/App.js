@@ -6,6 +6,8 @@ class App extends React.Component{
   state = {
     count: 0
   };
+
+  // function part
   add = () => {
     this.state.count++;
     console.log("add");
@@ -16,6 +18,8 @@ class App extends React.Component{
     console.log("minus");
     console.log(this.state.count);
   };
+
+  // class-render
   render(){
     return <div>
       <h1>The number is: {this.state.count}</h1>
