@@ -39,7 +39,10 @@ def extract_job(html):
    location = location.get_text(strip=True)
    # .strip("-").strip("\r"): -,와 new line을 삭제할 수 있음. \r은 \n으로도 쓸 수 있다.
 
-   return {'title':title,'company':company, 'location':location}
+   # job id
+   job_id = html["data-jobid"]
+
+   return {'title':title,'company':company, 'location':location, 'apply_link':f"https://stackoverflow.com/jobs?id={job_id}"}
 
 # extract "jobs"
 def extract_jobs(last_page):
