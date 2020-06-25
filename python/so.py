@@ -5,7 +5,7 @@ URL = f"https://stackoverflow.com/jobs?q=python&sort=i"
 
 # 1. 페이지 가져오기
 # 2. request 만들기
-# 3. extract jobs
+# 3. extract jobs info
 
 def get_last_page():
    # request
@@ -17,7 +17,31 @@ def get_last_page():
 
    return last_page
 
-# 3. extract jobs
+
+# 3.
+# extract job info
+def extract_job(html):
+   # job title
+   title = html.find("h2",{"class":"fs-body3"}).find("a")["title"]
+      # title = html.find("h2").text.strip()
+
+   # job company_name
+   # company = html.find("h3",{"class":"fs-body1"})
+   # company_name = company.find("span").get_text(strip=True)
+
+   # # job company_location
+   # company_location = company.find("span",{"class":"fc-black-500"}).get_text(strip=True)
+
+   # job company
+   company,location = html.find("h3",{"class":"fs-body1"}).find_all("span",recursive =False)
+   # unpacking, 깊은 하위 요소 추출을 막는 recursive)
+   company = company.get_text(strip=True)
+   location = location.get_text(strip=True)
+   # .strip("-").strip("\r"): -,와 new line을 삭제할 수 있음. \r은 \n으로도 쓸 수 있다.
+
+   return {'title':title,'company':company, 'location':location}
+
+# extract "jobs"
 def extract_jobs(last_page):
    jobs = []
    for page in range(last_page):
@@ -30,8 +54,8 @@ def extract_jobs(last_page):
 
       # 요소 중 id 추출
       for result in results:
-         job_id = result["data-jobid"]
-         print(job_id)
+         each_job = extract_job(result)
+         jobs.append(each_job)
    return jobs
 
 # ---
