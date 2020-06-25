@@ -15,7 +15,7 @@ def get_last_page():
    pages = soup.find("div",{"class":"s-pagination"}).find_all("a")   
    last_page = pages[-2].get_text(strip=True)
 
-   return last_page
+   return int(last_page)
 
 
 # 3.
@@ -48,6 +48,8 @@ def extract_job(html):
 def extract_jobs(last_page):
    jobs = []
    for page in range(last_page):
+      print(f"Scrapping SO page : {page}")
+
       result = requests.get(f"{URL}&pg={page + 1}")
       # 0부터 시작하기 때문
       soup = BeautifulSoup(result.text,"html.parser")
