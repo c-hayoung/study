@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 LIMIT = 50
-URL = "https://www.indeed.com/jobs?q=python&limit={LIMIT}"
+URL = f"https://www.indeed.com/jobs?q=python&limit={LIMIT}"
 
 def get_last_page():
       
@@ -17,7 +17,7 @@ def get_last_page():
    pagination = soup.find("ul",{"class":"pagination-list"})
    # class명이 pagination-list인 ul의 data추출
 
-   links = pagination.find_all("a")
+   links = pagination.find_all('a')
    # pagination 안에서 anchor요소 전부 찾아내기
 
    pages = []
@@ -48,12 +48,15 @@ def extract_info(html):
 
    # company
    company = html.find("span",{"class":"company"})
-   company_anchor = company.find("a")
-   if company_anchor is not None:
-      company = str(company_anchor.string)
+   if company:
+      company_anchor = company.find("a")
+      if company_anchor is not None:
+         company = str(company_anchor.string)
+      else:
+         company = str(company.string)
+      company = company.strip()
    else:
-      company = str(company.string)
-   company = company.strip()
+      company = None
    
    # location
    location = html.find("div",{"class":"recJobLoc"})["data-rc-loc"]
