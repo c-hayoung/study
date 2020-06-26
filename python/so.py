@@ -66,5 +66,7 @@ def extract_jobs(last_page):
 # ---
 def get_jobs():
    last_page = get_last_page()
-   jobs = extract_jobs(last_page)
+   # jobs = extract_jobs(last_page) //양이 너무 많아지니까 5페이지까지만 출력할 예정.
+   print(last_page)
+   jobs = extract_jobs(5)
    return jobs
