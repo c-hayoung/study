@@ -19,6 +19,18 @@ class App extends React.Component{
                       // current : 현재의 state를 받아온다.
   };
 
+  componentDidMount(){
+    console.log("component rendered");
+  }
+
+  componentDidUpdate(){
+    console.log("I just updated");
+  }
+
+  componentWillUnmount(){
+    console.log("Goodbye cruel world..")
+  }
+
   // class-render
   render(){
     return <div>
