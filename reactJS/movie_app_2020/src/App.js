@@ -9,14 +9,14 @@ class App extends React.Component{
 
   // function part
   add = () => {
-    this.state.count++;
-    console.log("add");
-    console.log(this.state.count);
+    // this.setState({count:this.state.count + 1});
+    this.setState(current => ({count:current.count + 1}));
   };
   minus = () => {
-    this.state.count--;
-    console.log("minus");
-    console.log(this.state.count);
+    // this.setState({count:this.state.count - 1});
+                      // 외부의 state에 의존하는 건 좋은 코드는 아님. current
+    this.setState(current => ({count:current.count - 1}));
+                      // current : 현재의 state를 받아온다.
   };
 
   // class-render
