@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes, { string } from "prop-types";
+// import PropTypes, { string } from "prop-types";
 import axios from "axios";
+import Movie from "./Movie";
 
 // function App -> class App
 class App extends React.Component{
@@ -15,7 +16,7 @@ class App extends React.Component{
       {data: 
         {movies}
       }
-    } =  await axios.get("https://yts.mx/api/v2/list_movies.json");
+    } =  await axios.get("https://yts.mx/api/v2/list_movies.json?sort_by=rating");
     // this.setState({movies/* state의 movies */:movies/* axios에서 가져온 movies */})
     this.setState({movies, isLoading:false})
     /* ES6형태로 단축할 수 있음. */
@@ -28,9 +29,25 @@ class App extends React.Component{
 
   // class-render
   render(){
-    const { isLoading } = this.state;
+    const { isLoading, movies } = this.state;
     // ES6의 class component
-    return <div>{isLoading ? "Loading. . .":"We are ready"}</div>;
+    return (
+      <div>
+        {isLoading 
+          ? "Loading. . ."
+          : movies.map(movie => (
+            <Movie 
+              key={movie.id}
+              id={movie.id}
+              year={movie.year} 
+              title={movie.title} 
+              summary={movie.summary} 
+              poster={movie.medium_cover_image} 
+            />
+          ))
+        }
+      </div>
+    );
   }
 }
 
