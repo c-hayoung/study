@@ -14,11 +14,22 @@ class Car():
   def __str__(self):
     return f"Car with {self.wheels} whells {self.color}"
 
-porche = Car(color="green",price="$40")
-print(porche.color,porche.price)
+class Convertible(Car):
+  # extend class
+  def take_off(self):
+    return "taking off"
 
-mini = Car()
-print(mini.color,mini.price)
+  # override method
+  def __str__(self):
+    return f"Car with no roofs"
+
+  # extend method
+  def __init__(self,**kwargs):
+    super().__init__(**kwargs)
+    self.time = kwargs.get("time",10)
+
+porche = Convertible(color="green",price="$40")
+print(porche.time)
 
 #   # method : class 안의 function (첫번째 argument로 method를 호출하는 instance자신을 가져온다.)
 #   def start(self):
