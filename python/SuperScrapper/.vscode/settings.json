@@ -1,3 +1,5 @@
 {
-   "python.pythonPath": "c:\\HY\\_bluehy\\study\\python\\SuperScrapper\\venv\\Scripts\\python.exe"
+   "python.pythonPath": "c:\\HY\\_bluehy\\study\\python\\SuperScrapper\\venv\\Scripts\\python.exe",
+   "python.linting.pylintEnabled": true,
+   "python.linting.enabled": false
 }
