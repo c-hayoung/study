@@ -1,18 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask("BluScrapper")
 
 @app.route("/")
 # /로 접속하면 home실행
 def home():
-  return "Hello! Welcome to mi casa!"
+  return render_template("potato.html")
+  # 경로를 안 지정해줘도 template을 어디서 찾아올지 알고 있음.
 
-@app.route("/<username>")
-# /contact로 접속요청이 발생하면 potato실행
-def potato(username):
-  return f"Hello, {username}!"
-
-# @ : 데코레이터. 바로 아래에 있는 '함수'를 찾아 꾸며주는 기능.
-
-app.run()
+app.run(debug=True)
 # repl.it환경이기 때문에 host="0.0.0.0"
