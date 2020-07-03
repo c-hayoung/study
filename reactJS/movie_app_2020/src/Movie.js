@@ -10,7 +10,7 @@ function Movie({ year, title, summary, poster, genres }){
          <h3 className="movie__title">{title}</h3>
          <ul className="genres clearfix">{genres.map((genre, index) => <li key={index} className="genres_genre">#{genre}</li>)}</ul> 
          <h5 className="movie_year" /* style={{color:"#aaa"}} */>{year}</h5>
-         <p className="movie__summary">{summary}</p>
+         <p className="movie__summary">{summary.slice(0,180)}…</p>
       </div>
    </div>
 }
