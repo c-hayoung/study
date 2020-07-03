@@ -8,8 +8,8 @@ function Movie({ year, title, summary, poster, genres }){
       <img src={poster} alt={title} title={title}/>
       <div className="movie__data">
          <h3 className="movie__title">{title}</h3>
+         <ul className="genres clearfix">{genres.map((genre, index) => <li key={index} className="genres_genre">#{genre}</li>)}</ul> 
          <h5 className="movie_year" /* style={{color:"#aaa"}} */>{year}</h5>
-         <ul className="genres">{genres.map((genre, index) => <li key={index} className="genres_genre">{genre}</li>)}</ul> 
          <p className="movie__summary">{summary}</p>
       </div>
    </div>

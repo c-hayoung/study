@@ -2,6 +2,8 @@ import React from 'react';
 // import PropTypes, { string } from "prop-types";
 import axios from "axios";
 import Movie from "./Movie";
+import "./reset.css"
+import "./common.css"
 import "./App.css"
 
 // function App -> class App
@@ -38,7 +40,7 @@ class App extends React.Component{
           ? <div className="loader">
               <span className="loader__text">Loading. . .</span>
             </div>
-          : <div className="movies">
+          : <div className="movies clearfix">
             {movies.map(movie => (
               <Movie 
                 key={movie.id}
