@@ -25,7 +25,7 @@ def report():
       db[word] = jobs
   else:
     return redirect("/")
-  return render_template("report.html",searchingBy=word,resultsNumber=len(jobs))
+  return render_template("report.html",searchingBy=word,resultsNumber=len(jobs),jobs=jobs)
 
 app.run(debug=True)
 # repl.it환경이기 때문에 host="0.0.0.0"
