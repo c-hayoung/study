@@ -17,7 +17,7 @@
      <h1>Search Results</h1>
      <!-- <h3>You are looking for {{searchingBy}}</h3> -->
      <h3>Found {{resultsNumber}} results for {{searchingBy}}</h3>
-     <a href="/export?word={{searchingBy}}"></a>
+     <a href="/export?word={{searchingBy}}">Download CSV</a>
      <section>
        <h4>title</h4>
        <h4>company</h4>
@@ -29,8 +29,6 @@
           <span>{{potato.location}}</span>
           <a href="{{potato.apply_link}}"target="_blank">Apply</a>
        {% endfor %}
-       <!-- {% 파이썬 코드 %} : flask를 통해 제작할 때, html에 파이썬 코드 사용하는 법. -->
-       <!-- {{변수}} : flask를 통해 제작할 때, html에 변수 사용하는 법. -->
      </section>
   </body>
 </html>
