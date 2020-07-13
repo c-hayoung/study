@@ -1,7 +1,7 @@
 import csv
 
 def save_to_file(jobs):
-   file = open("jobs.csv",mode="w",encoding="UTF-8")
+   file = open("jobs.csv", mode="w", encoding="utf-8")
    # http://blog.naver.com/PostView.nhn?blogId=rjs5730&logNo=220980957605&parentCategoryNo=&categoryNo=&viewDate=&isShowPopularPosts=false&from=postView (인코딩 오류참조)
 
    writer = csv.writer(file)

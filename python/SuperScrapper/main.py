@@ -40,7 +40,7 @@ def export():
     if not jobs:
       raise Exception()
     save_to_file(jobs)
-    return send_file("jobs.csv")
+    return send_file("./jobs.csv")
   except:
     return redirect("/")
 
