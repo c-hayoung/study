@@ -33,8 +33,8 @@ def extract_job(html):
    # job company
    company,location = html.find("h3",{"class":"fs-body1"}).find_all("span",recursive =False)
    # unpacking, 깊은 하위 요소 추출을 막는 recursive)
-   company = company.get_text(strip=True).strip(",").strip("\r")
-   location = location.get_text(strip=True).strip(",").strip("\r")
+   company = company.get_text(strip=True).strip(",")
+   location = location.get_text(strip=True).strip(",")
    # .strip("-").strip("\r"): -,와 new line을 삭제할 수 있음. \r은 \n으로도 쓸 수 있다.
 
    # job id
