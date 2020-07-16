@@ -6,7 +6,7 @@ https://www.python.org/
 
 ---
 
-- [ ] theory
-- [ ] Building a Job Scrapper
-- [ ] Get Ready for Django
-- [ ] 
+- [x] theory
+- [x] Building a Job Scrapper
+- [x] Get Ready for Django
+- [x] Deploy job scrapper 
