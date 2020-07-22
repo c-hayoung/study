@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet"></link>
+</head>
+
+<body>
+  <header>
+    <h1>Nomad News</h1>
+    <div>
+      <span>Order by:</span>
+      {% if order == False %}
+        <a href="/?order_by=popular">Popular</a>
+        <span>|</span>
+        <strong>New</strong>
+      {% else %}
+        <strong>Popular</strong>
+        <span>|</span>
+        <a href="/?order_by=new">New</a>
+      {% endif %}
+    </div>
+  </header>
+  <main>
+    <div>
+      {% for r in info %}
+        <div class="title">
+          <a href="/{{r.key}}">{{r.title}}</a>
+          <a href="{{r.link}}"> ({{r.link}})</a>
+        </div>
+        <div class="info">{{r.points}} points | By: {{r.author}} | {{r.comments}} comments</div>
+        <hr/>
+      {% endfor %}
+    </div>
+    
+  </main>
+</body>
+
+</html>
