@@ -2,18 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 
-
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
 
-
-"""
-All subreddits have the same url:
-i.e : https://reddit.com/r/javascript
-You can add more subreddits to the list, just make sure they exist.
-To make a request, use this url:
-https://www.reddit.com/r/{subreddit}/top/?t=month
-This will give you the top posts in per month.
-"""
 
 subreddits = [
     "javascript",
@@ -70,7 +60,8 @@ def read():
     lists.append(list)
     count = idx
   for i in range(count):
-    result = lists[i]+lists[i-1]
+    lists[i] = lists[i]+lists[i-1]
+    result = lists[i]
   # print(result,count)
   result = sorted(result, key=lambda x: x['rank'], reverse=True)
   return render_template("read.html",selected=selected,result = result)
