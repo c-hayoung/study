@@ -1,17 +1,30 @@
 /* flex container */
 .wrapper {
    display:flex;
-   flex-direction: column;
+   /* flex-direction: row; */
    /* Main Axis */
    justify-content: space-around;
    /* Cross Axis */
-   align-items: stretch;
-   height: 200vh;
+   height: 100vh;
 }
 
 .box {
-   /* width: 200px; */
+   width: 200px;
    height: 200px;
    background-color: #eaf;
    color: #fff;
+   font-size: 36px;
+}
+
+.box:nth-child(1) {
+   order:2;
+}
+
+.box:nth-child(2){
+   order:3;
+   align-self:center;
+}
+
+.box:nth-child(3) {
+   align-self: flex-end;
 }
