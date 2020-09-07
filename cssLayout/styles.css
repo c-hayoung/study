@@ -1,15 +1,16 @@
 /* flex container */
 .wrapper {
-   width: 80%;
-   height: 500px;
-   margin:auto;
    display:flex;
+   flex-direction: column;
+   /* Main Axis */
    justify-content: space-around;
-   align-items: center;
+   /* Cross Axis */
+   align-items: stretch;
+   height: 200vh;
 }
 
 .box {
-   width: 200px;
+   /* width: 200px; */
    height: 200px;
    background-color: #eaf;
    color: #fff;
