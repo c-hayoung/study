@@ -4,8 +4,10 @@
    /* flex-direction: row; */
    /* Main Axis */
    justify-content: space-around;
+   align-content: center;
    /* Cross Axis */
-   height: 100vh;
+   height: 200vh;
+   flex-wrap:wrap;
 }
 
 .box {
@@ -14,17 +16,7 @@
    background-color: #eaf;
    color: #fff;
    font-size: 36px;
-}
-
-.box:nth-child(1) {
-   order:2;
-}
-
-.box:nth-child(2){
-   order:3;
-   align-self:center;
-}
-
-.box:nth-child(3) {
-   align-self: flex-end;
+   display:flex;
+   justify-content:center;
+   align-items:center;
 }
