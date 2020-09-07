@@ -1,5 +1,11 @@
+/* flex container */
 .wrapper {
+   width: 80%;
+   height: 500px;
+   margin:auto;
    display:flex;
+   justify-content: space-around;
+   align-items: center;
 }
 
 .box {
