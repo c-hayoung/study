@@ -1,16 +1,16 @@
 # css Layout Challenge (0907-0921)
 
 ## Flexbox:
-- [ ] flex-direction
-- [ ] flex-wrap
-- [ ] justify-content
-- [ ] align-items
-- [ ] align-content
-- [ ] order
-- [ ] flex-grow
-- [ ] flex-shrink
-- [ ] flex-basis
-- [ ] align-self
+- [x] flex-direction
+- [x] flex-wrap
+- [x] justify-content
+- [x] align-items
+- [x] align-content
+- [x] order
+- [x] flex-grow
+- [x] flex-shrink
+- [X] flex-basis
+- [x] align-self
 
 ## Grid:
 - [ ] grid-template-columns
