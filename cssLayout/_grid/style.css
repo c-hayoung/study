@@ -1,0 +1,10 @@
+.father{
+   display:flex;
+}
+
+.child{
+   background-color: peru;
+   color: white;
+   display:flex;
+   justify-content:center;
+}
