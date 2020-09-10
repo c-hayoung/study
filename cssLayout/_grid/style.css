@@ -21,10 +21,11 @@
 .grid{
    display:grid;
    gap:10px;
-   /* grid-template-columns: repeat(4,100px); */
-   grid-template-columns: [first-line] 100px [second-line] 100px [third-line] 100px [fourth-line] 100px [fifth-line];
-   /* grid-template-rows: repeat(4,100px); */
-   grid-template-rows: repeat(4,100px [test-line]);
+   height: 50vh;
+   grid-template-columns: repeat(4,1fr);
+   /* grid-template-columns: [first-line] 100px [second-line] 100px [third-line] 100px [fourth-line] 100px [fifth-line]; */
+   grid-template-rows: repeat(4,1fr);
+   /* grid-template-rows: repeat(4,100px [test-line]); */
    /* grid-template-areas:
    "header header header header"
    "content content content nav"
@@ -46,8 +47,9 @@
    grid-column-end:4;
    grid-row-start:2;
    grid-row-end:4; */
-   grid-column: first-line/fourth-line;
-   grid-row: test-line 1 / test-line 3;
+   grid-column: 1/-2;
+   /* grid-column: first-line/fourth-line; */
+   grid-row: 2 / 4;
    /* grid-area: content; */
 }
 .nav {
