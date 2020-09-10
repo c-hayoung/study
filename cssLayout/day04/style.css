@@ -1,0 +1,75 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+body {
+  background-color:#DDE1D4;
+  padding:15px;
+  font-family: serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 100%;
+  height: 100vh;
+  margin:0 auto;
+}
+
+#wrap{
+   width: 80vw;
+   height: 50vw;
+   background-color: #fff;
+   margin:15px auto; 
+   display:grid;
+   grid-template-columns: repeat(2,1fr);
+   grid-template-rows: repeat(2,1fr);
+}
+
+.section{
+   font-size: 55px;
+   font-weight:bold;
+   text-align:center;
+   background-color: #e0ece4;
+   color: #ff4b5c;
+   display:grid;
+   grid-template-rows: repeat(3,1fr);
+   place-items: center center;
+}
+
+.section:nth-child(2){
+   background-color: #1d2d50;
+   color: #fcdab7;
+}
+
+.section:nth-child(3){
+   background-color: #ea5455;
+   color: #f3ecc2;
+}
+
+.section:nth-child(4){
+   display:grid;
+   grid-template-columns: repeat(2,1fr);
+   grid-template-rows: repeat(2,1fr);
+   place-items: stretch stretch;
+}
+
+.box {
+   font-size: 32px;
+   display:grid;
+   grid-template-rows: repeat(3,1fr);
+   place-items: center center;
+   background-color: #ffd5cd;
+   color: #e84a5f;
+}
+
+.box:nth-child(2){
+   background-color: #8675a9;
+   color: #fff;
+}
+
+.box:nth-child(3){
+   background-color: #febf63;
+   color: #d92027;
+}
+.box:nth-child(4){
+   background-color: #ff847c;
+   color: #eeecda;
+}
+
+.text{
+   grid-row-start:2;
+}
