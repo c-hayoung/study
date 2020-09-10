@@ -22,7 +22,6 @@ body {
 .section{
    font-size: 55px;
    font-weight:bold;
-   text-align:center;
    background-color: #e0ece4;
    color: #ff4b5c;
    display:grid;
