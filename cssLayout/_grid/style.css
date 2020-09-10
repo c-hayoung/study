@@ -58,5 +58,6 @@
    /* grid-column-start:1;
    grid-column-end:5; */
    /* grid-area: footer; */
-   grid-column: 1/-1;
+   /* grid-column: 1/-1; */
+   grid-column: span 4;
 }
