@@ -21,21 +21,17 @@
 .grid{
    color: #fff;
    display:grid;
-   gap:10px;
-   height: 100vh;
+   gap:5px;
    grid-template-columns: repeat(4,100px);
    grid-template-rows: repeat(4,100px);
+   grid-auto-flow: column;
+   grid-auto-columns: 150px;
 }
 
-.header {
-   background-color: #e67e22;
+.item:nth-child(odd){
+   background-color: #5eaaa8;
 }
-.content {
-   background-color: #8e44ad;
-}
-.nav {
-   background-color: #c0392b;
-}
-.footer {
-   background-color: #f1c40f;
+
+.item:nth-child(even){
+   background-color: #2d4059;
 }

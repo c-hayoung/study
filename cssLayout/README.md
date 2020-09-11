@@ -35,8 +35,8 @@
 - [x] justify-self
 - [x] align-self
 - [ ] grid-auto-rows
-- [ ] grid-auto-columns
 - [ ] grid-auto-flow
+- [ ] grid-auto-columns
 
 ## Keywords & Functions:
 - [x] repeat
