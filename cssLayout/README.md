@@ -34,9 +34,9 @@
 - [x] grid-row
 - [x] justify-self
 - [x] align-self
-- [ ] grid-auto-rows
-- [ ] grid-auto-flow
-- [ ] grid-auto-columns
+- [x] grid-auto-rows
+- [x] grid-auto-flow
+- [x] grid-auto-columns
 
 ## Keywords & Functions:
 - [x] repeat
@@ -44,8 +44,8 @@
 - [x] minmax
 - [x] auto-fit
 - [x] auto-fill
-- [ ] min-content
-- [ ] max-content
+- [x] min-content
+- [x] max-content
 
 ## SCSS:
 - [ ] Variables
