@@ -41,9 +41,9 @@
 ## Keywords & Functions:
 - [x] repeat
 - [x] fr
+- [x] minmax
 - [ ] min-content
 - [ ] max-content
-- [ ] minmax
 - [ ] auto-fit
 - [ ] auto-fill
 

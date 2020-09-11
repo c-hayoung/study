@@ -1,0 +1,36 @@
+/* grid basic */
+.father{
+   display:grid;
+   grid-template-columns: 250px 250px 250px;
+   grid-template-rows: 100px 50px 300px;
+   /* column-gap: 10px; */
+   /* row-gap: 10px; */
+   gap: 10px;
+}
+
+.child{
+   background-color: peru;
+   color: white;
+   font-size:50px;
+   display:flex;
+   justify-content:center;
+   align-items:center;
+}
+
+/* grid template areas */
+.grid{
+   color: #fff;
+   display:grid;
+   gap:5px;
+   grid-template-columns: repeat(5,minmax(100px, 1fr));
+   grid-template-rows: repeat(4,100px);
+   grid-auto-columns: 100px;
+}
+
+.item:nth-child(odd){
+   background-color: #5eaaa8;
+}
+
+.item:nth-child(even){
+   background-color: #2d4059;
+}
