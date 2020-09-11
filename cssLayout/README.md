@@ -13,30 +13,34 @@
 - [x] align-self
 
 ## Grid:
-- [ ] grid-template-columns
-- [ ] grid-template-rows
-- [ ] grid-template-areas
-- [ ] grid-template
-- [ ] grid-column-gap
-- [ ] grid-row-gap
-- [ ] grid-gap
-- [ ] justify-items
-- [ ] align-items
-- [ ] justify-content
-- [ ] align-content
-- [ ] grid-auto-columns
+- [x] grid-template-columns
+- [x] grid-template-rows
+- [x] grid-template-areas
+- [x] grid-template
+- [x] grid-column-gap
+- [x] grid-row-gap
+- [x] grid-gap
+- [x] justify-items
+- [x] align-items
+- [x] justify-content
+- [x] align-content
+- [x] grid-auto-columns
+- [x] grid-auto-rows
+- [x] grid-column-start
+- [x] grid-column-end
+- [x] grid-row-start
+- [x] grid-row-end
+- [x] grid-column
+- [x] grid-row
+- [x] justify-self
+- [x] align-self
 - [ ] grid-auto-rows
-- [ ] grid-column-start
-- [ ] grid-column-end
-- [ ] grid-row-start
-- [ ] grid-row-end
-- [ ] grid-column
-- [ ] grid-row
-- [ ] justify-self
-- [ ] align-self
+- [ ] grid-auto-columns
+- [ ] grid-auto-flow
 
 ## Keywords & Functions:
-- [ ] repeat
+- [x] repeat
+- [x] fr
 - [ ] min-content
 - [ ] max-content
 - [ ] minmax
