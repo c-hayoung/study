@@ -19,16 +19,16 @@
 
 /* grid template areas */
 .grid{
+   background-color: #333;
+   color: #fff;
    display:grid;
    gap:10px;
-   height: 50vh;
-   grid-template-columns: repeat(4,1fr);
-   grid-template-rows: repeat(4,1fr);
-   /* justify-items: stretch; */
-   /* justify-items: end; */
-   /* align-items: stretch; */
-   /* align-items: center; */
-   place-items: end stretch;
+   height: 100vh;
+   grid-template-columns: repeat(4,100px);
+   grid-template-rows: repeat(4,100px);
+   justify-content: space-evenly;
+   align-content: space-evenly;
+   place-content: end center;
 }
 
 .header {
