@@ -15,6 +15,10 @@ h1{
    font-size:70px;
 }
 
+.title{
+   font-size:28px;
+}
+
 .grid{
    display:grid;
    height: 80vh;
