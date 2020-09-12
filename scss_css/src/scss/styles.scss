@@ -1,6 +1,7 @@
 // import
 @import "variables";
 @import "mixins";
+@import "mixin";
 @import "buttons";
 
 // styles.scss
@@ -8,26 +9,39 @@ body {
   background-color: #fff;
 }
 
-h1{
-  @include makeTitle();
-}
-
-// a{
-//   margin-bottom:10px;
-//   &:nth-child(odd){
-//     @include link('odd');
-//   }
-//   &:nth-child(even){
-//     @include link('even');
-//   }
+// h1{
+//   @include makeTitle();
 // }
 
-a {
-  @extend %button;
-  text-decoration: none;
-} 
+// // a{
+// //   margin-bottom:10px;
+// //   &:nth-child(odd){
+// //     @include link('odd');
+// //   }
+// //   &:nth-child(even){
+// //     @include link('even');
+// //   }
+// // }
 
-button {
-  @extend %button;
-  border:none;
+// a {
+//   @extend %button;
+//   text-decoration: none;
+// } 
+
+// button {
+//   @extend %button;
+//   border:none;
+// }
+
+h1{
+  color: red;
+  @include responsive("iphone"){
+    color: yellow;
+  }
+  @include responsive("iphone-l"){
+    font-size:60px;
+  }
+  @include responsive("tablet"){
+    color: green;
+  }
 }
