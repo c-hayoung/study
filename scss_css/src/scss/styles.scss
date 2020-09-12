@@ -1,6 +1,7 @@
 // import
 @import "variables";
 @import "mixins";
+@import "buttons";
 
 // styles.scss
 body {
@@ -11,12 +12,22 @@ h1{
   @include makeTitle();
 }
 
-a{
-  margin-bottom:10px;
-  &:nth-child(odd){
-    @include link('odd');
-  }
-  &:nth-child(even){
-    @include link('even');
-  }
+// a{
+//   margin-bottom:10px;
+//   &:nth-child(odd){
+//     @include link('odd');
+//   }
+//   &:nth-child(even){
+//     @include link('even');
+//   }
+// }
+
+a {
+  @extend %button;
+  text-decoration: none;
+} 
+
+button {
+  @extend %button;
+  border:none;
 }
