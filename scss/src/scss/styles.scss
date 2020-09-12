@@ -1,0 +1,28 @@
+// import
+@import "variables";
+
+// styles.scss
+body {
+  background-color: $bg;
+}
+
+h2{
+  color: $bg;
+  font-size: $title;
+}
+
+.box{
+  margin-top:20px;
+  &:hover{
+    background-color: green;
+  }
+  h2{
+    color: blue;
+    &:hover{
+      color:red;
+    }
+  }
+  button{
+    color: $bg;
+  }
+}
