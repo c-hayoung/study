@@ -1,28 +1,22 @@
 // import
 @import "variables";
+@import "mixins";
 
 // styles.scss
 body {
-  background-color: $bg;
+  background-color: #fff;
 }
 
-h2{
-  color: $bg;
-  font-size: $title;
+h1{
+  @include makeTitle();
 }
 
-.box{
-  margin-top:20px;
-  &:hover{
-    background-color: green;
+a{
+  margin-bottom:10px;
+  &:nth-child(odd){
+    @include link('odd');
   }
-  h2{
-    color: blue;
-    &:hover{
-      color:red;
-    }
-  }
-  button{
-    color: $bg;
+  &:nth-child(even){
+    @include link('even');
   }
 }
